@@ -10,15 +10,15 @@ export default defineNuxtConfig({
   plugins: [
     { src: '@/plugins/ant-ui.ts', mode: 'client', ssr: false }
   ],
+
   nitro: {
-    preset: 'node-server'
+    // preset: 'node-server',
+    preset: 'firebase',
   },
   builder: "vite",
+  ssr: false,
 
   vue: {
-    // compilerOptions: {
-    //   isCustomElement: (tag) => tag.startsWith('a-'),
-    // },
   },
   antd:{
     // Options
