@@ -16,9 +16,9 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@ant-design-vue/nuxt": "^1.1.2",
     "@nuxt/vite-builder": "^3.7.4",
     "@nuxtjs/tailwindcss": "^6.8.0",
-    "ant-design-vue": "^4.0.3",
     "dayjs": "^1.11.10"
   }
 }

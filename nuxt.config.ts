@@ -1,8 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@nuxtjs/tailwindcss',
+    '@ant-design-vue/nuxt'
   ],
   plugins: [
     { src: '@/plugins/ant-ui.ts', mode: 'client', ssr: false }
@@ -11,16 +14,13 @@ export default defineNuxtConfig({
     preset: 'node-server'
   },
   builder: "vite",
+
   vue: {
-    compilerOptions: {
-      isCustomElement: (tag) => tag.startsWith('a-'),
-    },
+    // compilerOptions: {
+    //   isCustomElement: (tag) => tag.startsWith('a-'),
+    // },
   },
-
-  tailwindcss: {
-    config: {
-      
-    }
+  antd:{
+    // Options
   }
-
 })
