@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@ant-design-vue/nuxt',
     'nuxt-swiper',    
     'dayjs-nuxt',    
+    '@pinia/nuxt',
   ],
   plugins: [
     { src: '@/plugins/ant-ui.ts', mode: 'client', ssr: false }
