@@ -6,8 +6,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@ant-design-vue/nuxt',
-    'nuxt-swiper',
-    
+    'nuxt-swiper',    
+    'dayjs-nuxt',    
   ],
   plugins: [
     { src: '@/plugins/ant-ui.ts', mode: 'client', ssr: false }
@@ -24,5 +24,11 @@ export default defineNuxtConfig({
   },
   antd:{
     // Options
+  },
+  dayjs: {
+    locales: ['vi'],
+    plugins: ['relativeTime', 'utc', 'timezone'],
+    defaultLocale: 'vi',
+    defaultTimezone: 'Asia/Ho_Chi_Minh',
   }
 })

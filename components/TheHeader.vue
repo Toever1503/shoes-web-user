@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="flex items-center justify-end gap-[15px] max-w-[1200px] mx-auto">
+    <div class="flex items-center justify-end gap-[15px] max-w-[1200px] mx-auto px-[100px]">
       <a-menu
         class="justify-center"
         style="border: none"
