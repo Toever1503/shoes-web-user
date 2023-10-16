@@ -3,7 +3,7 @@
     <div class="px-3 md:px-[50px]">
       <a-breadcrumb class="bg-gray-50 p-2">
         <a-breadcrumb-item>
-            <router-link to="/">Trang chủ</router-link>
+          <router-link to="/">Trang chủ</router-link>
         </a-breadcrumb-item>
         <a-breadcrumb-item>Sản phẩm</a-breadcrumb-item>
         <a-breadcrumb-item>{{ productDetail?.tieuDe }}</a-breadcrumb-item>
@@ -159,9 +159,9 @@
 
       <!-- begin product description -->
       <a-tabs class="mt-5">
-        <a-tab-pane key="1" tab="Mô tả sản phẩm"
-          >Content of Tab Pane 1</a-tab-pane
-        >
+        <a-tab-pane key="1" tab="Mô tả sản phẩm">
+          <div v-html="productDetail?.moTa" />
+        </a-tab-pane>
 
         <!-- product info additional -->
         <a-tab-pane key="2" tab="Thông tin thêm" force-render>
@@ -211,8 +211,9 @@
 
 <script setup lang="ts">
 import dayjs from "dayjs";
+import { useCartStore } from "/stores/cart";
 
-const _store = useStore()
+const _storeCart = useCartStore();
 
 const productRate = ref<number>(3);
 
@@ -324,15 +325,15 @@ const addToCart = (product, qty) => {
 
     if (productVariation) {
       console.log("add variation: ", productVariation);
-      //   $store.dispatch("cart/addToCart", {
-      //     id: productVariation.id,
-      //     quantity: quantity,
-      //     anh: productVariation.anh || productVariation.anhSpChinh,
-      //     productId: productDetail.id,
-      //     productName: productDetail.tieuDe,
-      //     price: productDetail.giaMoi,
-      //     variation: `Màu: ${productVariation.giaTriObj1.giaTri}, Size: ${productVariation.giaTriObj2.giaTri}`,
-      //   });
+      _storeCart.addToCart({
+        id: productVariation.id,
+        qty: quantity,
+        anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
+        productId: productDetail?.value?.id,
+        productName: productDetail?.value?.tieuDe,
+        price: productDetail?.value?.giaMoi,
+        variation: `Màu: ${productVariation.giaTriObj1.giaTri}, Size: ${productVariation.giaTriObj2.giaTri}`,
+      });
     }
   } else {
     if (productDetail.value.loaiBienThe == "COLOR") {
@@ -349,15 +350,15 @@ const addToCart = (product, qty) => {
       );
       if (productVariation) {
         console.log("add variation: ", productVariation);
-        // $store.dispatch("cart/addToCart", {
-        //   id: productVariation.id,
-        //   quantity: quantity,
-        //   anh: productVariation.anh || productVariation.anhSpChinh,
-        //   productId: productDetail.id,
-        //   productName: productDetail.tieuDe,
-        //   price: productDetail.giaMoi,
-        //   variation: `Màu: ${productVariation.giaTriObj1.giaTri}`,
-        // });
+        _storeCart.addToCart({
+          id: productVariation.id,
+          qty: quantity,
+          anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
+          productId: productDetail?.value?.id,
+          productName: productDetail?.value?.tieuDe,
+          price: productDetail?.value?.giaMoi,
+          variation: `Màu: ${productVariation.giaTriObj1.giaTri}`,
+        });
       }
     } else {
       // for size
@@ -372,15 +373,16 @@ const addToCart = (product, qty) => {
       );
       if (productVariation) {
         console.log("add variation: ", productVariation);
-        // $store.dispatch("cart/addToCart", {
-        //   id: productVariation.id,
-        //   quantity: quantity,
-        //   anh: productVariation.anh || productVariation.anhSpChinh,
-        //   productId: productDetail.id,
-        //   productName: productDetail.tieuDe,
-        //   price: productDetail.giaMoi,
-        //   variation: `Size: ${productVariation.giaTriObj2.giaTri}`,
-        // });
+
+        _storeCart.addToCart({
+          id: productVariation.id,
+          qty: quantity,
+          anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
+          productId: productDetail?.value?.id,
+          productName: productDetail?.value?.tieuDe,
+          price: productDetail?.value?.giaMoi,
+          variation: `Size: ${productVariation.giaTriObj2.giaTri}`,
+        });
       }
     }
   }
