@@ -129,9 +129,4 @@ const updateQty = (val: number, record: ICart) => {
   _storeCart.updateCartQuantity({ ...record, qty: val });
 };
 </script>
-<style>
-thead.ant-table-thead th {
-  background-color: #f79837 !important;
-  color: white !important;
-}
-</style>
+
