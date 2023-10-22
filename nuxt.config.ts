@@ -11,7 +11,8 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
   ],
   plugins: [
-    { src: '@/plugins/ant-ui.ts', mode: 'client', ssr: false }
+    { src: '@/plugins/ant-ui.ts', mode: 'client', ssr: false },
+    { src: '@/plugins/Utils.ts', mode: 'client', ssr: false },
   ],
 
   nitro: {

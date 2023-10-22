@@ -6,6 +6,7 @@
       </a-breadcrumb-item>
       <a-breadcrumb-item>Giỏ hàng</a-breadcrumb-item>
     </a-breadcrumb>
+
     <a-table
       class="mt-[20px]"
       :columns="columns"
@@ -45,7 +46,7 @@
         <template v-if="column.dataIndex === 'qty'">
           <a-input-number
             :defaultValue="record.qty"
-            @change="(val: string) => updateQty(val, record)"
+            @change="(val: any) => updateQty(Number(val), record as ICart)"
           />
         </template>
 
@@ -90,11 +91,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useCartStore, ICart } from "/stores/cart";
+import { useCartStore, ICart } from "~/stores/cart";
 
 const _storeCart = useCartStore();
 
-const columns = [
+const columns: any = [
   {
     title: "Ảnh",
     dataIndex: "image",
@@ -125,7 +126,7 @@ const columns = [
 ];
 
 const updateQty = (val: number, record: ICart) => {
-  console.log("on change: ", val);
+  console.log("on change qty: ", val, record);
   _storeCart.updateCartQuantity({ ...record, qty: val });
 };
 </script>

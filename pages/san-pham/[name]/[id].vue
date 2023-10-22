@@ -327,12 +327,13 @@ const addToCart = (product, qty) => {
       console.log("add variation: ", productVariation);
       _storeCart.addToCart({
         id: productVariation.id,
-        qty: quantity,
+        qty: quantity.value,
         anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
         productId: productDetail?.value?.id,
         productName: productDetail?.value?.tieuDe,
         price: productDetail?.value?.giaMoi,
         variation: `Màu: ${productVariation.giaTriObj1.giaTri}, Size: ${productVariation.giaTriObj2.giaTri}`,
+        stockCnt: productVariation.soLuong
       });
     }
   } else {
@@ -352,12 +353,13 @@ const addToCart = (product, qty) => {
         console.log("add variation: ", productVariation);
         _storeCart.addToCart({
           id: productVariation.id,
-          qty: quantity,
+          qty: quantity.value,
           anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
           productId: productDetail?.value?.id,
           productName: productDetail?.value?.tieuDe,
           price: productDetail?.value?.giaMoi,
           variation: `Màu: ${productVariation.giaTriObj1.giaTri}`,
+          stockCnt: productVariation.soLuong
         });
       }
     } else {
@@ -376,12 +378,13 @@ const addToCart = (product, qty) => {
 
         _storeCart.addToCart({
           id: productVariation.id,
-          qty: quantity,
+          qty: quantity.value,
           anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
           productId: productDetail?.value?.id,
           productName: productDetail?.value?.tieuDe,
           price: productDetail?.value?.giaMoi,
           variation: `Size: ${productVariation.giaTriObj2.giaTri}`,
+          stockCnt: productVariation.soLuong
         });
       }
     }
