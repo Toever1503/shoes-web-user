@@ -16,7 +16,7 @@
           </h3>
         </template>
 
-        <a-form :model="formState" :label-col="{ span: 8 }" @finish="onFinish" @finishFailed="onFinishFailed">
+        <a-form ref="formRef" :model="formState" :label-col="{ span: 8 }">
 
           <a-form-item label="Tên người nhận" name="hoTenNguoiNhan"
             :rules="[{ required: true, message: 'Vui lòng không được bỏ trống!' }]">
@@ -32,14 +32,22 @@
             <a-input v-model:value="formState.email" type="email" />
           </a-form-item>
 
+          <div class="flex justify-end mb-2" v-if="false">
+            <a-button v-if="true" size="small">
+              Chọn địa chỉ cũ
+            </a-button>
+          </div>
           <a-form-item label="Tỉnh/TP" name="province" :rules="[{ required: true, message: 'Vui lòng chọn tỉnh/TP!' }]">
-            <a-select v-model:value="formState.province" show-search placeholder="Chọn tỉnh/tp" style="width: 100%"
-              @change="onProvinceChange">
+            <a-select v-model:value="formState.province" show-search class="w-full min-w-[200px]"
+              placeholder="Chọn tỉnh/tp" style="width: 100%" @change="onProvinceChange">
               <a-select-option value="">Chọn tỉnh/tp</a-select-option>
               <a-select-option v-for="(item, index) in provinceList" :key="index" :value="`${item.code}##${item.name}`">
                 {{ item.name }}
               </a-select-option>
             </a-select>
+
+
+
           </a-form-item>
 
           <a-form-item label="Quận/Huyện" name="district"
@@ -132,14 +140,20 @@
                   </span>
                 </a-space>
 
-                <a-space class="justify-between w-full">
+                <a-space class="justify-between w-full items-start">
                   <span class="font-semibold">
                     Giảm giá
                   </span>
 
-                  <span>
-                    0$
-                  </span>
+                  <div class="grid">
+                    <a-space>
+                      <a-input size="small"></a-input>
+                      <a-button size="small">Áp dụng</a-button>
+                    </a-space>
+                    <span class="text-end">
+                      - 0$
+                    </span>
+                  </div>
                 </a-space>
 
                 <a-space class="justify-between w-full">
@@ -164,8 +178,8 @@
                   </a-radio-group>
                 </a-space>
                 <a-space class="justify-end w-full">
-                  <a-button class="bg-black text-white" htmlType="submit">
-                    Đặt hàng 
+                  <a-button class="bg-black text-white" @click="onSubmitForm">
+                    Đặt hàng
                   </a-button>
                 </a-space>
 
@@ -184,14 +198,25 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { reactive, inject } from 'vue';
+import { reactive, inject, ref } from 'vue';
 import PaymentService from '~/services/PaymentService';
 import { useCartStore, ICart } from "~/stores/cart";
+import type { FormInstance } from 'ant-design-vue';
 
 const _getProvinces = inject("getProvinces", (p: any) => []);
 const _storeCart = useCartStore();
 const _router = useRouter();
 
+const formRef = ref<FormInstance>();
+const onSubmitForm = () => {
+  formRef?.value?.validate()
+    .then(() => {
+      onFinish(formState);
+    })
+    .catch(error => {
+      onFinishFailed(error);
+    });
+}
 const columns: any = [
   {
     title: "Sản phẩm",
@@ -234,7 +259,7 @@ const formState = reactive<FormState>({
   hoTenNguoiNhan: '',
   soDienThoaiNhanHang: '',
   note: '',
-  phuongThucTT: '',
+  phuongThucTT: 'VNPAY',
   discount: 0,
   shipFee: 0,
   province: '',
@@ -337,6 +362,9 @@ const onFinish = (values: any) => {
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
+  notification.error({
+    message: "Vui lòng kiểm tra lại thông tin!"
+  });
 };
 
 
