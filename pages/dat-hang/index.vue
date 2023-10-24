@@ -174,7 +174,7 @@
 
                   <a-radio-group v-model:value="formState.phuongThucTT">
                     <a-radio value="VNPAY">Thanh toán qua VNPAY</a-radio>
-                    <a-radio value="CODE">Thanh toán khi nhận hàng</a-radio>
+                    <a-radio value="COD">Thanh toán khi nhận hàng</a-radio>
                   </a-radio-group>
                 </a-space>
                 <a-space class="justify-end w-full">
@@ -354,7 +354,7 @@ const onFinish = (values: any) => {
     .catch((err) => {
       console.log("checkout failed: ", err);
       notification.error({
-        message: "Đặt hàngg thất bại. Vui lòng thử lại sau!"
+        message: "Đặt hàng thất bại. Vui lòng thử lại sau!"
       });
     })
     .finally(() => (submitted.value = false));
