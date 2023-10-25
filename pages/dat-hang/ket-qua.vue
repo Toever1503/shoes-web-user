@@ -11,7 +11,7 @@
     <section class="p-5 text-center">
       <h3 class="text-2xl mb-0">Đơn hàng đã được tạo thành công!</h3>
       <p class="mb-3 text-[#777c87]">
-        Mã đơn hàng của bạn là: #883738
+        Mã đơn hàng của bạn là: #{{ orderDetail?.maDonHang }}
         <br>
         Chúng tôi sẽ liên hệ lại với bạn để xác nhận đơn hàng. Cảm ơn quý khách đã sử dụng dịch vụ!
       </p>
@@ -20,30 +20,106 @@
         <h3 class="text-2xl" style="border-bottom: 2px solid orange;">
           Thông Tin Đơn Hàng
         </h3>
-        {{ orderDetail }}
         <a-table :columns="tblCols" :data-source="tbLData" :pagination="false">
           <template #bodyCell="{ column, text, record }">
             <template v-if="column.dataIndex === 'product'">
-              <router-link class="m-0" :to="`/san-pham/${record.productName}/${record.productId}`">
-                <span class="m-0">
-                  {{ record.productName }}
-                </span>
-              </router-link>
-              <p class="m-0">
-                {{ record.variation }}
-                -
-                x{{ record.qty }}
-              </p>
+              <div class="w-[500px]">
+                <router-link class="m-0" :to="`/san-pham/${record.sanPham.tieuDe}/${record.sanPham.id}`">
+                  <span class="m-0">
+                    {{ record.sanPham.tieuDe }}
+                  </span>
+                </router-link>
+                <p class="m-0">
+                  {{ record?.motaPhanLoai }}
+                  -
+                  x{{ record.soLuong }}
+                </p>
+              </div>
             </template>
 
             <template v-if="column.dataIndex === 'price'">
-              <span>{{ record.price }} vnd</span>
+              <span>{{ record.giaTien }} vnd</span>
             </template>
 
             <template v-if="column.dataIndex === 'qty'">
-              <span>{{ record.price * record.qty }} vnd</span>
+              <span>{{ record.giaTien * record.soLuong }} vnd</span>
             </template>
 
+          </template>
+
+          <template #footer>
+
+            <a-space direction="vertical" class="w-full">
+
+              <a-space class="justify-between w-full">
+                <span class="font-semibold">
+                  Tổng sản phẩm
+                </span>
+
+                <span>
+                  {{ orderDetail?.tongSp | 0 }}
+                </span>
+              </a-space>
+
+              <a-space class="justify-between w-full">
+                <span class="font-semibold">
+                  Tổng tiền sản phẩm
+                </span>
+
+                <span>
+                  {{ orderDetail?.tongTienSp | 0 }} vnd
+                </span>
+              </a-space>
+
+              <a-space class="justify-between w-full">
+                <span class="font-semibold">
+                  Phí ship
+                </span>
+
+                <span>
+                  {{ orderDetail?.phiShip | 0 }} vnd
+                </span>
+              </a-space>
+
+              <a-space class="justify-between w-full items-start">
+                <span class="font-semibold">
+                  Giảm giá
+                </span>
+
+                <span class="text-end">
+                  {{ orderDetail?.tongTienGiamGia | 0 }} vnd
+                </span>
+              </a-space>
+
+              <a-space class="justify-between w-full">
+                <span class="font-semibold">
+                  Hình thức thanh toán
+                </span>
+
+                <span>
+                  {{ orderDetail?.phuongThucTT }}
+                </span>
+              </a-space>
+
+              <a-space class="justify-between w-full">
+                <span class="font-semibold">
+                  Tổng tiền thanh toán
+                </span>
+
+                <span>
+                  {{ orderDetail?.tongGiaTien | 0 }} vnd
+                </span>
+              </a-space>
+
+
+              <div class="w-full">
+                <a-button class="bg-black text-white mx-auto w-fit">
+                  <router-link to="/">Tiếp tục mua sắm </router-link>
+                </a-button>
+              </div>
+
+
+            </a-space>
           </template>
         </a-table>
       </a-card>
@@ -55,7 +131,7 @@
 import { useCartStore, ICart } from "~/stores/cart";
 import { useRoute, useRouter } from "vue-router";
 import PaymentService from "~/services/PaymentService";
-import {onMounted} from "vue";
+import { onMounted } from "vue";
 
 const _route = useRoute();
 const _router = useRouter();
@@ -88,25 +164,18 @@ onMounted(() => {
   else {
     if (_route.query.status == "SUCCESS") {
       if (_route.query.id)
-        // PaymentService.getDetailOrder(_route.query.id)
-        //   .then((res) => {
-        //     console.log("detail order: ", res);
-        //     orderDetail.value = res;
-        //     //   _storeCart.forceResetCartItem();
-        //   })
-        //   .catch((err) => {
-        //     console.log("get detail order failed: ", err);
-        //     _router.push("/404");
-        //   });
-        fetch("http://localhost:8082/v1/payment/detail/22", {
-        })
-        .then(res => res.json())
-        .then(data => {
-          console.log("detail order: ", data);
-        })
-        .catch(error => {
-          console.log("get detail order failed: ", error)
-        }) 
+        PaymentService.getDetailOrder(_route.query.id)
+          .then((res: any) => {
+            console.log("detail order: ", res);
+            orderDetail.value = res;
+            tbLData.value = res.chiTietDonHang;
+            //   _storeCart.forceResetCartItem();
+          })
+          .catch((err) => {
+            console.log("get detail order failed: ", err);
+            _router.push("/404");
+          });
+     
       else _router.push("/404");
     } else if (_route.query.status == "FAILED") {
 
