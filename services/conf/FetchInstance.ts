@@ -3,7 +3,6 @@ const baseApiUrl = 'http://localhost:8082/v1';
 const commonBase = (payload: any, headers: any): any => {
     return (
         {
-            mode: "no-cors",
             body: payload,
             // credentials: 'include',
             headers: {
