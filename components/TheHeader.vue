@@ -8,6 +8,14 @@
         mode="horizontal"
         :items="items"
       />
+      <nuxt-link href="/dang-nhap" v-if="authen == null || authen == undefined">Đăng nhập</nuxt-link>
+      <ul v-else>
+        <li class="flex items-center gap-[10px]">
+          <nuxt-link href="/tai-khoan">Xin chào {{authen}}</nuxt-link>
+          <a href="#">Đăng xuất</a>
+        </li>
+      </ul>
+
       <ShoppingCartOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
       <SearchOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
     </div>
@@ -22,6 +30,8 @@ import {
   SettingOutlined,
 } from "@ant-design/icons-vue";
 import { MenuProps } from "ant-design-vue";
+import { fetchInstance } from "~/services/FetchInstance";
+import userVue from "~/layouts/user.vue";
 const current = ref<string[]>(["mail"]);
 const items = ref<MenuProps["items"]>([
   {
@@ -57,6 +67,8 @@ const items = ref<MenuProps["items"]>([
     title: "Liên hệ",
   },
 ]);
+
+const authen = fetchInstance.getCookie("username");
 </script>
 
 <style>
