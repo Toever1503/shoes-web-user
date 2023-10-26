@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body,
+html,
+body,
 #__nuxt {
   font-family: "Poppins", sans-serif;
   /*overflow-x: hidden;*/
@@ -25,4 +26,21 @@ a {
 img {
   width: 100%;
   height: 100%;
+}
+
+.bordered {
+  border: 1px solid #d9d9d9;
+}
+.bg-main{
+  background-color: #f79837;
+  background: #f79837;
+}
+table>thead>tr>th {
+  border-start-start-radius: unset !important;
+  border-start-end-radius: unset !important;
+}
+
+thead.ant-table-thead th {
+  background-color: #f79837 !important;
+  color: white !important;
 }

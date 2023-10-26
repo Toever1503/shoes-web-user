@@ -17,6 +17,9 @@
       </ul>
 
       <ShoppingCartOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
+      <router-link to="/gio-hang">
+        <ShoppingCartOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
+      </router-link>
       <SearchOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
     </div>
   </header>
