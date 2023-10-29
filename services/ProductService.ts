@@ -7,7 +7,19 @@ const locSp = (payload: any, page = 0, size = 10) => FetchInstance.post(`${baseP
 });
 const chiTietSp = (id: number) => FetchInstance.get(`${basePath}/${id}`);
 
+const getAllCategory = () =>  FetchInstance.get(`/danh-muc-giay/loc-danh-muc?page=0&size=999`);
+const getAllBrand = () => FetchInstance.get(`/thuong-hieu/loc-thuong-hieu?page=0&size=999`);
+const getAllColorVariation = () => FetchInstance.get(`${basePath}/get-all-gia-tri-bien-the/1`);
+const getAllSizeVariation = () => FetchInstance.get(`${basePath}/get-all-gia-tri-bien-the/2`);
+
+// get-all-gia-tri-bien-the
 export default {
     locSp,
-    chiTietSp
+    chiTietSp,
+
+    getAllCategory,
+    getAllBrand,
+    getAllColorVariation,
+    getAllSizeVariation,
+
 };

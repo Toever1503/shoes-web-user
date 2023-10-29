@@ -95,7 +95,6 @@
           Sản phẩm mới cập nhật</h4>
       </div>
 
-      {{ productList[0] }}
 
 
       <a-spin :spinning="isLoadingProduct">

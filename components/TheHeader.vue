@@ -2,39 +2,64 @@
   <header style="border-bottom: 1px solid rgba(220, 220, 220, 0.736);">
     <div class="flex items-center justify-between gap-[15px] max-w-[1200px] mx-auto px-[100px] py-[30px]">
       <img class="h-[30px] w-[100px]" src="https://sportshoes.web.app/_nuxt/img/logo.f486653.png">
-      <a-space :size="30" class="font-semibold text-[20px] items-center">
+      <a-space :size="15" class="font-light text-[20px] items-center">
+
+        <router-link to="/danh-sach-san-pham">
+          Sản phẩm bán chạy
+        </router-link>
 
         <a-dropdown overlayClassName="px-[50px] py-[20px]">
           <a class="ant-dropdown-link" @click.prevent>
-            <router-link to="/gio-hang">
-              Sản phẩm
-            </router-link>
-            <DownOutlined />
+            <span> Giày nam </span>
+            <DownOutlined class="text-[14px]" />
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item>
-                <a href="javascript:;">1st menu item</a>
+              <a-menu-item :key="item.tenDanhMuc" v-for="item in categoryList">
+                <router-link :to="`/giay-nu?danh_muc=${item.id}`">
+                  {{ item.tenDanhMuc }}
+                </router-link>
               </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;">2nd menu item</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a href="javascript:;">3rd menu item</a>
+
+              <a-menu-item :key="item.tenThuongHieu" v-for="item in brandList">
+                <router-link :to="`/giay-nu?thuon_hieu=${item.id}`">
+                  Giày {{ item.tenThuongHieu }}
+                </router-link>
               </a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>
 
-        <router-link to="/gio-hang">
+        <a-dropdown overlayClassName="px-[50px] py-[20px]">
+          <a class="ant-dropdown-link" @click.prevent>
+            <router-link to="/giay-nu">
+              Giày nữ
+            </router-link>
+            <DownOutlined class="text-[14px]" />
+          </a>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item :key="item.tenDanhMuc" v-for="item in categoryList">
+                <router-link :to="`/giay-nu?danh_muc=${item.id}`">
+                  {{ item.tenDanhMuc }}
+                </router-link>
+              </a-menu-item>
+
+              <a-menu-item :key="item.tenThuongHieu" v-for="item in brandList">
+                <router-link :to="`/giay-nu?thuon_hieu=${item.id}`">
+                  Giày {{ item.tenThuongHieu }}
+                </router-link>
+              </a-menu-item>
+
+            </a-menu>
+          </template>
+        </a-dropdown>
+
+        <router-link to="/tra-cuu-don">
           Tra cứu đơn hàng
         </router-link>
 
-        <router-link to="/gio-hang">
-          Liên hệ
-        </router-link>
-
-        <router-link to="/Chính sách">
+        <router-link to="/chinh-sach">
           Chính sách đổi trả
         </router-link>
 
@@ -61,6 +86,32 @@ import {
 } from "@ant-design/icons-vue";
 import { MenuProps } from "ant-design-vue";
 
+import ProductService from "~/services/ProductService";
+
+const categoryList = ref<{
+  id: number;
+  tenDanhMuc: string
+}[]>([]);
+const brandList = ref<{
+  id: number;
+  tenThuongHieu: string
+}[]>([]);
+
+
+onMounted(() => {
+  ProductService.getAllBrand()
+    .then((res: any) => brandList.value = res.content)
+    .catch(() => notification.error({
+      message: "Không thể lấy dữ liệu thương hiệụ!"
+    }));
+
+  ProductService.getAllCategory()
+    .then((res: any) => categoryList.value = res.content)
+    .catch(() => notification.error({
+      message: "Không thể lấy dữ liệu danh mục!"
+    }));
+
+});
 </script>
 
 <style>
