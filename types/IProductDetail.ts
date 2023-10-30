@@ -16,6 +16,12 @@ export default interface IProductDetail {
     moTa: string;
     nguoiTao: number;
     loaiBienThe: EProductVariation;
+    vouchers: [];
+    chatLieu: "",
+    trongLuong: "",
+    congNghe: "",
+    tinhNang: "",
+    noiSanXuat: ""
 };
 
 export type EProductVariation = "COLOR" | "SIZE" | "BOTH";

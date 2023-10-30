@@ -50,7 +50,7 @@
           <img :src="activeImage" />
         </a-space>
 
-        <div class="product_info md:w-1/2">
+        <div class="product_info md:w-1/2" v-if="productDetail">
           <h1 class="text-2xl">
             {{ productDetail?.tieuDe }}
           </h1>
@@ -71,13 +71,15 @@
             class="product_price flex items-center gap-[20px] bg-gray-100 px-5 py-3 mt-3"
           >
             <span class="font-bold text-xl text-red-500">
-              {{ productDetail?.giaMoi }} vnd
+              {{ _formatVnCurrency(productDetail?.giaMoi || 0) }}
             </span>
             <div class="flex items-center gap-[10px] text-[14px]">
-              <del>{{ productDetail?.giaCu }} vnd</del>
+              <del>{{ _formatVnCurrency(productDetail?.giaCu || 0) }}</del>
               <span class="bg-red-200 text-red-500 p-1"
                 >-{{
-                  (productDetail?.giaMoi / productDetail?.giaCu) * 100
+                  String(
+                    (productDetail?.giaMoi / productDetail?.giaCu) * 100
+                  ).slice(0, 2)
                 }}%</span
               >
             </div>
@@ -88,10 +90,13 @@
               Chương trình khuyến mãi
             </legend>
             <ul>
-              <li>Nha ma 29 giam 20k</li>
-              <li>Nha ma 29 giam 20k</li>
-              <li>Nha ma 29 giam 20k</li>
-              <li>Nha ma 29 giam 20k</li>
+              <template
+                :key="index"
+                v-for="(item, index) in productDetail.vouchers"
+              >
+                <li>Nha ma 29 giam 20k</li>
+              </template>
+
               <li>Miễn phí giao hàng cho đơn hàng trên 800k</li>
             </ul>
           </fieldset>
@@ -158,7 +163,7 @@
       <!-- end product info -->
 
       <!-- begin product description -->
-      <a-tabs class="mt-5">
+      <a-tabs class="mt-5" v-if="productDetail">
         <a-tab-pane key="1" tab="Mô tả sản phẩm">
           <div v-html="productDetail?.moTa" />
         </a-tab-pane>
@@ -166,14 +171,21 @@
         <!-- product info additional -->
         <a-tab-pane key="2" tab="Thông tin thêm" force-render>
           <a-descriptions bordered :column="1">
-            <a-descriptions-item label="Product"
-              >Cloud Database</a-descriptions-item
+            <a-descriptions-item label="Chất liệu"
+              >{{productDetail.chatLieu}}</a-descriptions-item
             >
-            <a-descriptions-item label="Billing">Prepaid</a-descriptions-item>
-            <a-descriptions-item label="Time">18:00:00</a-descriptions-item>
-            <a-descriptions-item label="Amount">$80.00</a-descriptions-item>
-            <a-descriptions-item label="Discount">$20.00</a-descriptions-item>
-            <a-descriptions-item label="Official">$60.00</a-descriptions-item>
+            <a-descriptions-item label="Trọng lượng"
+              >{{productDetail.trongLuong}}g</a-descriptions-item
+            >
+            <a-descriptions-item label="Công nghệ"
+              >{{productDetail.congNghe}}</a-descriptions-item
+            >
+            <a-descriptions-item label="Tính năng nổi bật"
+              >{{productDetail.tinhNang}}</a-descriptions-item
+            >
+            <a-descriptions-item label="Nơi sản xuất"
+              >{{productDetail.noiSanXuat}}</a-descriptions-item
+            >
           </a-descriptions>
         </a-tab-pane>
 
@@ -212,8 +224,17 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { useCartStore } from "/stores/cart";
+import { onMounted, inject } from "vue";
+import IProductDetail from "~/types/IProductDetail";
 
 const _storeCart = useCartStore();
+const _route = useRoute();
+const _formatVnCurrency = function (value: number) {
+  return Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(value);
+};
 
 const productRate = ref<number>(3);
 
@@ -333,7 +354,7 @@ const addToCart = (product, qty) => {
         productName: productDetail?.value?.tieuDe,
         price: productDetail?.value?.giaMoi,
         variation: `Màu: ${productVariation.giaTriObj1.giaTri}, Size: ${productVariation.giaTriObj2.giaTri}`,
-        stockCnt: productVariation.soLuong
+        stockCnt: productVariation.soLuong,
       });
     }
   } else {
@@ -359,7 +380,7 @@ const addToCart = (product, qty) => {
           productName: productDetail?.value?.tieuDe,
           price: productDetail?.value?.giaMoi,
           variation: `Màu: ${productVariation.giaTriObj1.giaTri}`,
-          stockCnt: productVariation.soLuong
+          stockCnt: productVariation.soLuong,
         });
       }
     } else {
@@ -384,7 +405,7 @@ const addToCart = (product, qty) => {
           productName: productDetail?.value?.tieuDe,
           price: productDetail?.value?.giaMoi,
           variation: `Size: ${productVariation.giaTriObj2.giaTri}`,
-          stockCnt: productVariation.soLuong
+          stockCnt: productVariation.soLuong,
         });
       }
     }
@@ -392,7 +413,7 @@ const addToCart = (product, qty) => {
 };
 
 onMounted(() => {
-  fetch("http://localhost:8082/v1/san-pham/public/1")
+  fetch("http://localhost:8082/v1/san-pham/public/"+_route.params.id)
     .then((res) => res.json())
     .then((res) => {
       console.log("result:  ", res);
