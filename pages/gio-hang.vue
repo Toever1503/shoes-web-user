@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-[10px]">
-    <a-breadcrumb class="bg-gray-50 px-3 md:px-[50px]">
+  <div>
+    <a-breadcrumb class="bg-gray-50 px-3 py-2 md:px-[50px]">
       <a-breadcrumb-item>
         <router-link to="/">Trang chủ</router-link>
       </a-breadcrumb-item>
@@ -26,11 +26,11 @@
           </template>
 
           <template v-if="column.dataIndex === 'price'">
-            <p>{{ record.price }} vnd</p>
+            <p>{{ _formatVnCurrency(record.price) }} </p>
           </template>
 
           <template v-if="column.dataIndex === 'qty'">
-            <a-input-number :defaultValue="record.qty" @change="(val: any) => updateQty(Number(val), record as ICart)" />
+            <a-input-number v-model:value="record.qty" @change="(val: any) => updateQty(Number(val), record as ICart)" />
           </template>
 
           <template v-else-if="column.dataIndex === 'action'">
@@ -49,12 +49,12 @@
               </h3>
             </template>
             <a-descriptions-item class="px-5" label="Tổng sản phẩm">
-              <div class="text-end w-full">x{{ _storeCart.cartTotalQty }}</div>
+              <div class="text-end w-full">{{ _storeCart.cartTotalQty }}</div>
             </a-descriptions-item>
 
             <a-descriptions-item class="px-5" label="Tổng Tiền">
               <div class="text-end w-full">
-                {{ _storeCart.cartTotalAmount }} vnd
+                {{ _formatVnCurrency(_storeCart.cartTotalAmount) }}
               </div>
             </a-descriptions-item>
 
@@ -76,6 +76,7 @@
 <script lang="ts" setup>
 import { useCartStore, ICart } from "~/stores/cart";
 
+const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
 const _storeCart = useCartStore();
 
 const columns: any = [

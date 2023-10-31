@@ -158,11 +158,11 @@
               </template>
 
               <template v-if="column.dataIndex === 'price'">
-                <span>{{ record.price }} vnd</span>
+                <span>{{ _formatVnCurrency(record.price) }}</span>
               </template>
 
               <template v-if="column.dataIndex === 'qty'">
-                <span>{{ record.price * record.qty }} vnd</span>
+                <span>{{ _formatVnCurrency(record.price * record.qty) }}</span>
               </template>
             </template>
 
@@ -332,7 +332,7 @@ const voucherModel = reactive<{
   isChecking: Boolean;
   error: string;
   success: string;
-  voucherInfo: Object;
+  voucherInfo?: Object;
   q: string;
   discountPrice: number;
 }>({
@@ -341,7 +341,7 @@ const voucherModel = reactive<{
   isChecking: false,
   error: "",
   success: "",
-  voucherInfo: {},
+  voucherInfo: undefined,
   q: "E1ECW5",
   discountPrice: 0,
 });
@@ -351,6 +351,7 @@ const onCheckVoucher = () => {
 
   voucherModel.hasChecked = true;
   voucherModel.discountPrice = 0;
+  voucherModel.voucherInfo = undefined;
 
   if (!voucherModel.q) {
     voucherModel.isValid = false;
@@ -433,6 +434,7 @@ const onFinish = (values: any) => {
     soDienThoaiNhanHang: formState.soDienThoaiNhanHang,
     diaChiNhanHang: undefined,
     diaChiId: undefined,
+    maGiamGiaId: voucherModel?.voucherInfo?.id || undefined
   };
 
   if (previousAddressId.value) payload.diaChiId = previousAddressId.value;

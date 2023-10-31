@@ -8,7 +8,7 @@
       <a-breadcrumb-item>Kết quả</a-breadcrumb-item>
     </a-breadcrumb>
 
-    <section class="p-5 text-center">
+    <section class="p-5 text-center" v-if="_route.query.status == 'SUCCESS'">
       <h3 class="text-2xl mb-0">Đơn hàng đã được tạo thành công!</h3>
       <p class="mb-3 text-[#777c87]">
         Mã đơn hàng của bạn là: #{{ orderDetail?.maDonHang }}
@@ -38,11 +38,11 @@
             </template>
 
             <template v-if="column.dataIndex === 'price'">
-              <span>{{ record.giaTien }} vnd</span>
+              <span>{{ _formatVnCurrency(record.giaTien) }} vnd</span>
             </template>
 
             <template v-if="column.dataIndex === 'qty'">
-              <span>{{ record.giaTien * record.soLuong }} vnd</span>
+              <span>{{ _formatVnCurrency(record.giaTien * record.soLuong) }} </span>
             </template>
 
           </template>
@@ -67,7 +67,7 @@
                 </span>
 
                 <span>
-                  {{ orderDetail?.tongTienSp | 0 }} vnd
+                  {{ _formatVnCurrency(orderDetail?.tongTienSp) }}
                 </span>
               </a-space>
 
@@ -77,7 +77,7 @@
                 </span>
 
                 <span>
-                  {{ orderDetail?.phiShip | 0 }} vnd
+                  {{ _formatVnCurrency(orderDetail?.phiShip) }}
                 </span>
               </a-space>
 
@@ -87,7 +87,7 @@
                 </span>
 
                 <span class="text-end">
-                  {{ orderDetail?.tongTienGiamGia | 0 }} vnd
+                  {{ _formatVnCurrency(orderDetail?.tongTienGiamGia) }}
                 </span>
               </a-space>
 
@@ -106,8 +106,8 @@
                   Tổng tiền thanh toán
                 </span>
 
-                <span>
-                  {{ orderDetail?.tongGiaTien | 0 }} vnd
+                <span class="text-red-500">
+                  {{ _formatVnCurrency(orderDetail?.tongGiaCuoiCung) }}
                 </span>
               </a-space>
 
@@ -123,7 +123,19 @@
           </template>
         </a-table>
       </a-card>
+
     </section>
+
+    <a-result v-else status="error" title="Thanh toán thất bại!">
+      <template #extra>
+        <div class="w-full">
+          <a-button class="bg-black text-white mx-auto w-fit">
+            <router-link to="/">Tiếp tục mua sắm </router-link>
+          </a-button>
+        </div>
+      </template>
+
+    </a-result>
   </div>
 </template>
 
@@ -133,6 +145,7 @@ import { useRoute, useRouter } from "vue-router";
 import PaymentService from "~/services/PaymentService";
 import { onMounted } from "vue";
 
+const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
 const _route = useRoute();
 const _router = useRouter();
 const _storeCart = useCartStore();
@@ -169,13 +182,13 @@ onMounted(() => {
             console.log("detail order: ", res);
             orderDetail.value = res;
             tbLData.value = res.chiTietDonHang;
-            //   _storeCart.forceResetCartItem();
+            _storeCart.fSetCart([]);
           })
           .catch((err) => {
             console.log("get detail order failed: ", err);
             _router.push("/404");
           });
-     
+
       else _router.push("/404");
     } else if (_route.query.status == "FAILED") {
 
