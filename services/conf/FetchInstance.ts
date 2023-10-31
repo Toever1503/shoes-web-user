@@ -53,14 +53,14 @@ const del = (url: string, payload: any = {}, headers = {}) => {
 }
 
 const getAuthHeader = () => {
-    // try {
-    //     const token = localStorage.getItem('loggedUser');
-    //     // const token = getCookie('token');
-    //     if (token)
-    //         return { 'x-api-token': token };
-    // } catch (e) {
-    //     return {};
-    // }
+    try {
+        const token = localStorage.getItem('loggedUser');
+        // const token = getCookie('token');
+        if (token)
+            return { 'x-api-token': token };
+    } catch (e) {
+        return {};
+    }
     return {}
 }
 

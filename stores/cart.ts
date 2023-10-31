@@ -41,11 +41,13 @@ export const useCartStore = defineStore('cart', {
         async fAddToCart(payload: ICart) {
             console.log("begin add item", payload);
 
+
             try {
-                await CartService.addProduct({
-                    sanPhamBienThe: payload.id,
-                    soLuong: payload.qty
-                });
+                if (localStorage.getItem('loggedUser'))
+                    await CartService.addProduct({
+                        sanPhamBienThe: payload.id,
+                        soLuong: payload.qty
+                    });
 
                 notification.success({
                     message: "Thêm thành công!"

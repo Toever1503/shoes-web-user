@@ -21,9 +21,9 @@
                     <div>
                         <label for="oderId" class="font-bold block mb-3 text-red-600">Mã đơn hàng/Số điện thoại</label>
                         <a-input v-model:value="q" type="text" id="oderId" name="oderId"
-                            placeholder="Found in your oder Confirmation email" />
+                            placeholder="..." />
                     </div>
-                    <div class=" flex justify-center">
+                    <div class=" flex justify-center mt-[15px]">
                         <a-button @click="onSearch">
                             Tìm kiếm
                         </a-button>
