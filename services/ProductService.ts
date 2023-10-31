@@ -9,7 +9,7 @@ const getAllCategory = () =>  FetchInstance.get(`/danh-muc-giay/loc-danh-muc?pag
 const getAllBrand = () => FetchInstance.get(`/thuong-hieu/loc-thuong-hieu?page=0&size=999`);
 const getAllColorVariation = () => FetchInstance.get(`${basePath}/get-all-gia-tri-bien-the/1`);
 const getAllSizeVariation = () => FetchInstance.get(`${basePath}/get-all-gia-tri-bien-the/2`);
-const checkVoucher = (code: string, dmList: number[]) => FetchInstance.get(`/voucher/public/kiem-tra-voucher/${code}?=dmList=${dmList}`);
+const checkVoucher = (code: string, productIds: number[]) => FetchInstance.get(`/voucher/public/kiem-tra-voucher/${code}?productList=${productIds}`);
 
 
 // get-all-gia-tri-bien-the

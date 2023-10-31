@@ -60,10 +60,18 @@ const getProvinces = (payload: { p: number }) => {
 
     return dataResponse;
 }
+
+function formatVnCurrency(value: number) {
+    return Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+    }).format(value);
+};
 export default defineNuxtPlugin((nuxtApp) => {
     const app = nuxtApp.vueApp;
     app.provide("readFileBase64", readFileBase64);
-        app.provide("debounce", debounce);
-        app.provide("getRandomColor", () => color[Math.floor(Math.random() * color.length)]);
-        app.provide("getProvinces", getProvinces);
+    app.provide("debounce", debounce);
+    app.provide("getRandomColor", () => color[Math.floor(Math.random() * color.length)]);
+    app.provide("getProvinces", getProvinces);
+    app.provide("formatVnCurrency", formatVnCurrency);
 });
