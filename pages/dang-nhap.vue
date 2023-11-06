@@ -26,7 +26,9 @@
               name="username"
               :rules="[{ required: true, message: 'Tài khoản không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.username" placeholder="Tài khoản ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.username" placeholder="Tài khoản ...">
+                <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+              </a-input>
             </a-form-item>
             </div>
             <div class="flex flex-col mb-3">
@@ -36,7 +38,9 @@
               name="password"
               :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]"
           >
-            <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ..."/>
+            <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ...">
+              <template #prefix><LockOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
+            </a-input-password>
           </a-form-item>
 
             </div>
@@ -79,9 +83,12 @@ const handleSubmit = () => {
                 res => {
                     console.log('user: ',res.data);
                     console.log('login success: ');
-                    fetchInstance.setCookie('token', `${res.data.content.accessToken}`, res.data.content.accessExpireIn);
-                    fetchInstance.setCookie('auth',  `${res.data.content.roles[0]}`, res.data.content.refreshExpireIn);
-                    fetchInstance.setCookie('username',  `${res.data.content.userName}`, res.data.content.refreshExpireIn);
+                    // fetchInstance.setCookie('token', `${res.data.content.accessToken}`, res.data.content.accessExpireIn);
+                    // fetchInstance.setCookie('auth',  `${res.data.content.roles[0]}`, res.data.content.refreshExpireIn);
+                    // fetchInstance.setCookie('username',  `${res.data.content.userName}`, res.data.content.refreshExpireIn);
+                    window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
+                    window.localStorage.setItem('auth', `${res.data.content.roles[0]}`);
+                    window.localStorage.setItem('username', `${res.data.content.userName}`);
                     message.success('Đăng nhập thành công');
                     window.location.href = '/';
                 },

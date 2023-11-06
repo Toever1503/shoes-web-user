@@ -8,15 +8,30 @@
         mode="horizontal"
         :items="items"
       />
-      <nuxt-link href="/dang-nhap" v-if="authen == null || authen == undefined">Đăng nhập</nuxt-link>
-      <ul v-else>
-        <li class="flex items-center gap-[10px]">
-          <nuxt-link href="/tai-khoan">Xin chào {{authen}}</nuxt-link>
-          <a href="#">Đăng xuất</a>
-        </li>
-      </ul>
+      <nuxt-link class="font-bold text-lg text-[#000000e0] no-underline " href="/dang-nhap" v-if="authen == null || authen == undefined">Đăng nhập</nuxt-link>
+      <a-dropdown v-else>
+        <a class="ant-dropdown-link" @click.prevent>
+          <a-avatar size="large">
+            <template #icon><UserOutlined /></template>
+          </a-avatar>
+        </a>
+        <template #overlay>
+          <a-menu>
+            <a-menu-item ><nuxt-link href="/tai-khoan/thong-tin">Thông tin cá nhân </nuxt-link> </a-menu-item>
+            <a-menu-item><nuxt-link href="/tai-khoan/lich-su-mua">Lịch sử mua hàng</nuxt-link> </a-menu-item>
+            <a-menu-item @click="logOut">Đăng xuất</a-menu-item>
+<!--            <a-sub-menu key="test" title="sub menu">-->
+<!--              <a-menu-item>3rd menu item</a-menu-item>-->
+<!--              <a-menu-item>4th menu item</a-menu-item>-->
+<!--            </a-sub-menu>-->
+<!--            <a-sub-menu title="disabled sub menu" disabled>-->
+<!--              <a-menu-item>5d menu item</a-menu-item>-->
+<!--              <a-menu-item>6th menu item</a-menu-item>-->
+<!--            </a-sub-menu>-->
+          </a-menu>
+        </template>
+      </a-dropdown>
 
-      <ShoppingCartOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
       <router-link to="/gio-hang">
         <ShoppingCartOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
       </router-link>
@@ -71,8 +86,18 @@ const items = ref<MenuProps["items"]>([
   },
 ]);
 
-const authen = fetchInstance.getCookie("username");
+const authen = window.localStorage.getItem("username");
+
+const logOut = () => {
+  window.location.reload();
+  window.localStorage.removeItem("username");
+  window.localStorage.removeItem("auth");
+  window.localStorage.removeItem("loggedUser");
+  window.location.href = "/";
+};
+
 </script>
+
 
 <style>
 header .ant-menu-title-content {

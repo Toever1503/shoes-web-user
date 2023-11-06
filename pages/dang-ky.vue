@@ -33,7 +33,7 @@
                  <a-form-item
               label="Email"
               name="email"
-              :rules="[{ required: true, message: 'Email không được để trống!' }]"
+              :rules="[ {validator: handleValidateTypeEmail}]"
           > 
               <a-input class="h-10 text-base" v-model:value="formState.email" placeholder="Email ..."/>
             </a-form-item>
@@ -42,7 +42,7 @@
                  <a-form-item
               label="Số điện thoại"
               name="phone"
-              :rules="[{ required: true, message: 'Số điện thoại không được để trống!' }]"
+              :rules="[ {validator: handleValidateTypePhone}]"
           > 
               <a-input class="h-10 text-base" v-model:value="formState.phone" placeholder="Số điện thoại ..."/>
             </a-form-item>
@@ -126,4 +126,18 @@ const handleSubmit = () =>{
         }
       });
 }
+
+const handleValidateTypePhone = (rule, value) => {
+  if (value && !/((09|03|07|08|05)+([0-9]{8})\b)/g.test(value)) {
+    return Promise.reject('Số điện thoại không đúng!');
+  }
+  return Promise.resolve();
+};
+const handleValidateTypeEmail = (rule, value) => {
+  if (value && !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g.test(value)) {
+    return Promise.reject('Email không hợp lệ!');
+  }
+  return Promise.resolve();
+};
+
 </script>

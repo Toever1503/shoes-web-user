@@ -17,6 +17,10 @@ function setCookie(cookie_name, cookie_value, expire_date) {
     document.cookie = cookie_name + "=" + cookie_value + "; " + expires + "; path=/";
 }
 
+function removeCookie(cookie_name) {
+    document.cookie = cookie_name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
 export const fetchInstance = {
     getCookie,
     setCookie
