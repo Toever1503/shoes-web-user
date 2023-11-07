@@ -1,7 +1,7 @@
 <template>
   <header style="border-bottom: 1px solid rgba(220, 220, 220, 0.736);">
     <div class="flex items-center justify-between gap-[15px] max-w-[1200px] mx-auto px-[100px] py-[30px]">
-      <img class="h-[30px] w-[100px]" src="https://sportshoes.web.app/_nuxt/img/logo.f486653.png">
+      <img class="h-[30px] w-[100px]" src="/cover.png">
       <a-space :size="15" class="font-light text-[20px] items-center">
 
         <router-link to="/danh-sach-san-pham">
