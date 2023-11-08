@@ -9,7 +9,7 @@
 
         <div class="mx-auto max-w-[800px]">
 
-            <section class="px-3 md:px-[50px] bg-gray-50">
+            <section class="px-3 md:px-[50px]">
                 <a-card class="bg-white shadown rounded px-6">
                     <div class="container">
                         <h1 class="text-center font-bold text-3xl pt-5">Tra cứu đơn hàng</h1>
@@ -19,7 +19,7 @@
                         </p>
                     </div>
                     <div>
-                        <label for="oderId" class="font-bold block mb-3 text-red-600">Mã đơn hàng/Số điện thoại</label>
+                        <label for="oderId" class="font-bold block mb-3">Mã đơn hàng/Số điện thoại</label>
                         <a-input v-model:value="q" type="text" id="oderId" name="oderId"
                             placeholder="..." />
                     </div>

@@ -6,8 +6,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@ant-design-vue/nuxt',
-    'nuxt-swiper',    
-    'dayjs-nuxt',    
+    'nuxt-swiper',
+    'dayjs-nuxt',
     '@pinia/nuxt',
   ],
   plugins: [
@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 
   vue: {
   },
-  antd:{
+  antd: {
     // Options
   },
   dayjs: {
@@ -32,5 +32,14 @@ export default defineNuxtConfig({
     plugins: ['relativeTime', 'utc', 'timezone'],
     defaultLocale: 'vi',
     defaultTimezone: 'Asia/Ho_Chi_Minh',
+  },
+
+  //head
+  app: {
+    head: {
+      link: [
+        { rel: 'stylesheet', integrity: 'sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css', crossorigin: 'anonymous', referrerpolicy: 'no-referrer' }
+      ]
+    }
   }
 })
