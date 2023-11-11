@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto w-8/12 grid px-20 grid-cols-4 mt-10">
+  <div class="max-w-[1200px] mx-auto grid px-20 grid-cols-4 mt-10">
     <div class="col-span-1">
 
       <!-- <div class="w-48 h-auto border border-solid border-gray-200 rounded-lg">
@@ -55,7 +55,7 @@
         </nuxt-link>
         <div
             type="button"
-            class="py-5 uppercase relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-solid border  border-gray-200 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+            class="hidden py-5 uppercase relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-solid border  border-gray-200 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
         >
           <svg
               class="w-3 h-3 mr-2.5"
@@ -105,7 +105,7 @@
           name="basic"
           layout="vertical"
       >
-        <h2 class="text-lg font-medium mb-4">ACCOUNT DETAIL</h2>
+        <h2 class="text-lg font-medium mb-4">Thông tin</h2>
         <div class="mb-4">
           <a-radio-group v-model:value="formState.sex">
             <a-radio :value="1">Nam</a-radio>

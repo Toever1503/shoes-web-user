@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto w-8/12 grid px-20 grid-cols-4 mt-10">
+  <div class="max-w-[1200px] mx-auto grid px-20 grid-cols-4 mt-10">
     <div class="col-span-1">
 
       <!-- <div class="w-48 h-auto border border-solid border-gray-200 rounded-lg">
@@ -33,7 +33,7 @@
           </div>
         </nuxt-link>
         <div type="button"
-          class="py-5 uppercase relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-solid border  border-gray-200 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
+          class="hidden py-5 uppercase relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-solid border  border-gray-200 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700">
           <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18"
             fill="currentColor">
             <path
@@ -78,10 +78,11 @@
             {{ record.diaChi?.tenNguoiNhan }}
           </template>
           <template v-else-if="column.dataIndex === 'ngayTao'">
+            <!-- {{ dayjs(text).format("DD/MM/YYYY HH:mm:ss") }} -->
             {{ text }}
           </template>
           <template v-else-if="column.dataIndex === 'diaChiEntity'">
-            {{ text.diaChi }}
+            {{ text.diaChi.replaceAll(/__[0-9]+##/g, ", ") }}
           </template>
 
           <template v-else-if="column.dataIndex === 'tongTienGiamGia'">
@@ -92,7 +93,7 @@
           </template>
           <template v-else-if="column.dataIndex === 'trangThai'">
             <a-tag :color="getOrderStatusColor(text)">
-              {{ text }}
+               {{getLabelOrderStatusByValue(text)}}
             </a-tag>
           </template>
 
@@ -105,12 +106,12 @@
           <template v-else-if="column.dataIndex === 'action'">
             <div class="flex gap-[10px] items-left justify-start">
               <a>
-                <a-tooltip> <a-button type="default" title="Chi tiết" @click="showModal(record.id)">Chi tiết</a-button>
+                <a-tooltip> <a-button type="default" size="small" title="Chi tiết" @click="showModal(record.id)">Chi tiết</a-button>
                  
-                  <a-button type="default" class="ml-1" title="Hủy đơn" v-if="record.trangThai == 'WAITING_CONFIRM'">
+                  <a-button type="default" size="small" class="ml-1" title="Hủy đơn" v-if="record.trangThai == 'WAITING_CONFIRM'">
                   Hủy đơn
                   </a-button>
-                  <a-button @click="showModal1(record.id)" title="Đánh giá" type="default" class="ml-1"
+                  <a-button @click="showModal1(record.id)" size="small" title="Đánh giá" type="default" class="ml-1"
                     v-if="record.trangThai == 'COMPLETED'">
                     Đánh giá
                   </a-button>
@@ -188,9 +189,11 @@
 
 <script lang="ts" setup>
 import { orderUserService } from "../../services/OrderUser";
-import ETrangThaiDonHang from "./IDonHangStatus";
+import {ETrangThaiDonHang, getLabelOrderStatusByValue} from "./IDonHangStatus";
 import { danhGiaService} from "../../services/DanhGiaService"
 import { reactive, ref } from 'vue';
+// import dayjs from "dayjs-nuxt"
+
 const selectedRecord = ref(null);
 
 
@@ -244,7 +247,7 @@ const tblConfig = {
       key: "action",
       align: "center",
       fixed: 'right',
-      width: 170,
+      width: 140,
     },
   ],
 };

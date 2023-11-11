@@ -8,9 +8,6 @@
       <div
         class="flex flex-col bg-white opacity-90 shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md"
       >
-        <h1 class="text-center text-2xl font-bold uppercase">
-          Sign in to your account
-        </h1>
         <div class="mt-3">
           <a-form
             ref="formRef"
@@ -50,14 +47,14 @@
               @click="handleSubmit"
                 class="flex z-auto items-center justify-center focus:outline-none h-10 text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 hover:text-white rounded py-2 w-full transition duration-150 ease-in"
               >
-                <span class="justify-center uppercase">Sign In</span>
+                <span class="justify-center uppercase">Đăng nhập</span>
               </a-button>
             </div>
           </a-form>
 
           <div class="mt-10">
-            Don’t have an account yet?
-            <nuxt-link class="text-blue-600 hover:text-blue-700" href="/dang-ky">Sign up</nuxt-link>
+            Chưa có tài khoản?
+            <nuxt-link class="text-blue-600 hover:text-blue-700" href="/dang-ky">Đăng ký</nuxt-link>
           </div>
         </div>
       </div>

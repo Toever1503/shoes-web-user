@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="max-w-[1200px] mx-auto">
         <a-breadcrumb class="bg-gray-50 px-3 md:px-[50px] py-2">
             <a-breadcrumb-item>
                 <router-link to="/">Trang chủ</router-link>

@@ -1,13 +1,13 @@
 <template>
     <div class="max-w-[1200px] mx-auto">
-        <a-breadcrumb class="bg-gray-50 px-3 md:px-[50px] py-2">
+        <a-breadcrumb class="bg-gray-50 md:px-[50px] px-3 py-2">
             <a-breadcrumb-item>
                 <router-link to="/">Trang chủ</router-link>
             </a-breadcrumb-item>
             <a-breadcrumb-item>Chính sách đổi trả</a-breadcrumb-item>
         </a-breadcrumb>
 
-        <section class="px-3 md:px-[50px w-[1200px]">
+        <section class="px-3 md:px-[50px] w-full">
             <div class="content-page text-gray-600">
                 <div class="article-content">
                     <div class="article-pages">

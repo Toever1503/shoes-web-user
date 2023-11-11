@@ -66,19 +66,43 @@
       </a-space>
 
       <a-space class="items-center">
+        <router-link to="/gio-hang">
+          <div style="background-image: url('/image/common/Shopping-Bag.svg'); background-size: cover"
+            class="w-[18px] h-[18px] cursor-pointer hover:scale(1.1)"></div>
+        </router-link>
+        <SearchOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
+
         <nuxt-link class="font-bold text-lg text-[#000000e0] no-underline " href="/dang-nhap"
           v-if="authen == null || authen == undefined">Đăng nhập</nuxt-link>
         <a-dropdown v-else>
           <a class="ant-dropdown-link" @click.prevent>
-            <a-avatar size="large">
+            <a-avatar size="small">
               <template #icon>
                 <UserOutlined />
               </template>
             </a-avatar>
-            >>>>>>> origin/vinhnd
+          </a>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item><nuxt-link href="/tai-khoan/thong-tin">Thông tin cá nhân </nuxt-link> </a-menu-item>
+              <a-menu-item><nuxt-link href="/tai-khoan/lich-su-mua">Lịch sử mua hàng</nuxt-link> </a-menu-item>
+              <a-menu-item @click="logOut">Đăng xuất</a-menu-item>
+              <!--            <a-sub-menu key="test" title="sub menu">-->
+              <!--              <a-menu-item>3rd menu item</a-menu-item>-->
+              <!--              <a-menu-item>4th menu item</a-menu-item>-->
+              <!--            </a-sub-menu>-->
+              <!--            <a-sub-menu title="disabled sub menu" disabled>-->
+              <!--              <a-menu-item>5d menu item</a-menu-item>-->
+              <!--              <a-menu-item>6th menu item</a-menu-item>-->
+              <!--            </a-sub-menu>-->
+            </a-menu>
+          </template>
+        </a-dropdown>
+      </a-space>
     </div>
   </header>
 </template>
+
 
 <script lang="ts" setup>
 import { h, ref } from "vue";
@@ -167,6 +191,7 @@ const logOut = () => {
   window.location.href = "/";
 };
 </script>
+
 
 
 <style>
