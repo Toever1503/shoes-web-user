@@ -66,12 +66,16 @@
       </a-space>
 
       <a-space class="items-center">
-        <router-link to="/gio-hang">
-          <div style="background-image: url('/image/common/Shopping-Bag.svg'); background-size: cover"
-            class="w-[18px] h-[18px] cursor-pointer hover:scale(1.1)"></div>
-        </router-link>
-        <SearchOutlined class="text-[16px] cursor-pointer hover:text-orange-500" />
-      </a-space>
+        <nuxt-link class="font-bold text-lg text-[#000000e0] no-underline " href="/dang-nhap"
+          v-if="authen == null || authen == undefined">Đăng nhập</nuxt-link>
+        <a-dropdown v-else>
+          <a class="ant-dropdown-link" @click.prevent>
+            <a-avatar size="large">
+              <template #icon>
+                <UserOutlined />
+              </template>
+            </a-avatar>
+            >>>>>>> origin/vinhnd
     </div>
   </header>
 </template>
@@ -85,9 +89,11 @@ import {
   DownOutlined
 } from "@ant-design/icons-vue";
 import { MenuProps } from "ant-design-vue";
-
+import { fetchInstance } from "~/services/FetchInstance";
+import userVue from "~/layouts/user.vue";
 import ProductService from "~/services/ProductService";
 
+// hau
 const categoryList = ref<{
   id: number;
   tenDanhMuc: string
@@ -112,11 +118,59 @@ onMounted(() => {
     }));
 
 });
+
+
+// vinh
+const current = ref<string[]>(["mail"]);
+const items = ref<MenuProps["items"]>([
+  {
+    key: "mail",
+    label: "Sản phẩm",
+    title: "Sản phẩm",
+    children: [
+      {
+        key: "3",
+        label: "Option 3",
+        title: "Option 3",
+      },
+      {
+        key: "4",
+        label: "Option 4",
+        title: "Option 4",
+      },
+    ],
+  },
+  {
+    key: "app",
+    label: "Tra cứu đơn",
+    title: "Tra cứu đơn",
+  },
+  {
+    key: "app",
+    label: "Chính sách giao hàng",
+    title: "Chính sách giao hàng",
+  },
+  {
+    key: "alipay",
+    label: h("a", { href: "https://antdv.com", target: "_blank" }, "Liên hệ"),
+    title: "Liên hệ",
+  },
+]);
+
+const authen = window.localStorage.getItem("username");
+
+const logOut = () => {
+  window.location.reload();
+  window.localStorage.removeItem("username");
+  window.localStorage.removeItem("auth");
+  window.localStorage.removeItem("loggedUser");
+  window.location.href = "/";
+};
 </script>
+
 
 <style>
 header .ant-menu-title-content {
   font-size: 20px;
   font-weight: 700;
-}
-</style>
+}</style>
