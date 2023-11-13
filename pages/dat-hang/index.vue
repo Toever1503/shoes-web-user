@@ -227,6 +227,7 @@ interface FormState {
   province: string;
   district: string;
   ward: string;
+  totalPay: number;
 }
 
 const phoneValidator = () =>
@@ -246,6 +247,7 @@ const formState = reactive<FormState>({
   province: "2##Hồ Chí Minh",
   district: "",
   ward: "",
+  totalPay: 0,
 });
 
 type AddressProvinceType = {
@@ -412,7 +414,8 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const totalPay = computed(() => {
-  return _storeCart.cartTotalAmount - voucherModel.discountPrice;
+  formState.totalPay = (_storeCart.cartTotalAmount + formState.shipFee) - voucherModel.discountPrice;
+  return formState.totalPay;
 })
 
 const calcShipFee = () => {
