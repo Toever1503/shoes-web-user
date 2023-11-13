@@ -1,5 +1,5 @@
 import { type App } from "vue";
-import address from '~/data/address_vn.json'
+import address from '~/data/ad.json'
 
 
 const readFileBase64 = (file: File) => {
@@ -46,15 +46,15 @@ const getProvinces = (payload: { p: number }) => {
     if (p) {
         if (!isNaN(p)) {
             hasP = true;
-            dataResponse = address.filter((item) => item.code == p);
+            dataResponse = address.filter((item) => item.PROVINCE_ID == p);
         }
     }
     if (!hasP)
         dataResponse = address.map(
             item =>
             ({
-                code: item.code,
-                name: item.name
+                PROVINCE_ID: item.PROVINCE_ID,
+                PROVINCE_NAME: item.PROVINCE_NAME
             })
         );
 
