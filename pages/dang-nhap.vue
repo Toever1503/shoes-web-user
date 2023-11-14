@@ -59,6 +59,26 @@
             Don’t have an account yet?
             <nuxt-link class="text-blue-600 hover:text-blue-700" href="/dang-ky">Sign up</nuxt-link>
           </div>
+          <div class="mt-5"><a class="text-blue-600 hover:text-blue-700" @click="showModal">Forgot Password ?</a></div>
+          
+          <a-modal v-model:visible="visible" title="Quên mật khẩu" @ok="handleOk">
+         <a-form 
+            ref="formRef"
+            style="margin: 0 auto"
+            :model="formForgotPass"
+            name="basic"
+            layout="vertical">
+          <div class="flex flex-col">
+                 <a-form-item
+              label="Email"
+              name="email"
+              :rules="[ {validator: handleValidateTypeEmail}, { required: true, message: 'Email không được để trống!' }]"
+          > 
+              <a-input v-model:value="formForgotPass.email" placeholder="Email ..."/>
+            </a-form-item>
+              </div>
+         </a-form>
+    </a-modal>
         </div>
       </div>
     </div>
@@ -76,7 +96,52 @@ const formState = reactive({
   username: '',
   password: '',
 });
+const formForgotPass = reactive({
+  email: '',
+});
 const formRef = ref(null);
+const visible = ref<boolean>(false);
+
+const showModal = () => {
+  visible.value = true;
+  formForgotPass.email = "";
+  resetValidation();
+};
+
+const resetValidation = () => {
+  // Xóa thông báo validate
+  formRef.value.resetFields();
+};
+
+const handleOk = (e: MouseEvent) => {
+      console.log(e);
+      console.log(formForgotPass.email);
+      authService.forgotPassword(formForgotPass.email).then(
+                res => {
+                    console.log('user: ',res.data);
+                    message.success('Vui lòng kiểm tra email để lấy lại mật khẩu');
+                    setTimeout(() => {
+                      visible.value = false;
+                    }, 1000);
+                },
+                error => {
+                    if(error.response.data.code == 9999){
+                       message.warning('Email không tồn tại trong hệ thống !');
+                    }
+                }
+            ).catch((error) => {
+              message.warning('Không tìm thấy email. Vui lòng kiểm tra lại!');
+              console.log(error);
+            });
+    };
+
+const handleValidateTypeEmail = (rule, value) => {
+  if (value && !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g.test(value)) {
+    return Promise.reject('Email không hợp lệ!');
+  }
+    return Promise.resolve();
+};
+
 
 const handleSubmit = () => {
   authService.login(formState).then(

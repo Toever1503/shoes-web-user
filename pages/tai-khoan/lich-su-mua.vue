@@ -78,7 +78,7 @@
             {{ record.diaChi?.tenNguoiNhan }}
           </template>
           <template v-else-if="column.dataIndex === 'ngayTao'">
-            {{ text }}
+            {{ dateFormat(text) }}
           </template>
           <template v-else-if="column.dataIndex === 'diaChiEntity'">
             {{ text.diaChi }}
@@ -402,6 +402,17 @@ const daDanhGia = ref(false);
 interface DelayLoading {
   delay: number;
 }
+
+const dateFormat = (ngayTao) =>{
+  const date = new Date(ngayTao);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
 const iconLoading = ref<boolean | DelayLoading>(false);
 const showModal1 = (id) => {
   const record = tblData.value.find((item) => item.id === id);
@@ -429,9 +440,9 @@ const showModal1 = (id) => {
 }
 
 const handleOk = (e: MouseEvent) => {
-  if (selectedRecord && selectedRecord) {
+  if (selectedRecord && selectedRecord.value) {
     let allCommentsValid = true;
-    let formComment = []; // Tạo một mảng để lưu trữ các đối tượng formComment.
+    let formComment = [];
 
     selectedRecord.value.chiTietDonHang.forEach((record) => {
       const singleFormComment = {
@@ -439,25 +450,25 @@ const handleOk = (e: MouseEvent) => {
         binhLuan: record.comment,
         soSao: record.rating,
       };
-      formComment.push(singleFormComment); // Thêm đối tượng formComment vào mảng formComment.
-      // Kiểm tra validate của comment ở đây
+
+      // Kiểm tra validate của comment và rating ở đây
       if (!isValidComment(record.comment)) {
         allCommentsValid = false;
-        // console.error('Comment không hợp lệ: ' + record.id);
-        message.warning('Vui lòng nhập hết bình luận !');
+        console.error('Comment không hợp lệ: ' + record.id);
+      } else if (record.rating === 0 || !isValidRating(record.rating)) {
+        allCommentsValid = false;
+        message.warning('Vui lòng đánh giá sao từ 1 đến 5 !');
+      } else {
+        formComment.push(singleFormComment);
       }
     });
 
     if (allCommentsValid) {
-      // Thực hiện xử lý khi tất cả các comment hợp lệ
       console.log('Tất cả comment hợp lệ.');
-      console.log('formComment', formComment); // Log formComment sau khi đã xử lý hết các dòng.
-      if(formComment.soSao == 0 || formComment.soSao == undefined || formComment.soSao == null){
-      message.warning('Vui lòng đánh giá sao !');
-    }else
+      console.log('formComment', formComment);
+
       if (!daDanhGia.value) {
-        // Nếu chưa đánh giá thì thực hiện lưu đánh giá
-        danhGiaService.create(formComment).then(res => {
+        danhGiaService.create(formComment).then((res) => {
           console.log('res', res.data);
           iconLoading.value = true;
           message.success('Đánh giá thành công');
@@ -467,17 +478,20 @@ const handleOk = (e: MouseEvent) => {
           }, 1000);
         });
       }
-    }
-   
-     else {
-      // Hiển thị thông báo cảnh báo cho người dùng
-      message.warning('Có comment không hợp lệ. Vui lòng kiểm tra lại.');
+    } else {
+      message.warning('Có comment hoặc đánh giá không hợp lệ. Vui lòng kiểm tra lại.');
     }
   } else {
     console.error('Không tìm thấy dữ liệu.');
   }
   visible.value = false;
 };
+
+// Hàm kiểm tra validate của rating
+const isValidRating = (rating) => {
+  return rating >= 1 && rating <= 5;
+};
+
 
 function isValidComment(comment) {
   // Kiểm tra validate của comment ở đây
@@ -499,7 +513,7 @@ const onchangeOrderStatus = (status) => {
   console.log('status', status);
   LichSuMua(status);
 }
-const rating = ref(0);
+const rating = ref(3);
 const rateStar = (userRating) => {
   console.log('value', userRating);
   rating.value = userRating;

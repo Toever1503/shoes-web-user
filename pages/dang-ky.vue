@@ -33,7 +33,7 @@
                  <a-form-item
               label="Email"
               name="email"
-              :rules="[ {validator: handleValidateTypeEmail}]"
+              :rules="[ {validator: handleValidateTypeEmail}, { required: true, message: 'Email không được để trống!' }]"
           > 
               <a-input class="h-10 text-base" v-model:value="formState.email" placeholder="Email ..."/>
             </a-form-item>
@@ -42,7 +42,7 @@
                  <a-form-item
               label="Số điện thoại"
               name="phone"
-              :rules="[ {validator: handleValidateTypePhone}]"
+              :rules="[ {validator: handleValidateTypePhone}, { required: true, message: 'Số điện thoại không được để trống!' }]"
           > 
               <a-input class="h-10 text-base" v-model:value="formState.phone" placeholder="Số điện thoại ..."/>
             </a-form-item>
