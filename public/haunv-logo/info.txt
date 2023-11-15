@@ -1,0 +1,11 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: FredokaOne-Regular
+font link: https://fonts.google.com/specimen/Fredoka+One
+font author: Milena Brandao
+font author site: mailto:milenabbrandao@gmail.com
+
+
+{"bg-gradient-0":"#F05000","bg-gradient-1":"#F7AA00","icon":"#ffffff","font":"#ffffff","slogan":"#ffffff"}
+      

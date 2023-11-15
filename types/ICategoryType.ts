@@ -7,5 +7,5 @@ export default interface ICategoryType {
     ngayTao: Date;
     createdBy?: {
         name: string
-    }
+    };
 };

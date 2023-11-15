@@ -41,11 +41,13 @@ export const useCartStore = defineStore('cart', {
         async fAddToCart(payload: ICart) {
             console.log("begin add item", payload);
 
+
             try {
-                await CartService.addProduct({
-                    sanPhamBienThe: payload.id,
-                    soLuong: payload.qty
-                });
+                if (localStorage.getItem('loggedUser'))
+                    await CartService.addProduct({
+                        sanPhamBienThe: payload.id,
+                        soLuong: payload.qty
+                    });
 
                 notification.success({
                     message: "Thêm thành công!"
@@ -123,10 +125,8 @@ export const useCartStore = defineStore('cart', {
         },
         fSetCart(cartItems: ICart[]) {
             this.cart = cartItems;
+            localStorage.setItem('cart', JSON.stringify([]));
         }
-        // forceResetCartItem: (context, payload) => {
-        //     context.commit('forceResetCartItem', payload)
-        // }
     },
     getters: {
         cartItems: (state) => {
@@ -162,7 +162,6 @@ export const syncCart = () => {
     if (localStorage.getItem('cart') && localStorage.getItem('loggedUser')) {
         let cartLocalstorage = localStorage.getItem('cart');
         cart = cartLocalstorage ? JSON.parse(cartLocalstorage) : [];
-
         CartService.syncCart(cart.map(item => ({
             sanPhamBienThe: item.id,
             soLuong: item.qty

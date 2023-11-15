@@ -13,6 +13,7 @@ body,
 }
 a {
   color: black;
+  text-decoration: none;
 }
 
 .ant-table-thead > tr > th {
@@ -43,4 +44,12 @@ table>thead>tr>th {
 thead.ant-table-thead th {
   background-color: #f79837 !important;
   color: white !important;
+}
+
+.ant-form-item-label{
+  width: 100%;
+}
+.ant-form-item-label label{
+  width: 100%;
+  display: inline-block;
 }

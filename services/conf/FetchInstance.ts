@@ -1,9 +1,9 @@
-const baseApiUrl = 'http://localhost:8082/v1';
+// const baseApiUrl = 'http://localhost:8082/v1';
+const baseApiUrl = 'https://shoes.orisu.lol/v1';
 
 const commonBase = (payload: any, headers: any): any => {
     return (
         {
-            mode: "no-cors",
             body: payload,
             // credentials: 'include',
             headers: {
@@ -54,14 +54,14 @@ const del = (url: string, payload: any = {}, headers = {}) => {
 }
 
 const getAuthHeader = () => {
-    // try {
-    //     const token = localStorage.getItem('loggedUser');
-    //     // const token = getCookie('token');
-    //     if (token)
-    //         return { 'x-api-token': token };
-    // } catch (e) {
-    //     return {};
-    // }
+    try {
+        const token = localStorage.getItem('loggedUser');
+        // const token = getCookie('token');
+        if (token)
+            return { 'x-api-token': token };
+    } catch (e) {
+        return {};
+    }
     return {}
 }
 

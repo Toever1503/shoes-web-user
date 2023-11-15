@@ -16,6 +16,30 @@ export default interface IProductDetail {
     moTa: string;
     nguoiTao: number;
     loaiBienThe: EProductVariation;
+    vouchers: [];
+    chatLieu: "",
+    trongLuong: "",
+    congNghe: "",
+    tinhNang: "",
+    noiSanXuat: "",
+    bienTheDTOS: {
+        id: number;
+        bienThe1: number;
+        bienThe2: number;
+        giatri1: number;
+        giatri2: number;
+        anh: IFileModel;
+        anhSpChinh: IFileModel;
+        soLuong: number;
+        giaTriObj1: {
+            id: number;
+            giaTri: string;
+        };
+        giaTriObj2: {
+            id: number;
+            giaTri: string;
+        };
+    }[]
 };
 
 export type EProductVariation = "COLOR" | "SIZE" | "BOTH";
