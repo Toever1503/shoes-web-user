@@ -53,9 +53,10 @@
             Lịch sử mua
           </div>
         </nuxt-link>
-        <div
+        <nuxt-link to="/tai-khoan/change-password">
+          <div
             type="button"
-            class="hidden py-5 uppercase relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-solid border  border-gray-200 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
+            class="py-5 uppercase relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-solid border  border-gray-200 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"
         >
           <svg
               class="w-3 h-3 mr-2.5"
@@ -73,8 +74,9 @@
                 fill="currentColor"
             />
           </svg>
-          Địa chỉ
+          Đổi mật khẩu
         </div>
+        </nuxt-link>
         <div
             type="button"
             class="py-5 uppercase relative inline-flex items-center w-full px-4 py-2 text-sm rounded-b-lg font-medium border-solid border  border-gray-200 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700"

@@ -17,6 +17,8 @@ const forgotPassword = (payload) => Axios.post(`${basePath}/user/find-pw?email=$
 const forgotPassId = (payload) => Axios.get(`${basePath}/user/token?token=${payload}`);
 
 const submitforgotPass = (payload,id) => Axios.put(`${basePath}/user/forgot-pass/${id}`, payload);
+
+const changePassword = (payload) => Axios.patch(`${basePath}/user/password`, payload);
 export const authService = {
     login,
     register,
@@ -25,4 +27,5 @@ export const authService = {
     forgotPassword,
     submitforgotPass,
     forgotPassId,
+    changePassword,
 };

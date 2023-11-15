@@ -85,6 +85,7 @@
           <template #overlay>
             <a-menu>
               <a-menu-item><nuxt-link href="/tai-khoan/thong-tin">Thông tin cá nhân </nuxt-link> </a-menu-item>
+              <a-menu-item><nuxt-link href="/tai-khoan/change-password">Đổi mật khẩu</nuxt-link> </a-menu-item>
               <a-menu-item><nuxt-link href="/tai-khoan/lich-su-mua">Lịch sử mua hàng</nuxt-link> </a-menu-item>
               <a-menu-item @click="logOut">Đăng xuất</a-menu-item>
               <!--            <a-sub-menu key="test" title="sub menu">-->
