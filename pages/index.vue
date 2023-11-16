@@ -28,63 +28,6 @@
       </Swiper>
     </section>
 
-    <section class="mt-[30px] w-full hidden">
-      <h3 class="text-center text-[24px]">SẢN PHẨM ĐANG BÁN CHẠY</h3>
-
-      <div class="flex gap-[30px] px-[30px] w-full">
-
-        <a-card hoverable :bodyStyle="'padding: 10px'" style="width: 25%; border: none; box-shadow: none;" :key="i"
-          v-for="i in 4">
-          <template #cover>
-            <div class="relative">
-              <router-link to="/san-pham/">
-                <img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
-              </router-link>
-
-              <div class="absolute bottom-2 left-[30%] hidden">
-                <button>
-                  Xem chi tiết
-                </button>
-              </div>
-            </div>
-
-          </template>
-          <a-card-meta>
-            <template #title>
-              <h3 class="m-0 text-base">
-                <router-link to="/san-pham/">
-                  Nike Court Vision Low Next Natur
-                </router-link>
-              </h3>
-
-            </template>
-            <template #description>
-
-              <div class="product_price flex items-center gap-[10px]">
-                <del>{{ 120 }} vnd</del>
-                <span class="font-bold text-red-500">
-                  {{ 100 }} vnd
-                </span>
-              </div>
-
-              <a-space>
-                <a-rate class="text-[14px]" :value="3" allow-half disabled />
-                <a-divider type="vertical" class="bg-gray-500" />
-                <span>55 Đã bán</span>
-              </a-space>
-            </template>
-          </a-card-meta>
-        </a-card>
-
-
-      </div>
-      <div class="flex justify-center mt-[20px]">
-        <a-button class="bg-black text-white">
-          <router-link to="/dat-hang"> Xem thêm </router-link>
-        </a-button>
-      </div>
-    </section>
-
     <section class="mt-[30px] w-full">
       <div class="flex gap-[20px] justify-center mb-[15px] tabar_product">
         <h4 @click="onChangeActiveProductTab(1)"
@@ -99,48 +42,49 @@
 
       <a-spin :spinning="isLoadingProduct">
         <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
-          <a-card hoverable :bodyStyle="'padding: 10px'" style="width: 23%; border: none; box-shadow: none;" :key="index"
+          <div class="p-[10px]" style="width: 23%; border: none; box-shadow: none;" :key="index"
             v-for="(item, index) in productList">
-            <template #cover>
-              <div class="relative">
-                <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                  <img :src="item?.anhChinh?.url" class="shadow-sm" />
-                </router-link>
+            <div class="relative">
+              <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <img :src="item?.anhChinh?.url" class="shadow-sm h-[280px] rounded-[5px]" />
+              </router-link>
 
-                <div class="absolute bottom-2 left-[30%] hidden">
-                  <button>
-                    Xem chi tiết
-                  </button>
-                </div>
+              <div class="absolute bottom-2 left-[30%] hidden">
+                <button>
+                  Xem chi tiết
+                </button>
+              </div>
+            </div>
+
+            <a-space direction="vertical" :size="10" class="mt-[10px]">
+              <h3 class="m-0 text-base">
+                <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                  {{ item.tieuDe }}
+                </router-link>
+              </h3>
+
+
+              <div class="product_price flex items-center gap-[10px]">
+                <template v-if="item?.giaCu && item?.giaCu > 0">
+
+                  <del>{{ _formatVnCurrency(item?.giaCu) }}</del>
+                  <span class="font-bold text-red-500">
+                    {{ _formatVnCurrency(item?.giaMoi) }}
+                  </span>
+                </template>
+
+                <span v-else class="font-bold text-red-500">
+                    {{ _formatVnCurrency(item?.giaMoi) }}
+                  </span>
               </div>
 
-            </template>
-            <a-card-meta>
-              <template #title>
-                <h3 class="m-0 text-base">
-                  <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                    {{ item.tieuDe }}
-                  </router-link>
-                </h3>
-
-              </template>
-              <template #description>
-
-                <div class="product_price flex items-center gap-[10px]">
-                  <del>{{ item?.giaCu }} vnd</del>
-                  <span class="font-bold text-red-500">
-                    {{ item?.giaMoi }} vnd
-                  </span>
-                </div>
-
-                <a-space>
-                  <a-rate class="text-[14px]" :value="item?.soSaoDanhGia || 0" allow-half disabled />
-                  <a-divider type="vertical" class="bg-gray-500" />
-                  <span>55 Đã bán</span>
-                </a-space>
-              </template>
-            </a-card-meta>
-          </a-card>
+              <a-space>
+                <a-rate class="text-[14px]" :value="item?.soSaoDanhGia || 0" allow-half disabled />
+                <a-divider type="vertical" class="bg-gray-500" />
+                <span>55 Đã bán</span>
+              </a-space>
+            </a-space>
+          </div>
         </div>
       </a-spin>
 
@@ -158,6 +102,7 @@
 import ProductService from '~/services/ProductService';
 
 
+const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
 
 const currentActiveProductTab = ref<number>(1);
 const isLoadingProduct = ref<boolean>(false);
