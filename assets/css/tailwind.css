@@ -33,8 +33,8 @@ img {
   border: 1px solid #d9d9d9;
 }
 .bg-main{
-  background-color: #f79837;
-  background: #f79837;
+  background-color: #4096ff;
+  background: #4096ff;
 }
 table>thead>tr>th {
   border-start-start-radius: unset !important;
@@ -42,7 +42,7 @@ table>thead>tr>th {
 }
 
 thead.ant-table-thead th {
-  background-color: #f79837 !important;
+  background-color: #4096ff !important;
   color: white !important;
 }
 

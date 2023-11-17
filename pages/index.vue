@@ -46,8 +46,8 @@
         <h4
           @click="onChangeActiveProductTab(1)"
           :class="
-            'text-[18px] pb-2 cursor-pointer hover:text-orange-500 duration-150 ease-in-out uppercase' +
-            (currentActiveProductTab == 1 ? ' activated text-orange-500' : '')
+            'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase' +
+            (currentActiveProductTab == 1 ? ' activated text-[#4096ff]' : '')
           "
         >
           Sản phẩm bán chạy
@@ -55,8 +55,8 @@
         <h4
           @click="onChangeActiveProductTab(2)"
           :class="
-            'text-[18px] pb-2 cursor-pointer hover:text-orange-500 duration-150 ease-in-out uppercase' +
-            (currentActiveProductTab == 2 ? ' activated text-orange-500' : '')
+            'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase' +
+            (currentActiveProductTab == 2 ? ' activated text-[#4096ff]' : '')
           "
         >
           Sản phẩm mới cập nhật
@@ -162,6 +162,6 @@ onMounted(() => {
 
 <style>
 .tabar_product h4.activated {
-  border-bottom: 2px solid orange;
+  border-bottom: 2px solid #4096ff;
 }
 </style>
