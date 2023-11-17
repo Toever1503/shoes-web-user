@@ -11,7 +11,7 @@
     <section class="p-5 text-center" v-if="_route.query.status == 'SUCCESS'">
       <h3 class="text-2xl mb-0">Đơn hàng đã được tạo thành công!</h3>
       <p class="mb-3 text-[#777c87]">
-        Mã đơn hàng của bạn là: #{{ orderDetail?.maDonHang }}
+        Mã đơn hàng của bạn là: <span class="text-black font-[600]">#{{ orderDetail?.maDonHang }}</span>
         <br>
         Chúng tôi sẽ liên hệ lại với bạn để xác nhận đơn hàng. Cảm ơn quý khách đã sử dụng dịch vụ!
       </p>
@@ -25,7 +25,7 @@
             <template v-if="column.dataIndex === 'product'">
               <div class="w-[500px]">
                 <router-link class="m-0" :to="`/san-pham/${record.sanPham.tieuDe}/${record.sanPham.id}`">
-                  <span class="m-0">
+                  <span class="m-0 font-semibold">
                     {{ record.sanPham.tieuDe }}
                   </span>
                 </router-link>
@@ -38,7 +38,7 @@
             </template>
 
             <template v-if="column.dataIndex === 'price'">
-              <span>{{ _formatVnCurrency(record.giaTien) }} vnd</span>
+              <span>{{ _formatVnCurrency(record.giaTien) }}</span>
             </template>
 
             <template v-if="column.dataIndex === 'qty'">

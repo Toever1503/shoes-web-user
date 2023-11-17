@@ -449,7 +449,7 @@ const addToCart = (product, qty) => {
     if (productDetail.value.loaiBienThe == "COLOR") {
       console.log("add cart - color");
       // for color
-      if (!selectedVariation1) {
+      if (!selectedVariation1.value) {
         notification.warning({
           message: "Vui lòng chọn phân loại sản phẩm!",
         });
@@ -519,6 +519,16 @@ const buyNow = () => {
     );
 
     if (productVariation) {
+      _storeCart.fSetBuyNow({
+        id: productVariation.id,
+        qty: quantity.value,
+        anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
+        productId: productDetail?.value?.id,
+        productName: productDetail?.value?.tieuDe,
+        price: productDetail?.value?.giaMoi,
+        variation: `Màu: ${productVariation.giaTriObj1.giaTri}, Size: ${productVariation.giaTriObj2.giaTri}`,
+        stockCnt: productVariation.soLuong,
+      });
       _router.push("/dat-hang?type=NOW&id=" + productVariation.id);
       console.log("buy now variation: ", productVariation);
     }
@@ -526,7 +536,7 @@ const buyNow = () => {
     if (productDetail.value.loaiBienThe == "COLOR") {
       console.log("add cart - color");
       // for color
-      if (!selectedVariation1) {
+      if (!selectedVariation1.value) {
         notification.warning({
           message: "Vui lòng chọn phân loại sản phẩm!",
         });
@@ -537,6 +547,17 @@ const buyNow = () => {
         (item) => item.giatri1 == Number(selectedVariation1.value)
       );
       if (productVariation) {
+
+        _storeCart.fSetBuyNow({
+        id: productVariation.id,
+        qty: quantity.value,
+        anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
+        productId: productDetail?.value?.id,
+        productName: productDetail?.value?.tieuDe,
+        price: productDetail?.value?.giaMoi,
+        variation: `Màu: ${productVariation.giaTriObj1.giaTri}`,
+        stockCnt: productVariation.soLuong,
+      });
         _router.push("/dat-hang?type=NOW&id=" + productVariation.id);
         console.log("buy now variation: ", productVariation);
       }
@@ -554,6 +575,16 @@ const buyNow = () => {
       );
       console.log("variation: ", productVariation);
       if (productVariation) {
+        _storeCart.fSetBuyNow({
+        id: productVariation.id,
+        qty: quantity.value,
+        anh: productVariation?.anh?.url || productVariation?.anhSpChinh?.url,
+        productId: productDetail?.value?.id,
+        productName: productDetail?.value?.tieuDe,
+        price: productDetail?.value?.giaMoi,
+        variation: `Size: ${productVariation.giaTriObj2.giaTri}`,
+        stockCnt: productVariation.soLuong,
+      });
         _router.push("/dat-hang?type=NOW&id=" + productVariation.id);
         console.log("buy now variation: ", productVariation);
       }
@@ -583,7 +614,7 @@ onMounted(() => {
       productDetail.value = res;
       variation1List.value = res.giaTri1List;
       variation2List.value = res.giaTri2List;
-      variationStockCnt.value = res.soLuongKho;
+      variationStockCnt.value = res.tongSp;
       activeImage.value = res.anhChinh.url;
       productImages.value = pImgs;
 

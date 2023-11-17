@@ -17,15 +17,23 @@
         </template>
 
         <a-form ref="formRef" :model="formState" :label-col="{ span: 8 }">
-          <a-form-item label="Tên người nhận" name="hoTenNguoiNhan" :rules="[
-            { required: true, message: 'Vui lòng không được bỏ trống!' },
-          ]">
+          <a-form-item
+            label="Tên người nhận"
+            name="hoTenNguoiNhan"
+            :rules="[
+              { required: true, message: 'Vui lòng không được bỏ trống!' },
+            ]"
+          >
             <a-input v-model:value="formState.hoTenNguoiNhan" />
           </a-form-item>
 
-          <a-form-item label="Số điện thoại" name="soDienThoaiNhanHang" :rules="[
-            { required: true, message: 'Vui lòng không được bỏ trống!' },
-          ]">
+          <a-form-item
+            label="Số điện thoại"
+            name="soDienThoaiNhanHang"
+            :rules="[
+              { required: true, message: 'Vui lòng không được bỏ trống!' },
+            ]"
+          >
             <a-input v-model:value="formState.soDienThoaiNhanHang" />
           </a-form-item>
 
@@ -36,42 +44,81 @@
           <div class="flex justify-end mb-2" v-if="false">
             <a-button v-if="true" size="small"> Chọn địa chỉ cũ </a-button>
           </div>
-          <a-form-item label="Tỉnh/TP" name="province" :rules="[{ required: true, message: 'Vui lòng chọn tỉnh/TP!' }]">
-            <a-select v-model:value="formState.province" show-search class="w-full min-w-[200px]"
-              placeholder="Chọn tỉnh/tp" style="width: 100%" @change="onProvinceChange">
+          <a-form-item
+            label="Tỉnh/TP"
+            name="province"
+            :rules="[{ required: true, message: 'Vui lòng chọn tỉnh/TP!' }]"
+          >
+            <a-select
+              v-model:value="formState.province"
+              show-search
+              class="w-full min-w-[200px]"
+              placeholder="Chọn tỉnh/tp"
+              style="width: 100%"
+              @change="onProvinceChange"
+            >
               <a-select-option value="">Chọn tỉnh/tp</a-select-option>
-              <a-select-option v-for="(item, index) in provinceList" :key="index"
-                :value="`${item.PROVINCE_ID}##${item.PROVINCE_NAME}`">
+              <a-select-option
+                v-for="(item, index) in provinceList"
+                :key="index"
+                :value="`${item.PROVINCE_ID}##${item.PROVINCE_NAME}`"
+              >
                 {{ item.PROVINCE_NAME }}
               </a-select-option>
             </a-select>
           </a-form-item>
 
-          <a-form-item label="Quận/Huyện" name="district"
-            :rules="[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]">
-            <a-select v-model:value="formState.district" show-search placeholder="Chọn quận/huyện" style="width: 100%"
-              @change="onDistrictChange">
+          <a-form-item
+            label="Quận/Huyện"
+            name="district"
+            :rules="[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]"
+          >
+            <a-select
+              v-model:value="formState.district"
+              show-search
+              placeholder="Chọn quận/huyện"
+              style="width: 100%"
+              @change="onDistrictChange"
+            >
               <a-select-option value="">Chọn quận/huyện</a-select-option>
-              <a-select-option v-for="(item, index) in districtList" :key="index"
-                :value="`${item.DISTRICT_ID}##${item.DISTRICT_NAME}`">
+              <a-select-option
+                v-for="(item, index) in districtList"
+                :key="index"
+                :value="`${item.DISTRICT_ID}##${item.DISTRICT_NAME}`"
+              >
                 {{ item.DISTRICT_NAME }}
               </a-select-option>
             </a-select>
           </a-form-item>
 
-          <a-form-item label="Phường/Xã" name="ward" :rules="[{ required: true, message: 'Vui lòng chọn xã/phường!' }]">
-            <a-select v-model:value="formState.ward" show-search style="width: 100%">
+          <a-form-item
+            label="Phường/Xã"
+            name="ward"
+            :rules="[{ required: true, message: 'Vui lòng chọn xã/phường!' }]"
+          >
+            <a-select
+              v-model:value="formState.ward"
+              show-search
+              style="width: 100%"
+            >
               <a-select-option value="">Chọn xã/phường</a-select-option>
-              <a-select-option v-for="(item, index) in wardList" :key="index"
-                :value="`${item.WARDS_ID}##${item.WARDS_NAME}`">
+              <a-select-option
+                v-for="(item, index) in wardList"
+                :key="index"
+                :value="`${item.WARDS_ID}##${item.WARDS_NAME}`"
+              >
                 {{ item.WARDS_NAME }}
               </a-select-option>
             </a-select>
           </a-form-item>
 
-          <a-form-item label="Số nhà" name="diaChiNhanHang" :rules="[
-            { required: true, message: 'Vui lòng không được bỏ trống!' },
-          ]">
+          <a-form-item
+            label="Số nhà"
+            name="diaChiNhanHang"
+            :rules="[
+              { required: true, message: 'Vui lòng không được bỏ trống!' },
+            ]"
+          >
             <a-input v-model:value="formState.diaChiNhanHang" />
           </a-form-item>
 
@@ -89,10 +136,21 @@
             </h3>
           </template>
 
-          <a-table :columns="columns" :data-source="_storeCart.cart" :pagination="false">
+          <a-table
+            :columns="columns"
+            :data-source="
+              _storeCart.variationNow
+                ? [_storeCart.variationNow]
+                : _storeCart.cart
+            "
+            :pagination="false"
+          >
             <template #bodyCell="{ column, text, record }">
               <template v-if="column.dataIndex === 'product'">
-                <router-link class="m-0" :to="`/san-pham/${record.productName}/${record.productId}`">
+                <router-link
+                  class="m-0"
+                  :to="`/san-pham/${record.productName}/${record.productId}`"
+                >
                   <span class="m-0">
                     {{ record.productName }}
                   </span>
@@ -118,7 +176,8 @@
                   <span class="font-semibold"> Tổng tiền sản phẩm </span>
 
                   <span>
-                    {{ _formatVnCurrency(_storeCart.cartTotalAmount) }}</span>
+                    {{ _formatVnCurrency(_storeCart.cartTotalAmount) }}</span
+                  >
                 </a-space>
 
                 <a-space class="justify-between w-full">
@@ -132,10 +191,18 @@
 
                   <div class="grid">
                     <a-space>
-                      <a-input v-model:value="voucherModel.q" size="small"></a-input>
-                      <a-button size="small" @click="onCheckVoucher">Áp dụng</a-button>
+                      <a-input
+                        v-model:value="voucherModel.q"
+                        size="small"
+                      ></a-input>
+                      <a-button size="small" @click="onCheckVoucher"
+                        >Áp dụng</a-button
+                      >
                     </a-space>
-                    <span v-if="voucherModel.hasChecked && !voucherModel.isValid" class="text-end text-red-500">
+                    <span
+                      v-if="voucherModel.hasChecked && !voucherModel.isValid"
+                      class="text-end text-red-500"
+                    >
                       {{ voucherModel.error }}
                     </span>
                     <span v-else class="text-end text-green-500">
@@ -237,9 +304,9 @@ const phoneValidator = () =>
 
 const formState = reactive<FormState>({
   phanLoaidIds: [],
-  diaChiNhanHang: "",
-  hoTenNguoiNhan: "",
-  soDienThoaiNhanHang: "",
+  diaChiNhanHang: "so 2 to ka",
+  hoTenNguoiNhan: "haunv" + Math.floor(Math.random() * 999),
+  soDienThoaiNhanHang: "0965901542",
   note: "",
   phuongThucTT: "VNPAY",
   discount: 0,
@@ -305,14 +372,17 @@ const onCheckVoucher = () => {
       .then((res: any) => {
         voucherModel.voucherInfo = res;
         voucherModel.isValid = true;
-        console.log('voucher info: ', res);
-        if (res.giamGiaTheo == 'PERCENT') {
-          const priceDiscount = _storeCart.cartTotalAmount * (res.phanTramGiam / 100);
-          voucherModel.success = 'Áp mã thành công, bạn được giảm ' + _formatVnCurrency(priceDiscount);
+        console.log("voucher info: ", res);
+        if (res.giamGiaTheo == "PERCENT") {
+          const priceDiscount =
+            _storeCart.cartTotalAmount * (res.phanTramGiam / 100);
+          voucherModel.success =
+            "Áp mã thành công, bạn được giảm " +
+            _formatVnCurrency(priceDiscount);
           voucherModel.discountPrice = priceDiscount;
-        }
-        else {
-          voucherModel.success = 'Áp mã thành công, bạn được giảm ' + (_formatVnCurrency(res.giaGiam));
+        } else {
+          voucherModel.success =
+            "Áp mã thành công, bạn được giảm " + _formatVnCurrency(res.giaGiam);
           voucherModel.discountPrice = res.giaGiam;
         }
       })
@@ -320,8 +390,7 @@ const onCheckVoucher = () => {
         console.log("check voucher failed: ", err.response.status);
         voucherModel.isValid = false;
         if (err.response.status == 404)
-          voucherModel.error =
-            "Rất tiếc, mã giảm giá không tồn tại!";
+          voucherModel.error = "Rất tiếc, mã giảm giá không tồn tại!";
         else
           voucherModel.error =
             "Rất tiếc, sản phẩm của bạn không phù hợp với mã giảm này!";
@@ -374,20 +443,27 @@ const onFinish = (values: any) => {
     soDienThoaiNhanHang: formState.soDienThoaiNhanHang,
     diaChiNhanHang: undefined,
     diaChiId: undefined,
-    maGiamGiaId: voucherModel?.voucherInfo?.id || undefined
+    maGiamGiaId: voucherModel?.voucherInfo?.id || undefined,
+    shipFee: formState.shipFee,
+    totalPay: formState.totalPay,
   };
 
   if (previousAddressId.value) payload.diaChiId = previousAddressId.value;
   else
     payload.diaChiNhanHang = `${formState.diaChiNhanHang}__${formState.ward}__${formState.district}__${formState.province}`;
 
-  // if (localStorage.getItem("loggedUser"))
-  //   payload.gioHangItemIds = this.cart.map((item) => item.id);
-  // else
-  payload.gioHangTamThoiReqDto = _storeCart.cart.map((item) => ({
-    sanPhamBienThe: item.id,
-    soLuong: item.qty,
-  }));
+  if (_storeCart.variationNow)
+    payload.gioHangTamThoiReqDto = [
+      {
+        sanPhamBienThe: _storeCart.variationNow.id,
+        soLuong: _storeCart.variationNow.qty,
+      },
+    ];
+  else
+    payload.gioHangTamThoiReqDto = _storeCart.cart.map((item) => ({
+      sanPhamBienThe: item.id,
+      soLuong: item.qty,
+    }));
   console.log("order payload: ", payload);
 
   PaymentService.checkout(payload)
@@ -414,49 +490,57 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const totalPay = computed(() => {
-  formState.totalPay = (_storeCart.cartTotalAmount + formState.shipFee) - voucherModel.discountPrice;
+  if (_storeCart.variationNow)
+    formState.totalPay =
+      _storeCart.variationNow.qty * _storeCart.variationNow.price;
+  else
+    formState.totalPay =
+      _storeCart.cartTotalAmount +
+      formState.shipFee -
+      voucherModel.discountPrice;
   return formState.totalPay;
-})
+});
 
 const calcShipFee = () => {
-  const DEFAULT_FEE = 6800;
+  const DEFAULT_FEE = 6000;
   const payload = {
     SENDER_PROVINCE: 1,
     SENDER_DISTRICT: 1,
     RECEIVER_PROVINCE: Number(formState.province.split("##")[0]),
     RECEIVER_DISTRICT: Number(formState.district.split("##")[0]),
     PRODUCT_TYPE: "HH",
-    PRODUCT_WEIGHT: _storeCart.cartTotalQty * 400,
+    PRODUCT_WEIGHT: _storeCart.variationNow
+      ? _storeCart.variationNow.qty * 400
+      : _storeCart.cartTotalQty * 400,
     PRODUCT_PRICE: 0,
     MONEY_COLLECTION: 0,
-    TYPE: 1
+    TYPE: 1,
   };
 
   fetch("https://api.viettelpost.vn/api/tmdt/getPriceAll", {
-    method: 'POST',
+    method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
-    redirect: 'follow'
+    redirect: "follow",
   })
-    .then(response => response.json())
-    .then(result => {
+    .then((response) => response.json())
+    .then((result) => {
       result = result.sort((r1, r2) => r1.GIA_CUOC - r2.GIA_CUOC);
       console.log(result);
 
       if (result.length == 0) {
-
-      }
-      else {
-        formState.shipFee = result[0].GIA_CUOC + DEFAULT_FEE;
+      } else {
+        formState.shipFee =
+          Math.ceil((result[0].GIA_CUOC + DEFAULT_FEE) / 1000) * 1000;
       }
     })
-    .catch(error => {
-      console.log('error', error)
+    .catch((error) => {
+      console.log("error", error);
       formState.shipFee = 30000;
     });
-}
+};
 
 onMounted(() => {
   console.log("dat hang page mounted");

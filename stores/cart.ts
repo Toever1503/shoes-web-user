@@ -4,7 +4,8 @@ import CartService from '~/services/CartService';
 
 
 export interface ICartState {
-    cart: ICart[]
+    cart: ICart[],
+    variationNow?: ICart
 }
 export interface ICart {
     id: number;
@@ -126,6 +127,9 @@ export const useCartStore = defineStore('cart', {
         fSetCart(cartItems: ICart[]) {
             this.cart = cartItems;
             localStorage.setItem('cart', JSON.stringify([]));
+        },
+        fSetBuyNow(item: ICart){
+            this.variationNow = item;
         }
     },
     getters: {
