@@ -1,4 +1,4 @@
-export type ETrangThaiDonHang = 'ALL'| 'WAITING_CONFIRM'| 'VNPAY_PAID'| 'DELIVERING'| 'COMPLETED'| 'PHONE_RETURNED'| 'WRONG_SP_RETURNED' | 'CANCELED';
+export type ETrangThaiDonHang = 'ALL'| 'WAITING_CONFIRM'| 'VNPAY_PAID'| 'DELIVERING'| 'COMPLETED'| 'PHONE_RETURNED'| 'WRONG_SP_RETURNED' | 'CANCELLED';
 
 type IOrderStatusList = {
     label: string;
@@ -12,7 +12,7 @@ export const ORDER_STATUS_LIST: IOrderStatusList[] = [
     { label: "Hoàn Tất", value: "COMPLETED", order: 5 },
     { label: "(Hoàn trả) Không nghe máy", value: "PHONE_RETURNED", order: 6 },
     { label: "(Hoàn trả) Sản phẩm sai", value: "WRONG_SP_RETURNED", order: 7 },
-    { label: "Hủy bỏ", value: "CANCELED", order: 8 },
+    { label: "Hủy bỏ", value: "CANCELLED", order: 8 },
 ];
 export function getLabelOrderStatusByValue(value: ETrangThaiDonHang) {
     const foundStatus = ORDER_STATUS_LIST.find((status) => status.value === value);

@@ -41,8 +41,7 @@
 
         <div class="flex flex-wrap gap-[20px]">
             <div
-              class="p-[10px]"
-              style="width: 25%; border: none; box-shadow: none"
+              style="width: 23%; border: none; box-shadow: none"
               :key="index"
               v-for="(item, index) in productList"
             >

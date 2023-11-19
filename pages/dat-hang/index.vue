@@ -17,23 +17,15 @@
         </template>
 
         <a-form ref="formRef" :model="formState" :label-col="{ span: 8 }">
-          <a-form-item
-            label="Tên người nhận"
-            name="hoTenNguoiNhan"
-            :rules="[
-              { required: true, message: 'Vui lòng không được bỏ trống!' },
-            ]"
-          >
+          <a-form-item label="Tên người nhận" name="hoTenNguoiNhan" :rules="[
+            { required: true, message: 'Vui lòng không được bỏ trống!' },
+          ]">
             <a-input v-model:value="formState.hoTenNguoiNhan" />
           </a-form-item>
 
-          <a-form-item
-            label="Số điện thoại"
-            name="soDienThoaiNhanHang"
-            :rules="[
-              { required: true, message: 'Vui lòng không được bỏ trống!' },
-            ]"
-          >
+          <a-form-item label="Số điện thoại" name="soDienThoaiNhanHang" :rules="[
+            { required: true, message: 'Vui lòng không được bỏ trống!' },
+          ]">
             <a-input v-model:value="formState.soDienThoaiNhanHang" />
           </a-form-item>
 
@@ -44,81 +36,42 @@
           <div class="flex justify-end mb-2" v-if="false">
             <a-button v-if="true" size="small"> Chọn địa chỉ cũ </a-button>
           </div>
-          <a-form-item
-            label="Tỉnh/TP"
-            name="province"
-            :rules="[{ required: true, message: 'Vui lòng chọn tỉnh/TP!' }]"
-          >
-            <a-select
-              v-model:value="formState.province"
-              show-search
-              class="w-full min-w-[200px]"
-              placeholder="Chọn tỉnh/tp"
-              style="width: 100%"
-              @change="onProvinceChange"
-            >
+          <a-form-item label="Tỉnh/TP" name="province" :rules="[{ required: true, message: 'Vui lòng chọn tỉnh/TP!' }]">
+            <a-select v-model:value="formState.province" show-search class="w-full min-w-[200px]"
+              placeholder="Chọn tỉnh/tp" style="width: 100%" @change="onProvinceChange">
               <a-select-option value="">Chọn tỉnh/tp</a-select-option>
-              <a-select-option
-                v-for="(item, index) in provinceList"
-                :key="index"
-                :value="`${item.PROVINCE_ID}##${item.PROVINCE_NAME}`"
-              >
+              <a-select-option v-for="(item, index) in provinceList" :key="index"
+                :value="`${item.PROVINCE_ID}##${item.PROVINCE_NAME}`">
                 {{ item.PROVINCE_NAME }}
               </a-select-option>
             </a-select>
           </a-form-item>
 
-          <a-form-item
-            label="Quận/Huyện"
-            name="district"
-            :rules="[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]"
-          >
-            <a-select
-              v-model:value="formState.district"
-              show-search
-              placeholder="Chọn quận/huyện"
-              style="width: 100%"
-              @change="onDistrictChange"
-            >
+          <a-form-item label="Quận/Huyện" name="district"
+            :rules="[{ required: true, message: 'Vui lòng chọn quận/huyện!' }]">
+            <a-select v-model:value="formState.district" show-search placeholder="Chọn quận/huyện" style="width: 100%"
+              @change="onDistrictChange">
               <a-select-option value="">Chọn quận/huyện</a-select-option>
-              <a-select-option
-                v-for="(item, index) in districtList"
-                :key="index"
-                :value="`${item.DISTRICT_ID}##${item.DISTRICT_NAME}`"
-              >
+              <a-select-option v-for="(item, index) in districtList" :key="index"
+                :value="`${item.DISTRICT_ID}##${item.DISTRICT_NAME}`">
                 {{ item.DISTRICT_NAME }}
               </a-select-option>
             </a-select>
           </a-form-item>
 
-          <a-form-item
-            label="Phường/Xã"
-            name="ward"
-            :rules="[{ required: true, message: 'Vui lòng chọn xã/phường!' }]"
-          >
-            <a-select
-              v-model:value="formState.ward"
-              show-search
-              style="width: 100%"
-            >
+          <a-form-item label="Phường/Xã" name="ward" :rules="[{ required: true, message: 'Vui lòng chọn xã/phường!' }]">
+            <a-select v-model:value="formState.ward" show-search style="width: 100%">
               <a-select-option value="">Chọn xã/phường</a-select-option>
-              <a-select-option
-                v-for="(item, index) in wardList"
-                :key="index"
-                :value="`${item.WARDS_ID}##${item.WARDS_NAME}`"
-              >
+              <a-select-option v-for="(item, index) in wardList" :key="index"
+                :value="`${item.WARDS_ID}##${item.WARDS_NAME}`">
                 {{ item.WARDS_NAME }}
               </a-select-option>
             </a-select>
           </a-form-item>
 
-          <a-form-item
-            label="Số nhà"
-            name="diaChiNhanHang"
-            :rules="[
-              { required: true, message: 'Vui lòng không được bỏ trống!' },
-            ]"
-          >
+          <a-form-item label="Số nhà" name="diaChiNhanHang" :rules="[
+            { required: true, message: 'Vui lòng không được bỏ trống!' },
+          ]">
             <a-input v-model:value="formState.diaChiNhanHang" />
           </a-form-item>
 
@@ -136,21 +89,14 @@
             </h3>
           </template>
 
-          <a-table
-            :columns="columns"
-            :data-source="
-              _storeCart.variationNow
-                ? [_storeCart.variationNow]
-                : _storeCart.cart
-            "
-            :pagination="false"
-          >
+          <a-table :columns="columns" :data-source="
+            _storeCart.variationNow
+              ? [_storeCart.variationNow]
+              : _storeCart.cart
+          " :pagination="false">
             <template #bodyCell="{ column, text, record }">
               <template v-if="column.dataIndex === 'product'">
-                <router-link
-                  class="m-0"
-                  :to="`/san-pham/${record.productName}/${record.productId}`"
-                >
+                <router-link class="m-0" :to="`/san-pham/${record.productName}/${record.productId}`">
                   <span class="m-0">
                     {{ record.productName }}
                   </span>
@@ -176,8 +122,7 @@
                   <span class="font-semibold"> Tổng tiền sản phẩm </span>
 
                   <span>
-                    {{ _formatVnCurrency(_storeCart.cartTotalAmount) }}</span
-                  >
+                    {{ _formatVnCurrency(_storeCart.cartTotalAmount) }}</span>
                 </a-space>
 
                 <a-space class="justify-between w-full">
@@ -191,18 +136,10 @@
 
                   <div class="grid">
                     <a-space>
-                      <a-input
-                        v-model:value="voucherModel.q"
-                        size="small"
-                      ></a-input>
-                      <a-button size="small" @click="onCheckVoucher"
-                        >Áp dụng</a-button
-                      >
+                      <a-input v-model:value="voucherModel.q" size="small"></a-input>
+                      <a-button size="small" @click="onCheckVoucher">Áp dụng</a-button>
                     </a-space>
-                    <span
-                      v-if="voucherModel.hasChecked && !voucherModel.isValid"
-                      class="text-end text-red-500"
-                    >
+                    <span v-if="voucherModel.hasChecked && !voucherModel.isValid" class="text-end text-red-500">
                       {{ voucherModel.error }}
                     </span>
                     <span v-else class="text-end text-green-500">
@@ -437,6 +374,7 @@ const onFinish = (values: any) => {
   if (submitted.value) return;
   submitted.value = true;
   const payload: any = {
+    email: formState.email,
     phuongThucTT: formState.phuongThucTT,
     note: formState.note,
     hoTenNguoiNhan: formState.hoTenNguoiNhan,
@@ -492,7 +430,9 @@ const onFinishFailed = (errorInfo: any) => {
 const totalPay = computed(() => {
   if (_storeCart.variationNow)
     formState.totalPay =
-      _storeCart.variationNow.qty * _storeCart.variationNow.price;
+      (_storeCart.variationNow.qty * _storeCart.variationNow.price) +
+      formState.shipFee -
+      voucherModel.discountPrice;
   else
     formState.totalPay =
       _storeCart.cartTotalAmount +
