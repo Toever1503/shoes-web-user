@@ -394,10 +394,7 @@ const tblPagination = reactive({
   pageSize: 10,
   total: 0,
 });
-const onTblChange = ({ current }: { current: number }, status) => {
-  tblPagination.current = current;
-  LichSuMua(status);
-};
+
 const sanPhamTieuDeList = ref([]);
 const showModal = (id) => {
   const record = tblData.value.find((item) => item.id === id);
@@ -522,15 +519,31 @@ function isValidComment(comment) {
   return comment && comment.trim() !== '';
 }
 
+const tblLoading = ref<boolean>(false);
 
+const onTblChange = ({ current }: { current: number }, status) => {
+  tblPagination.current = current;
+  console.log('current: ', current);
+  LichSuMua(status);
+};
 const LichSuMua = (status) => {
+  if (tblLoading.value) return;
+  tblLoading.value = true;
   if (status === 'ALL') {
     status = '';
   }
-  orderUserService.lichSuMua(status).then(res => {
+  orderUserService.lichSuMua(status,tblPagination.current - 1,
+    tblPagination.pageSize).then(res => {;
     console.log(res.data);
-    tblData.value = res.data.content;
-  });
+    tblData.value = res.data.content.map((item: any, index: number) => ({
+        ...item,
+        stt: index + 1,
+      }));
+      tblPagination.total = res.data.totalElements;
+  }) .catch((err) => {
+      console.log("error: ", err);
+    })
+    .finally(() => (tblLoading.value = false));
 }
 const onchangeOrderStatus = (status) => {
   orderFilter.status = status;

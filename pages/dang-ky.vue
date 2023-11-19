@@ -105,7 +105,7 @@ onsubmit = (e) => {
     console.log("signup page mounted: ", storeCounter);
 }
 const formState = reactive({
-    role: "ROLE_ADMIN",
+    role: "ROLE_USER",
     userName: '',
     password: '',
     email: '',
