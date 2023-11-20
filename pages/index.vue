@@ -66,7 +66,6 @@
       <a-spin :spinning="isLoadingProduct">
         <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
           <div
-            class="p-[10px]"
             style="width: 23%; border: none; box-shadow: none"
             :key="index"
             v-for="(item, index) in productList"
@@ -121,7 +120,7 @@
 
       <div class="flex justify-center my-[20px]">
         <a-button class="bg-black text-white">
-          <router-link to="/dat-hang"> Xem thêm </router-link>
+          <router-link to="/danh-sach-san-pham"> Xem tất cả </router-link>
         </a-button>
       </div>
     </section>

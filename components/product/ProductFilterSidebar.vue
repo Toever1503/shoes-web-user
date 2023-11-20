@@ -92,22 +92,14 @@
 <script setup lang="ts">
 import ProductService from "~/services/ProductService";
 import type { FormInstance } from "ant-design-vue";
+import type {IProductFilterModel} from "@/types/IProductFilter";
 
 const _emit = defineEmits(["filter"]);
 
 const formRef = ref<FormInstance>();
 
-export interface ProductFilterReq {
-    name?: string;
-    category?: number;
-    color?: number;
-    size?: number;
-    brand?: number;
-    priceStart: number;
-    priceEnd: number;
-    priceRange: [number, number]
-};
-const formState = reactive<ProductFilterReq>({
+
+const formState = reactive<IProductFilterModel>({
     priceStart: 0,
     priceEnd: 0,
     priceRange: [0, 0],

@@ -7,9 +7,7 @@
       <a-breadcrumb-item>Danh sách sản phẩm</a-breadcrumb-item>
     </a-breadcrumb>
 
-    <div
-      class="flex gap-[50px] mt-[20px] w-full justify-start px-3 md:px-[50px]"
-    >
+    <div class="flex gap-[50px] mt-[20px] w-full justify-start px-3 md:px-[50px]">
       <ProductFilterSidebar @filter="onClickFilter" />
       <div class="w-full">
         <a-space class="items-center justify-end w-full mb-[20px]">
@@ -39,59 +37,44 @@
         </a-space>
 
         <div class="flex flex-wrap gap-[20px]">
-            <div
-              style="width: 23%; border: none; box-shadow: none"
-              :key="index"
-              v-for="(item, index) in productList"
-            >
-              <div class="relative">
-                <router-link
-                  class="block h-[300px]"
-                  :to="`/san-pham/${item?.tieuDe}/${item?.id}`"
-                >
-                  <img
-                    :src="item?.anhChinh?.url"
-                    class="shadow-sm h-full rounded-[5px]"
-                  />
-                </router-link>
+          <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in productList">
+            <div class="relative">
+              <router-link class="block h-[300px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px]" />
+              </router-link>
 
-                <div class="absolute bottom-2 left-[30%] hidden">
-                  <button>Xem chi tiết</button>
-                </div>
+              <div class="absolute bottom-2 left-[30%] hidden">
+                <button>Xem chi tiết</button>
               </div>
+            </div>
 
-              <a-space direction="vertical" :size="10" class="mt-[10px]">
-                <h3 class="m-0 text-base">
-                  <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                    {{ item.tieuDe }}
-                  </router-link>
-                </h3>
+            <a-space direction="vertical" :size="10" class="mt-[10px]">
+              <h3 class="m-0 text-base">
+                <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                  {{ item.tieuDe }}
+                </router-link>
+              </h3>
 
-                <div class="product_price flex items-center gap-[10px]">
-                  <template v-if="item?.giaCu && item?.giaCu > 0">
-                    <del>{{ _formatVnCurrency(item?.giaCu) }}</del>
-                    <span class="font-bold text-red-500">
-                      {{ _formatVnCurrency(item?.giaMoi) }}
-                    </span>
-                  </template>
-
-                  <span v-else class="font-bold text-red-500">
+              <div class="product_price flex items-center gap-[10px]">
+                <template v-if="item?.giaCu && item?.giaCu > 0">
+                  <del>{{ _formatVnCurrency(item?.giaCu) }}</del>
+                  <span class="font-bold text-red-500">
                     {{ _formatVnCurrency(item?.giaMoi) }}
                   </span>
-                </div>
+                </template>
 
-                <a-space>
-                  <a-rate
-                    class="text-[14px]"
-                    :value="item?.tbDanhGia || 0"
-                    allow-half
-                    disabled
-                  />
-                  <a-divider type="vertical" class="bg-gray-500" />
-                  <span>{{ item?.daBan }} Đã bán</span>
-                </a-space>
+                <span v-else class="font-bold text-red-500">
+                  {{ _formatVnCurrency(item?.giaMoi) }}
+                </span>
+              </div>
+
+              <a-space>
+                <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
+                <a-divider type="vertical" class="bg-gray-500" />
+                <span>{{ item?.daBan }} Đã bán</span>
               </a-space>
-            </div>
+            </a-space>
+          </div>
         </div>
 
         <div class="flex justify-center mt-[15px]">
@@ -103,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { ProductFilterReq } from "~/components/product/ProductFilterSidebar.vue";
+import type { IProductFilterModel, IProductFilterReq } from "@/types/IProductFilter";
 import ProductService from "~/services/ProductService";
 
 const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
@@ -119,15 +102,27 @@ const paginationCnf = reactive<{
   total: 0,
 });
 
-const onClickFilter = (val: ProductFilterReq) => {
-  console.log("filter product", val);
+const filterModel = reactive<IProductFilterReq>({
+  hienThiWeb: true
+});
+
+const onClickFilter = (val: IProductFilterModel) => {
+  filterModel.thuongHieu = val.brand;
+  filterModel.dmGiay = val.category;
+  filterModel.mau = val.color;
+  filterModel.size = val.size;
+  filterModel.tieuDe = val.name || undefined
+  if (val.priceStart > 0 || val.priceEnd > 0)
+    filterModel.khoangGia = val.priceRange;
+
+  console.log("filter product", filterModel);
+
 };
 
 const onCallApiProductFilter = () => {
-  ProductService.locSp({
-    page: paginationCnf.current - 1,
-    size: paginationCnf.pageSize,
-  })
+  ProductService.locSp(
+    filterModel, paginationCnf.current - 1,
+    paginationCnf.pageSize)
     .then((res: any) => {
       console.log("product filter data", res);
       productList.value = res.content;
