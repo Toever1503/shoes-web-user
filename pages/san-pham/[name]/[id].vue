@@ -210,8 +210,8 @@
 
           <!-- review -->
           <a-tab-pane key="3" tab="Đánh giá">
-            <a-comment>
-              <template #author><a>Han Solo</a></template>
+            <a-comment v-for="(item, index) in reviewList" :key="index">
+              <template #author><a>Người dùng #{{  item?.nguoiTaoId}}</a></template>
               <template #avatar>
                 <a-avatar
                   src="https://joeschmoe.io/api/v1/random"
@@ -219,17 +219,14 @@
                 />
               </template>
               <template #content>
-                <a-rate v-model:value="productRate" allow-half disabled />
+                <a-rate :value="item?.soSao || 0" allow-half disabled />
                 <p class="m-0">
-                  We supply a series of design principles, practical patterns
-                  and high quality design resources (Sketch and Axure), to help
-                  people create their product prototypes beautifully and
-                  efficiently.
+                 {{ item?.binhLuan }}
                 </p>
               </template>
               <template #datetime>
                 <a-tooltip :title="dayjs().format('YYYY-MM-DD HH:mm:ss')">
-                  <span>{{ dayjs().fromNow() }}</span>
+                  <span>{{ dayjs(item?.ngayTao).fromNow() }}</span>
                 </a-tooltip>
               </template>
             </a-comment>
@@ -484,11 +481,15 @@ const addToCart = (product, qty) => {
         (item) => item.giatri1 == Number(selectedVariation1.value)
       );
       if (productVariation) {
-        
         const cartItemCheck = _storeCart.cart.find(
           (item: any) => item.id == productVariation.id
         );
-        console.log("add variation: ", productVariation, cartItemCheck, quantity.value);
+        console.log(
+          "add variation: ",
+          productVariation,
+          cartItemCheck,
+          quantity.value
+        );
         let isTurnOffShowRs = false;
         if (cartItemCheck) {
           if (
@@ -668,6 +669,9 @@ const onClickImageBg = (src: string) => {
   } else activeImage.value = src;
 };
 const relatedProducts = ref([]);
+
+const reviewList = ref([]);
+
 onMounted(() => {
   ProductService.chiTietSp(Number(_route.params.id))
     .then((res) => {
@@ -702,5 +706,9 @@ onMounted(() => {
       console.log("fetch product error", err);
     })
     .finally(() => (isGettingProduct.value = false));
+  ProductService.getReviewForProduct(Number(_route.params.id)).then((res) => {
+    console.log("revierw data", res);
+    reviewList.value = res as any;
+  });
 });
 </script>

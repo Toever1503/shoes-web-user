@@ -10,7 +10,7 @@ const getAllBrand = () => FetchInstance.get(`/thuong-hieu/loc-thuong-hieu?page=0
 const getAllColorVariation = () => FetchInstance.get(`${basePath}/get-all-gia-tri-bien-the/1`);
 const getAllSizeVariation = () => FetchInstance.get(`${basePath}/get-all-gia-tri-bien-the/2`);
 const checkVoucher = (code: string, productIds: number[]) => FetchInstance.get(`/voucher/public/kiem-tra-voucher/${code}?productList=${productIds}`);
-
+const getReviewForProduct = (id: number) => FetchInstance.get(`/danh-gia/public/lay-danh-gia/${id}`);
 
 // get-all-gia-tri-bien-the
 export default {
@@ -21,5 +21,6 @@ export default {
     getAllBrand,
     getAllColorVariation,
     getAllSizeVariation,
-    checkVoucher
+    checkVoucher,
+    getReviewForProduct
 };
