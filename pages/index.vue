@@ -71,7 +71,10 @@
             v-for="(item, index) in productList"
           >
             <div class="relative">
-              <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+              <router-link
+                class="block h-[450px]"
+                :to="`/san-pham/${item?.tieuDe}/${item?.id}`"
+              >
                 <img
                   :src="item?.anhChinh?.url"
                   class="shadow-sm h-full rounded-[5px]"
@@ -111,7 +114,7 @@
                   disabled
                 />
                 <a-divider type="vertical" class="bg-gray-500" />
-                <span>{{item?.daBan}} Đã bán</span>
+                <span>{{ item?.daBan || 0 }} Đã bán</span>
               </a-space>
             </a-space>
           </div>
@@ -119,8 +122,14 @@
       </a-spin>
 
       <div class="flex justify-center my-[20px]">
-        <a-button class="bg-black text-white">
-          <router-link to="/danh-sach-san-pham"> Xem tất cả </router-link>
+        <a-button type="primary">
+          <router-link
+            :to="`/danh-sach-san-pham?sort=${
+              currentActiveProductTab == 1 ? 'daBan,desc' : 'id,desc'
+            }`"
+          >
+            Xem tất cả
+          </router-link>
         </a-button>
       </div>
     </section>
@@ -134,17 +143,22 @@ const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
 
 const currentActiveProductTab = ref<number>(1);
 const isLoadingProduct = ref<boolean>(false);
-const onChangeActiveProductTab = (val: number) =>
-  (currentActiveProductTab.value = val);
+const onChangeActiveProductTab = (val: number) => {
+  currentActiveProductTab.value = val;
+  onCallApi();
+};
 const productList = ref([]);
 
-onMounted(() => {
+const onCallApi = () => {
   if (isLoadingProduct.value) return;
   isLoadingProduct.value = true;
-  ProductService.locSp({
+
+  const payload: any = {
     page: 0,
     size: 8,
-  })
+  };
+  if (currentActiveProductTab.value == 1) payload.sort = "daBan,desc";
+  ProductService.locSp(payload)
     .then((res: any) => {
       console.log("filter product: ", res.content);
       productList.value = res.content;
@@ -156,6 +170,9 @@ onMounted(() => {
       console.log("filter product failed: ", err);
     })
     .finally(() => (isLoadingProduct.value = false));
+};
+onMounted(() => {
+  onCallApi();
 });
 </script>
 

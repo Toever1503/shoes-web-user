@@ -7,40 +7,56 @@
       <a-breadcrumb-item>Danh sách sản phẩm</a-breadcrumb-item>
     </a-breadcrumb>
 
-    <div class="flex gap-[50px] mt-[20px] w-full justify-start px-3 md:px-[50px]">
+    <div
+      class="flex gap-[50px] mt-[20px] w-full justify-start px-3 md:px-[50px]"
+    >
       <ProductFilterSidebar @filter="onClickFilter" />
       <div class="w-full">
         <a-space class="items-center justify-end w-full mb-[20px]">
           <span class="text-xl">Sắp xếp:</span>
           <a-dropdown>
             <template #overlay>
-              <a-menu>
-                <a-menu-item key="1">
+              <a-menu @click="onClickSort">
+                <a-menu-item key="latest">
+                  <UserOutlined />
+                  Mới nhất
+                </a-menu-item>
+                <a-menu-item key="sale">
                   <UserOutlined />
                   Bán chạy nhất
                 </a-menu-item>
-                <a-menu-item key="pricePump">
+                <a-menu-item key="priceDown">
                   <UserOutlined />
                   Giá giảm dần
                 </a-menu-item>
-                <a-menu-item key="priceDump">
+                <a-menu-item key="priceUp">
                   <UserOutlined />
                   Giá tăng dần
                 </a-menu-item>
               </a-menu>
             </template>
             <a-button>
-              Mới nhất
+              {{ filterSortBy.title }}
               <DownOutlined />
             </a-button>
           </a-dropdown>
         </a-space>
 
         <div class="flex flex-wrap gap-[20px]">
-          <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in productList">
+          <div
+            style="width: 23%; border: none; box-shadow: none"
+            :key="index"
+            v-for="(item, index) in productList"
+          >
             <div class="relative">
-              <router-link class="block h-[300px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px]" />
+              <router-link
+                class="block h-[300px]"
+                :to="`/san-pham/${item?.tieuDe}/${item?.id}`"
+              >
+                <img
+                  :src="item?.anhChinh?.url"
+                  class="shadow-sm h-full rounded-[5px]"
+                />
               </router-link>
 
               <div class="absolute bottom-2 left-[30%] hidden">
@@ -69,7 +85,12 @@
               </div>
 
               <a-space>
-                <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
+                <a-rate
+                  class="text-[14px]"
+                  :value="item?.tbDanhGia || 0"
+                  allow-half
+                  disabled
+                />
                 <a-divider type="vertical" class="bg-gray-500" />
                 <span>{{ item?.daBan }} Đã bán</span>
               </a-space>
@@ -86,9 +107,13 @@
 </template>
 
 <script setup lang="ts">
-import type { IProductFilterModel, IProductFilterReq } from "@/types/IProductFilter";
+import type {
+  IProductFilterModel,
+  IProductFilterReq,
+} from "@/types/IProductFilter";
 import ProductService from "~/services/ProductService";
 
+const _route = useRoute();
 const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
 
 const productList = ref([]);
@@ -103,26 +128,59 @@ const paginationCnf = reactive<{
 });
 
 const filterModel = reactive<IProductFilterReq>({
-  hienThiWeb: true
+  hienThiWeb: true,
 });
+const filterSortBy = reactive({
+  title: "Mới nhất",
+  by: "id,desc",
+});
+const onClickSort = (event: any) => {
+  console.log("sort by: ", event);
 
+  switch (event.key) {
+    case "latest":
+      filterSortBy.title = "Mới nhất";
+      filterSortBy.by = "id,desc";
+      break;
+    case "sale":
+      filterSortBy.title = "Bán chạy nhất";
+      filterSortBy.by = "daBan,desc";
+      break;
+    case "priceDown":
+      filterSortBy.title = "Giá giảm dần";
+      filterSortBy.by = "giaMoi,desc";
+      break;
+    case "priceUp":
+      filterSortBy.title = "Giá tăng dần";
+      filterSortBy.by = "giaMoi,asc";
+      break;
+    default:
+      break;
+  }
+
+  onCallApiProductFilter();
+};
 const onClickFilter = (val: IProductFilterModel) => {
   filterModel.thuongHieu = val.brand;
   filterModel.dmGiay = val.category;
   filterModel.mau = val.color;
   filterModel.sizeId = val.sizeId;
-  filterModel.tieuDe = val.name || undefined
+  filterModel.tieuDe = val.name || undefined;
   if (val.priceStart > 0 || val.priceEnd > 0)
     filterModel.khoangGia = val.priceRange;
 
   console.log("filter product", filterModel);
-
+  onCallApiProductFilter();
 };
 
 const onCallApiProductFilter = () => {
+  productList.value = [];
   ProductService.locSp(
-    filterModel, paginationCnf.current - 1,
-    paginationCnf.pageSize)
+    filterModel,
+    paginationCnf.current - 1,
+    paginationCnf.pageSize,
+    filterSortBy.by
+  )
     .then((res: any) => {
       console.log("product filter data", res);
       productList.value = res.content;
@@ -136,6 +194,8 @@ const onCallApiProductFilter = () => {
 };
 
 onMounted(() => {
+  if (_route.query.sort)
+    filterSortBy.by = _route.query.sort ? String(_route.query.sort) : "id,desc";
   onCallApiProductFilter();
 });
 </script>

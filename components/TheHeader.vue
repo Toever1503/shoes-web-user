@@ -23,7 +23,7 @@
               </a-menu-item>
 
               <a-menu-item :key="item.tenThuongHieu" v-for="item in brandList">
-                <router-link :to="`/giay-nu?thuon_hieu=${item.id}`">
+                <router-link :to="`/giay-nu?thuong_hieu=${item.id}`">
                   Giày {{ item.tenThuongHieu }}
                 </router-link>
               </a-menu-item>
@@ -45,7 +45,7 @@
               </a-menu-item>
 
               <a-menu-item :key="item.tenThuongHieu" v-for="item in brandList">
-                <router-link :to="`/giay-nu?thuon_hieu=${item.id}`">
+                <router-link :to="`/giay-nu?thuong_hieu=${item.id}`">
                   Giày {{ item.tenThuongHieu }}
                 </router-link>
               </a-menu-item>
