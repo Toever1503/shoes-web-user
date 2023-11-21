@@ -16,6 +16,7 @@ export interface ICart {
     price: number;
     variation: string; // desribe variation
     stockCnt: number;
+    isTurnOffShowRs?: boolean;
 }
 export const useCartStore = defineStore('cart', {
     state: (): ICartState => {
@@ -42,7 +43,6 @@ export const useCartStore = defineStore('cart', {
         async fAddToCart(payload: ICart) {
             console.log("begin add item", payload);
 
-
             try {
                 if (localStorage.getItem('loggedUser'))
                     await CartService.addProduct({
@@ -50,15 +50,20 @@ export const useCartStore = defineStore('cart', {
                         soLuong: payload.qty
                     });
 
-                notification.success({
-                    message: "Thêm thành công!"
-                });
+                if (!payload.isTurnOffShowRs)
+                    notification.success({
+                        message: "Thêm thành công!"
+                    });
+
                 const cartItem = this.cart.find((item: ICart) => item.id === payload.id);
                 if (cartItem) {
-                    this.cart.forEach((item: ICart) => {
-                        if (item.id == cartItem.id)
-                            item.qty = payload.qty + item.qty;
-                    });
+                    {
+                        if (cartItem.qty == payload.stockCnt) return;
+                        this.cart.forEach((item: ICart) => {
+                            if (item.id == cartItem.id)
+                                item.qty = payload.qty + item.qty;
+                        });
+                    }
                 } else {
                     this.cart.push({
                         id: payload.id,
@@ -77,7 +82,7 @@ export const useCartStore = defineStore('cart', {
             catch (err) {
                 console.log("user.add cart failed: ", err);
                 notification.error({
-                    message: "add item to cart failed!"
+                    message: "Thêm sản phẩm thất bại!"
                 });
             }
         },
@@ -93,7 +98,7 @@ export const useCartStore = defineStore('cart', {
             catch (err) {
                 console.log("user.add cart failed: ", err);
                 notification.error({
-                    message: "add item to cart failed!"
+                    message: "Không thể cập nhật giỏ hàng!"
                 });
             }
         },
@@ -128,7 +133,7 @@ export const useCartStore = defineStore('cart', {
             this.cart = cartItems;
             localStorage.setItem('cart', JSON.stringify([]));
         },
-        fSetBuyNow(item: ICart){
+        fSetBuyNow(item: ICart) {
             this.variationNow = item;
         }
     },

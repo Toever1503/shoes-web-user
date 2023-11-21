@@ -2,7 +2,7 @@ export interface IProductFilterModel {
     name?: string;
     category?: number;
     color?: number;
-    size?: number;
+    sizeId?: number;
     brand?: number;
     priceStart: number;
     priceEnd: number;
@@ -16,6 +16,6 @@ export interface IProductFilterReq{
     hienThiWeb?: boolean;
     tieuDe?: string;
     mau?: number;
-    size?: number;
+    sizeId?: number;
     gioiTinh?: 'MALE' | 'FEMALE';
   }
