@@ -9,7 +9,7 @@
         class="flex flex-col bg-white opacity-90 shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md"
       >
         <h1 class="text-center text-2xl font-bold uppercase">
-          Sign up
+          Đăng ký
         </h1>
         <div class="mt-3">
           <a-form
@@ -26,7 +26,7 @@
               name="userName"
               :rules="[{ required: true, message: 'Tài khoản không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.userName" placeholder="Tài khoản ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.userName"  @change="formState.userName = formState.userName.replace(/^\s*$/, '')" placeholder="Tài khoản ..."/>
             </a-form-item>
             </div>
             <div class="flex flex-col">
@@ -35,7 +35,7 @@
               name="email"
               :rules="[ {validator: handleValidateTypeEmail}, { required: true, message: 'Email không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.email" placeholder="Email ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.email" @change="formState.email = formState.email.replace(/^\s*$/, '')" placeholder="Email ..."/>
             </a-form-item>
               </div>
               <div class="flex flex-col">
@@ -44,7 +44,7 @@
               name="phone"
               :rules="[ {validator: handleValidateTypePhone}, { required: true, message: 'Số điện thoại không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.phone" placeholder="Số điện thoại ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.phone" @change="formState.phone = formState.phone.replace(/^\s*$/, '')" placeholder="Số điện thoại ..."/>
             </a-form-item>
               </div>
               <div class="flex flex-col">
@@ -53,7 +53,7 @@
               name="name"
               :rules="[{ required: true, message: 'Họ và tên không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.name" placeholder="Email ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.name" @change="formState.name = formState.name.replace(/^\s*$/, '')" placeholder="Email ..."/>
             </a-form-item>
               </div>
             <div class="flex flex-col mb-3">
@@ -63,7 +63,7 @@
               name="password"
               :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]"
           >
-            <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ..."/>
+            <a-input-password class="h-10 text-base" v-model:value="formState.password" @change="formState.password = formState.password.replace(/^\s*$/, '')" placeholder="Mật khẩu ..."/>
           </a-form-item>
 
             </div>
@@ -73,7 +73,7 @@
               html-type="button" @click="handleSubmit"
                 class="flex z-auto items-center justify-center focus:outline-none h-10 hover:text-white text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in"
               >
-                <span class="justify-center uppercase">Sign Up</span>
+                <span class="justify-center uppercase">Đăng ký</span>
               </a-button>
             </div>
           </a-form>
@@ -115,6 +115,12 @@ const formState = reactive({
 const formRef = ref(null);
 
 const handleSubmit = () =>{
+  formRef.value.validate().then(() => {
+    // Check for empty username and password
+    if (formState.username.trim() === '' || formState.password.trim() === '') {
+      message.error('Vui lòng nhập tài khoản và mật khẩu.');
+      return;
+    }
   console.log("formState: ", formState);
      authService.register(formState).then((res) => {
         console.log("res: ", res);
@@ -125,6 +131,7 @@ const handleSubmit = () =>{
           message.error("Đăng ký thất bại");
         }
       });
+    });
 }
 
 const handleValidateTypePhone = (rule, value) => {

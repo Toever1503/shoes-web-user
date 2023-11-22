@@ -21,9 +21,9 @@
               <a-form-item
               label="Tài khoản"
               name="username"
-              :rules="[{ required: true, message: 'Tài khoản không được để trống!' }]"
+              :rules="[{ required: true, message: 'Vui lòng không bỏ trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.username" placeholder="Tài khoản ...">
+              <a-input class="h-10 text-base" v-model:value="formState.username"  @change="formState.username = formState.username.replace(/^\s*$/, '')" :maxlength="255" placeholder="Tài khoản ...">
                 <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
               </a-input>
             </a-form-item>
@@ -35,7 +35,7 @@
               name="password"
               :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]"
           >
-            <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ...">
+            <a-input-password class="h-10 text-base" v-model:value="formState.password"  @change="formState.password = formState.password.replace(/^\s*$/, '')" placeholder="Mật khẩu ...">
               <template #prefix><LockOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
             </a-input-password>
           </a-form-item>
@@ -90,8 +90,8 @@ const onSlideChange = () => {
   console.log("slide change");
 };
 const formState = reactive({
-  username: '',
-  password: '',
+  username: "",
+  password: "",
 });
 const formForgotPass = reactive({
   email: '',
@@ -141,25 +141,30 @@ const handleValidateTypeEmail = (rule, value) => {
 
 
 const handleSubmit = () => {
-  authService.login(formState).then(
-                res => {
-                    console.log('user: ',res.data);
-                    console.log('login success: ');
-                    // fetchInstance.setCookie('token', `${res.data.content.accessToken}`, res.data.content.accessExpireIn);
-                    // fetchInstance.setCookie('auth',  `${res.data.content.roles[0]}`, res.data.content.refreshExpireIn);
-                    // fetchInstance.setCookie('username',  `${res.data.content.userName}`, res.data.content.refreshExpireIn);
-                    window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
+  formRef.value.validate().then(() => {
+    // Check for empty username and password
+    if (formState.username.trim() === '' || formState.password.trim() === '') {
+      message.error('Vui lòng nhập tài khoản và mật khẩu.');
+      return;
+    }
+
+    console.log(formState);
+    authService.login(formState).then(
+      res => {
+        console.log('user: ', res.data);
+        console.log('login success: ');
+        window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
                     window.localStorage.setItem('auth', `${res.data.content.roles[0]}`);
                     window.localStorage.setItem('username', `${res.data.content.userName}`);
-                    message.success('Đăng nhập thành công');
-                    window.location.href = '/';
-                },
-                error => {
-                    if(error.response.data.code == 1001){
-                       message.error('Tài khoản hoặc mật khẩu không chính xác');
-                    }
-                }
-            );
+        window.location.href = '/';
+      },
+      error => {
+        if (error.response.data.code == 1001) {
+          message.error('Tài khoản hoặc mật khẩu không chính xác');
+        }
+      }
+    );
+  });
 };
 
 </script>
