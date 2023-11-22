@@ -9,7 +9,7 @@
         class="flex flex-col bg-white opacity-90 shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md"
       >
         <h1 class="text-center text-2xl font-bold uppercase">
-          Đăng ký
+          Đăng ký tài khoản mới
         </h1>
         <div class="mt-3">
           <a-form
@@ -53,7 +53,7 @@
               name="name"
               :rules="[{ required: true, message: 'Họ và tên không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.name" @change="formState.name = formState.name.replace(/^\s*$/, '')" placeholder="Email ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.name" placeholder="Email ..."/>
             </a-form-item>
               </div>
             <div class="flex flex-col mb-3">
@@ -63,7 +63,7 @@
               name="password"
               :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]"
           >
-            <a-input-password class="h-10 text-base" v-model:value="formState.password" @change="formState.password = formState.password.replace(/^\s*$/, '')" placeholder="Mật khẩu ..."/>
+            <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ..."/>
           </a-form-item>
 
             </div>
@@ -73,7 +73,7 @@
               html-type="button" @click="handleSubmit"
                 class="flex z-auto items-center justify-center focus:outline-none h-10 hover:text-white text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in"
               >
-                <span class="justify-center uppercase">Đăng ký</span>
+                <span class="justify-center uppercase">Đăng ký tài khoản mới</span>
               </a-button>
             </div>
           </a-form>

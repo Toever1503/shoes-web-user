@@ -15,6 +15,9 @@ export default interface IProductDetail {
     anhPhu: IFileModel[];
     moTa: string;
     nguoiTao: number;
+    daBan: number;
+    tbDanhGia: number;
+    soDanhGia: number;
     loaiBienThe: EProductVariation;
     vouchers: [];
     chatLieu: "",

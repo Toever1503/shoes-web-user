@@ -8,16 +8,31 @@
     </a-breadcrumb>
 
     <div class="page_content px-3 md:px-[50px]">
-      <a-table class="mt-[20px]" :columns="columns" :data-source="_storeCart.cart" bordered :pagination="false">
+      <a-table
+        class="mt-[20px]"
+        :columns="columns"
+        :data-source="_storeCart.cart"
+        bordered
+        :pagination="false"
+      >
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'image'">
-            <router-link :to="`/san-pham/${record.productName}/${record.productId}`">
-              <a-image class="bordered" :preview="false" :width="100" :src="record.anh" />
+            <router-link
+              :to="`/san-pham/${record.productName}/${record.productId}`"
+            >
+              <a-image
+                class="bordered"
+                :preview="false"
+                :width="100"
+                :src="record.anh"
+              />
             </router-link>
           </template>
 
           <template v-if="column.dataIndex === 'product'">
-            <router-link :to="`/san-pham/${record.productName}/${record.productId}`">
+            <router-link
+              :to="`/san-pham/${record.productName}/${record.productId}`"
+            >
               <h3 class="m-0">
                 {{ record.productName }}
               </h3>
@@ -26,16 +41,21 @@
           </template>
 
           <template v-if="column.dataIndex === 'price'">
-            <p>{{ _formatVnCurrency(record.price) }} </p>
+            <p>{{ _formatVnCurrency(record.price) }}</p>
           </template>
 
           <template v-if="column.dataIndex === 'qty'">
-            <a-input-number v-model:value="record.qty" @change="(val: any) => updateQty(Number(val), record as ICart)" />
+            <a-input-number
+              v-model:value="record.qty"
+              @change="(val: any) => updateQty(Number(val), record as ICart)"
+            />
           </template>
 
           <template v-else-if="column.dataIndex === 'action'">
-            <DeleteOutlined @click="_storeCart.removeCartItem(record.id)"
-              class="mx-auto text-xl hover:text-red-500 cursor-pointer duration-150 ease-in-out" />
+            <DeleteOutlined
+              @click="_storeCart.removeCartItem(record.id)"
+              class="mx-auto text-xl hover:text-red-500 cursor-pointer duration-150 ease-in-out"
+            />
           </template>
         </template>
       </a-table>
@@ -61,7 +81,11 @@
             <a-descriptions-item class="px-5">
               <div class="text-end w-full">
                 <a-button class="bg-black text-white">
-                  <router-link to="/dat-hang"> Đặt hàng </router-link>
+                  <router-link
+                    :to="_storeCart.cartTotalQty > 0 ? '/dat-hang' : '#'"
+                  >
+                    Đặt hàng
+                  </router-link>
                 </a-button>
               </div>
             </a-descriptions-item>
@@ -69,7 +93,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -114,4 +137,3 @@ const updateQty = (val: number, record: ICart) => {
   _storeCart.updateCartQuantity({ ...record, qty: val });
 };
 </script>
-

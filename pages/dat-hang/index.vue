@@ -89,7 +89,11 @@
             </h3>
           </template>
 
-          <a-table :columns="columns" :data-source="_storeCart.cart" :pagination="false">
+          <a-table :columns="columns" :data-source="
+            _storeCart.variationNow
+              ? [_storeCart.variationNow]
+              : _storeCart.cart
+          " :pagination="false">
             <template #bodyCell="{ column, text, record }">
               <template v-if="column.dataIndex === 'product'">
                 <router-link class="m-0" :to="`/san-pham/${record.productName}/${record.productId}`">
@@ -237,9 +241,9 @@ const phoneValidator = () =>
 
 const formState = reactive<FormState>({
   phanLoaidIds: [],
-  diaChiNhanHang: "",
-  hoTenNguoiNhan: "",
-  soDienThoaiNhanHang: "",
+  diaChiNhanHang: "so 2 to ka",
+  hoTenNguoiNhan: "haunv" + Math.floor(Math.random() * 999),
+  soDienThoaiNhanHang: "0965901542",
   note: "",
   phuongThucTT: "VNPAY",
   discount: 0,
@@ -305,14 +309,17 @@ const onCheckVoucher = () => {
       .then((res: any) => {
         voucherModel.voucherInfo = res;
         voucherModel.isValid = true;
-        console.log('voucher info: ', res);
-        if (res.giamGiaTheo == 'PERCENT') {
-          const priceDiscount = _storeCart.cartTotalAmount * (res.phanTramGiam / 100);
-          voucherModel.success = 'Áp mã thành công, bạn được giảm ' + _formatVnCurrency(priceDiscount);
+        console.log("voucher info: ", res);
+        if (res.giamGiaTheo == "PERCENT") {
+          const priceDiscount =
+            _storeCart.cartTotalAmount * (res.phanTramGiam / 100);
+          voucherModel.success =
+            "Áp mã thành công, bạn được giảm " +
+            _formatVnCurrency(priceDiscount);
           voucherModel.discountPrice = priceDiscount;
-        }
-        else {
-          voucherModel.success = 'Áp mã thành công, bạn được giảm ' + (_formatVnCurrency(res.giaGiam));
+        } else {
+          voucherModel.success =
+            "Áp mã thành công, bạn được giảm " + _formatVnCurrency(res.giaGiam);
           voucherModel.discountPrice = res.giaGiam;
         }
       })
@@ -320,8 +327,7 @@ const onCheckVoucher = () => {
         console.log("check voucher failed: ", err.response.status);
         voucherModel.isValid = false;
         if (err.response.status == 404)
-          voucherModel.error =
-            "Rất tiếc, mã giảm giá không tồn tại!";
+          voucherModel.error = "Rất tiếc, mã giảm giá không tồn tại!";
         else
           voucherModel.error =
             "Rất tiếc, sản phẩm của bạn không phù hợp với mã giảm này!";
@@ -368,26 +374,34 @@ const onFinish = (values: any) => {
   if (submitted.value) return;
   submitted.value = true;
   const payload: any = {
+    email: formState.email,
     phuongThucTT: formState.phuongThucTT,
     note: formState.note,
     hoTenNguoiNhan: formState.hoTenNguoiNhan,
     soDienThoaiNhanHang: formState.soDienThoaiNhanHang,
     diaChiNhanHang: undefined,
     diaChiId: undefined,
-    maGiamGiaId: voucherModel?.voucherInfo?.id || undefined
+    maGiamGiaId: voucherModel?.voucherInfo?.id || undefined,
+    shipFee: formState.shipFee,
+    totalPay: formState.totalPay,
   };
 
   if (previousAddressId.value) payload.diaChiId = previousAddressId.value;
   else
     payload.diaChiNhanHang = `${formState.diaChiNhanHang}__${formState.ward}__${formState.district}__${formState.province}`;
 
-  // if (localStorage.getItem("loggedUser"))
-  //   payload.gioHangItemIds = this.cart.map((item) => item.id);
-  // else
-  payload.gioHangTamThoiReqDto = _storeCart.cart.map((item) => ({
-    sanPhamBienThe: item.id,
-    soLuong: item.qty,
-  }));
+  if (_storeCart.variationNow)
+    payload.gioHangTamThoiReqDto = [
+      {
+        sanPhamBienThe: _storeCart.variationNow.id,
+        soLuong: _storeCart.variationNow.qty,
+      },
+    ];
+  else
+    payload.gioHangTamThoiReqDto = _storeCart.cart.map((item) => ({
+      sanPhamBienThe: item.id,
+      soLuong: item.qty,
+    }));
   console.log("order payload: ", payload);
 
   PaymentService.checkout(payload)
@@ -414,49 +428,59 @@ const onFinishFailed = (errorInfo: any) => {
 };
 
 const totalPay = computed(() => {
-  formState.totalPay = (_storeCart.cartTotalAmount + formState.shipFee) - voucherModel.discountPrice;
+  if (_storeCart.variationNow)
+    formState.totalPay =
+      (_storeCart.variationNow.qty * _storeCart.variationNow.price) +
+      formState.shipFee -
+      voucherModel.discountPrice;
+  else
+    formState.totalPay =
+      _storeCart.cartTotalAmount +
+      formState.shipFee -
+      voucherModel.discountPrice;
   return formState.totalPay;
-})
+});
 
 const calcShipFee = () => {
-  const DEFAULT_FEE = 6800;
+  const DEFAULT_FEE = 6000;
   const payload = {
     SENDER_PROVINCE: 1,
     SENDER_DISTRICT: 1,
     RECEIVER_PROVINCE: Number(formState.province.split("##")[0]),
     RECEIVER_DISTRICT: Number(formState.district.split("##")[0]),
     PRODUCT_TYPE: "HH",
-    PRODUCT_WEIGHT: _storeCart.cartTotalQty * 400,
+    PRODUCT_WEIGHT: _storeCart.variationNow
+      ? _storeCart.variationNow.qty * 400
+      : _storeCart.cartTotalQty * 400,
     PRODUCT_PRICE: 0,
     MONEY_COLLECTION: 0,
-    TYPE: 1
+    TYPE: 1,
   };
 
   fetch("https://api.viettelpost.vn/api/tmdt/getPriceAll", {
-    method: 'POST',
+    method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),
-    redirect: 'follow'
+    redirect: "follow",
   })
-    .then(response => response.json())
-    .then(result => {
+    .then((response) => response.json())
+    .then((result) => {
       result = result.sort((r1, r2) => r1.GIA_CUOC - r2.GIA_CUOC);
       console.log(result);
 
       if (result.length == 0) {
-
-      }
-      else {
-        formState.shipFee = result[0].GIA_CUOC + DEFAULT_FEE;
+      } else {
+        formState.shipFee =
+          Math.ceil((result[0].GIA_CUOC + DEFAULT_FEE) / 1000) * 1000;
       }
     })
-    .catch(error => {
-      console.log('error', error)
+    .catch((error) => {
+      console.log("error", error);
       formState.shipFee = 30000;
     });
-}
+};
 
 onMounted(() => {
   console.log("dat hang page mounted");
