@@ -1,84 +1,48 @@
 <template>
   <div>
     <section class="w-full h-[500px]">
-      <Swiper
-        class="h-full"
-        :modules="[SwiperAutoplay, SwiperEffectCreative]"
-        :slides-per-view="1"
-        :loop="true"
-        :effect="'creative'"
-        :autoplay="{
+      <Swiper class="h-full" :modules="[SwiperAutoplay, SwiperEffectCreative]" :slides-per-view="1" :loop="true"
+        :effect="'creative'" :autoplay="{
           delay: 8000,
           disableOnInteraction: true,
-        }"
-        :creative-effect="{
-          prev: {
-            shadow: false,
-            translate: ['-20%', 0, -1],
-          },
-          next: {
-            translate: ['100%', 0, 0],
-          },
-        }"
-      >
+        }" :creative-effect="{
+  prev: {
+    shadow: false,
+    translate: ['-20%', 0, -1],
+  },
+  next: {
+    translate: ['100%', 0, 0],
+  },
+}">
         <SwiperSlide>
-          <img
-            src="https://cf.shopee.vn/file/vn-50009109-c01ffe7818db36dd90e0c8ed0ec2baa1_xxhdpi"
-          />
+          <img src="https://cf.shopee.vn/file/vn-50009109-c01ffe7818db36dd90e0c8ed0ec2baa1_xxhdpi" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img
-            src="https://cf.shopee.vn/file/vn-50009109-ed9104cb971e205afcdd0bf1cf5479c1_xxhdpi"
-          />
+          <img src="https://cf.shopee.vn/file/vn-50009109-ed9104cb971e205afcdd0bf1cf5479c1_xxhdpi" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img
-            src="https://cf.shopee.vn/file/vn-50009109-83dd5db23e7386abacc6be4165b2cf2e_xxhdpi"
-          />
+          <img src="https://cf.shopee.vn/file/vn-50009109-83dd5db23e7386abacc6be4165b2cf2e_xxhdpi" />
         </SwiperSlide>
       </Swiper>
     </section>
 
+    <!-- sale products -->
     <section class="mt-[30px] w-full">
       <div class="flex gap-[20px] justify-center mb-[15px] tabar_product">
-        <h4
-          @click="onChangeActiveProductTab(1)"
-          :class="
-            'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase' +
-            (currentActiveProductTab == 1 ? ' activated text-[#4096ff]' : '')
-          "
-        >
+        <h4 :class="
+          'text-[18px] pb-2 duration-150 ease-in-out uppercase'">
           Sản phẩm bán chạy
-        </h4>
-        <h4
-          @click="onChangeActiveProductTab(2)"
-          :class="
-            'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase' +
-            (currentActiveProductTab == 2 ? ' activated text-[#4096ff]' : '')
-          "
-        >
-          Sản phẩm mới cập nhật
         </h4>
       </div>
 
-      <a-spin :spinning="isLoadingProduct">
+      <a-spin :spinning="saleProductList.length == 0">
         <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
-          <div
-            style="width: 23%; border: none; box-shadow: none"
-            :key="index"
-            v-for="(item, index) in productList"
-          >
+          <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in saleProductList">
             <div class="relative">
-              <router-link
-                class="block h-[450px]"
-                :to="`/san-pham/${item?.tieuDe}/${item?.id}`"
-              >
-                <img
-                  :src="item?.anhChinh?.url"
-                  class="shadow-sm h-full rounded-[5px]"
-                />
+              <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
 
               <div class="absolute bottom-2 left-[30%] hidden">
@@ -88,9 +52,9 @@
 
             <a-space direction="vertical" :size="10" class="mt-[10px]">
               <h3 class="m-0 text-base">
-                <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                  {{ item.tieuDe }}
-                </router-link>
+                <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                    {{ item.tieuDe.slice(0, 50) }}
+                  </router-link>
               </h3>
 
               <div class="product_price flex items-center gap-[10px]">
@@ -107,12 +71,7 @@
               </div>
 
               <a-space>
-                <a-rate
-                  class="text-[14px]"
-                  :value="item?.tbDanhGia || 0"
-                  allow-half
-                  disabled
-                />
+                <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
                 <a-divider type="vertical" class="bg-gray-500" />
                 <span>{{ item?.daBan || 0 }} Đã bán</span>
               </a-space>
@@ -123,11 +82,129 @@
 
       <div class="flex justify-center my-[20px]">
         <a-button type="primary">
-          <router-link
-            :to="`/danh-sach-san-pham?sort=${
-              currentActiveProductTab == 1 ? 'daBan,desc' : 'id,desc'
-            }`"
-          >
+          <router-link :to="`/danh-sach-san-pham?sort=daBan,desc`">
+            Xem tất cả
+          </router-link>
+        </a-button>
+      </div>
+    </section>
+
+    <!-- latest products -->
+    <section class="mt-[30px] w-full">
+      <div class="flex gap-[20px] justify-center mb-[15px] tabar_product">
+        <h4 :class="
+          'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase'">
+          Sản phẩm mới cập nhật
+        </h4>
+      </div>
+
+
+      <a-spin :spinning="latestProductList.length == 0">
+        <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
+          <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in latestProductList">
+            <div class="relative">
+              <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
+              </router-link>
+
+              <div class="absolute bottom-2 left-[30%] hidden">
+                <button>Xem chi tiết</button>
+              </div>
+            </div>
+
+            <a-space direction="vertical" :size="10" class="mt-[10px]">
+              <h3 class="m-0 text-base">
+                <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                    {{ item.tieuDe.slice(0, 50) }}
+                  </router-link>
+              </h3>
+
+              <div class="product_price flex items-center gap-[10px]">
+                <template v-if="item?.giaCu && item?.giaCu > 0">
+                  <del>{{ _formatVnCurrency(item?.giaCu) }}</del>
+                  <span class="font-bold text-red-500">
+                    {{ _formatVnCurrency(item?.giaMoi) }}
+                  </span>
+                </template>
+
+                <span v-else class="font-bold text-red-500">
+                  {{ _formatVnCurrency(item?.giaMoi) }}
+                </span>
+              </div>
+
+              <a-space>
+                <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
+                <a-divider type="vertical" class="bg-gray-500" />
+                <span>{{ item?.daBan || 0 }} Đã bán</span>
+              </a-space>
+            </a-space>
+          </div>
+        </div>
+      </a-spin>
+
+      <div class="flex justify-center my-[20px]">
+        <a-button type="primary">
+          <router-link :to="`/danh-sach-san-pham?sort=id,desc`">
+            Xem tất cả
+          </router-link>
+        </a-button>
+      </div>
+    </section>
+
+    <section class="mt-[30px] w-full">
+      <div class="flex gap-[20px] justify-center mb-[15px] tabar_product">
+        <h4 :class="
+          'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase'">
+          Sản phẩm được yêu thích
+        </h4>
+      </div>
+
+      <a-spin :spinning="likeProductList.length == 0">
+        <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
+          <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in likeProductList">
+            <div class="relative">
+              <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
+              </router-link>
+
+              <div class="absolute bottom-2 left-[30%] hidden">
+                <button>Xem chi tiết</button>
+              </div>
+            </div>
+
+            <a-space direction="vertical" :size="10" class="mt-[10px]">
+              <h3 class="m-0 text-base">
+                <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                    {{ item.tieuDe.slice(0, 50) }}
+                  </router-link>
+              </h3>
+
+              <div class="product_price flex items-center gap-[10px]">
+                <template v-if="item?.giaCu && item?.giaCu > 0">
+                  <del>{{ _formatVnCurrency(item?.giaCu) }}</del>
+                  <span class="font-bold text-red-500">
+                    {{ _formatVnCurrency(item?.giaMoi) }}
+                  </span>
+                </template>
+
+                <span v-else class="font-bold text-red-500">
+                  {{ _formatVnCurrency(item?.giaMoi) }}
+                </span>
+              </div>
+
+              <a-space>
+                <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
+                <a-divider type="vertical" class="bg-gray-500" />
+                <span>{{ item?.daBan || 0 }} Đã bán</span>
+              </a-space>
+            </a-space>
+          </div>
+        </div>
+      </a-spin>
+
+      <div class="flex justify-center my-[20px]">
+        <a-button type="primary">
+          <router-link :to="`/danh-sach-san-pham?sort=tbDanhGia,desc`">
             Xem tất cả
           </router-link>
         </a-button>
@@ -143,11 +220,10 @@ const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
 
 const currentActiveProductTab = ref<number>(1);
 const isLoadingProduct = ref<boolean>(false);
-const onChangeActiveProductTab = (val: number) => {
-  currentActiveProductTab.value = val;
-  onCallApi();
-};
-const productList = ref([]);
+
+const latestProductList = ref([]);
+const saleProductList = ref([]);
+const likeProductList = ref([]);
 
 const onCallApi = () => {
   if (isLoadingProduct.value) return;
@@ -156,20 +232,41 @@ const onCallApi = () => {
   const payload: any = {
     page: 0,
     size: 8,
+
   };
-  if (currentActiveProductTab.value == 1) payload.sort = "daBan,desc";
-  ProductService.locSp(payload)
+  ProductService.locSp({ ...payload, sort: 'daBan,desc' })
     .then((res: any) => {
       console.log("filter product: ", res.content);
-      productList.value = res.content;
+      saleProductList.value = res.content;
     })
     .catch((err) => {
       notification.error({
         message: "Không thể lấy dữ liệu sản phẩm!",
       });
       console.log("filter product failed: ", err);
+    });
+  ProductService.locSp({ ...payload, sort: 'id,desc' })
+    .then((res: any) => {
+      console.log("filter product: ", res.content);
+      latestProductList.value = res.content;
     })
-    .finally(() => (isLoadingProduct.value = false));
+    .catch((err) => {
+      notification.error({
+        message: "Không thể lấy dữ liệu sản phẩm!",
+      });
+      console.log("filter product failed: ", err);
+    });
+  ProductService.locSp({ ...payload, sort: 'tbDanhGia,desc' })
+    .then((res: any) => {
+      console.log("filter product: ", res.content);
+      likeProductList.value = res.content;
+    })
+    .catch((err) => {
+      notification.error({
+        message: "Không thể lấy dữ liệu sản phẩm!",
+      });
+      console.log("filter product failed: ", err);
+    });
 };
 onMounted(() => {
   onCallApi();

@@ -12,40 +12,21 @@
       <div class="px-3 md:px-[50px]">
         <!-- begin product info -->
         <div class="md:flex gap-[50px]">
-          <a-space
-            style="max-width: 600px; max-height: 500px"
-            class="product_image md:w-1/2 justify-center md:max-w-[unset] mx-auto"
-          >
-            <swiper
-              :direction="'vertical'"
-              :slidesPerView="8"
-              :pagination="{
-                clickable: true,
-              }"
-              :autoplay="{
-                delay: 2000,
-                disableOnInteraction: true,
-              }"
-              :loop="true"
-              :modules="modules"
-              class="product_image_slide mx-auto h-[450px] w-[50px]"
-              @swiper="onSwiper"
-              @slideChange="onSlideChange"
-            >
-              <swiper-slide
-                v-slot="{ isActive }"
-                v-for="item in productImages"
-                :key="item"
-                class="mt-[10px] h-[40px]"
-              >
-                <div
-                  @click="onClickImageBg(item)"
-                  :style="
-                    isActive
-                      ? 'border: 1px solid yellow'
-                      : 'border: 1px solid #d9d9d9'
-                  "
-                >
+          <a-space style="max-width: 600px; max-height: 500px"
+            class="product_image md:w-1/2 justify-center md:max-w-[unset] mx-auto">
+            <swiper :direction="'vertical'" :slidesPerView="8" :pagination="{
+              clickable: true,
+            }" :autoplay="{
+  delay: 2000,
+  disableOnInteraction: true,
+}" :loop="true" :modules="modules" class="product_image_slide mx-auto h-[450px] w-[50px]" @swiper="onSwiper"
+              @slideChange="onSlideChange">
+              <swiper-slide v-slot="{ isActive }" v-for="item in productImages" :key="item" class="mt-[10px] h-[40px]">
+                <div @click="onClickImageBg(item)" :style="
+                  isActive
+                    ? 'border: 1px solid yellow'
+                    : 'border: 1px solid #d9d9d9'
+                ">
                   <img class="" alt="example" :src="item" />
                 </div>
               </swiper-slide>
@@ -62,33 +43,25 @@
               <div class="mr-3 inline-block">
                 Mã SP: {{ productDetail?.maSP }}
               </div>
-              <a-rate
-                :value="productDetail?.tbDanhGia || 0"
-                allow-half
-                disabled
-              />
+              <a-rate :value="productDetail?.tbDanhGia || 0" allow-half disabled />
               <a-divider type="vertical" class="bg-gray-500" />
               <span>{{ productDetail?.soDanhGia || 0 }} Đánh giá</span>
               <a-divider type="vertical" class="bg-gray-500" />
               <span>{{ productDetail?.daBan || 0 }} Đã bán</span>
             </div>
 
-            <div
-              class="product_price flex items-center gap-[20px] bg-gray-100 px-5 py-3 mt-3"
-            >
+            <div class="product_price flex items-center gap-[20px] bg-gray-100 px-5 py-3 mt-3">
               <template v-if="productDetail?.giaCu && productDetail?.giaCu > 0">
                 <span class="font-bold text-xl text-red-500">
                   {{ _formatVnCurrency(productDetail?.giaMoi || 0) }}
                 </span>
                 <div class="flex items-center gap-[10px] text-[14px]">
                   <del>{{ _formatVnCurrency(productDetail?.giaCu || 0) }}</del>
-                  <span class="bg-red-200 text-red-500 p-1"
-                    >-{{
-                      String(
-                        (productDetail?.giaMoi / productDetail?.giaCu) * 100
-                      ).slice(0, 2)
-                    }}%</span
-                  >
+                  <span class="bg-red-200 text-red-500 p-1">-{{
+                    String(
+                      (productDetail?.giaMoi / productDetail?.giaCu) * 100
+                    ).slice(0, 2)
+                  }}%</span>
                 </div>
               </template>
               <span v-else class="font-bold text-xl">
@@ -101,10 +74,7 @@
                 Chương trình khuyến mãi
               </legend>
               <ul>
-                <template
-                  :key="index"
-                  v-for="(item, index) in productDetail.vouchers"
-                >
+                <template :key="index" v-for="(item, index) in productDetail.vouchers">
                   <li>
                     {{ item.moTa }}
                   </li>
@@ -116,40 +86,22 @@
 
             <a-space direction="vertical" :size="20">
               <a-space class="product_variations mt-5">
-                <a-select
-                  v-if="
-                    productDetail?.loaiBienThe == 'BOTH' ||
-                    productDetail?.loaiBienThe == 'COLOR'
-                  "
-                  v-model:value="selectedVariation1"
-                  @change="onThayDoiBienTheMau"
-                  class="min-w-[200px]"
-                >
+                <a-select v-if="
+                  productDetail?.loaiBienThe == 'BOTH' ||
+                  productDetail?.loaiBienThe == 'COLOR'
+                " v-model:value="selectedVariation1" @change="onThayDoiBienTheMau" class="min-w-[200px]">
                   <a-select-option value="">Chọn màu</a-select-option>
-                  <a-select-option
-                    :key="index"
-                    :value="item.id"
-                    v-for="(item, index) in variation1List"
-                  >
+                  <a-select-option :key="index" :value="item.id" v-for="(item, index) in variation1List">
                     {{ item.giaTri }}
                   </a-select-option>
                 </a-select>
 
-                <a-select
-                  v-if="
-                    productDetail?.loaiBienThe == 'BOTH' ||
-                    productDetail?.loaiBienThe == 'SIZE'
-                  "
-                  v-model:value="selectedVariation2"
-                  @change="onThayDoiBienTheSize"
-                  class="min-w-[200px]"
-                >
+                <a-select v-if="
+                  productDetail?.loaiBienThe == 'BOTH' ||
+                  productDetail?.loaiBienThe == 'SIZE'
+                " v-model:value="selectedVariation2" @change="onThayDoiBienTheSize" class="min-w-[200px]">
                   <a-select-option value="">Chọn size</a-select-option>
-                  <a-select-option
-                    :key="index"
-                    :value="item.id"
-                    v-for="(item, index) in variation2List"
-                  >
+                  <a-select-option :key="index" :value="item.id" v-for="(item, index) in variation2List">
                     {{ item.giaTri }}
                   </a-select-option>
                 </a-select>
@@ -157,21 +109,12 @@
 
               <a-space :size="20">
                 <span> Số lượng: </span>
-                {{ quantity }} - {{ variationStockCnt }}
-                <a-input-number
-                  v-model:value="quantity"
-                  min="1"
-                  :max="variationStockCnt"
-                />
-                <span v-if="variationStockCnt > 0"
-                  >{{ variationStockCnt }} sản phẩm có sẵn</span
-                >
+                <a-input-number v-model:value="quantity" min="1" :max="variationStockCnt" />
+                <span v-if="variationStockCnt > 0">{{ variationStockCnt }} sản phẩm có sẵn</span>
                 <span v-else>sản phẩm đang hết hàng</span>
               </a-space>
               <a-space>
-                <a-button :disabled="variationStockCnt == 0" @click="addToCart"
-                  >Thêm giỏ hàng</a-button
-                >
+                <a-button :disabled="variationStockCnt == 0" @click="addToCart">Thêm giỏ hàng</a-button>
                 <a-button :disabled="variationStockCnt == 0" @click="buyNow">
                   Mua ngay
                 </a-button>
@@ -183,19 +126,23 @@
 
         <!-- begin product description -->
         <a-tabs class="mt-5" v-if="productDetail">
-          <a-tab-pane key="1" tab="Mô tả sản phẩm">
+          <a-tab-pane key="1">
+            <template #tab>
+              <h3 class="font-[600] m-0">Mô tả sản phẩm</h3>
+            </template>
             <div v-html="productDetail?.moTa" />
           </a-tab-pane>
 
           <!-- product info additional -->
-          <a-tab-pane key="2" tab="Thông tin thêm" force-render>
+          <a-tab-pane key="2" force-render>
+            <template #tab>
+              <h3 class="font-[600] m-0">Thông tin thêm</h3>
+            </template>
             <a-descriptions bordered :column="1" class="max-w-[800px]">
               <a-descriptions-item label="Chất liệu">{{
                 productDetail.chatLieu
               }}</a-descriptions-item>
-              <a-descriptions-item label="Trọng lượng"
-                >{{ productDetail.trongLuong }}g</a-descriptions-item
-              >
+              <a-descriptions-item label="Trọng lượng">{{ productDetail.trongLuong }}g</a-descriptions-item>
               <a-descriptions-item label="Công nghệ">{{
                 productDetail.congNghe
               }}</a-descriptions-item>
@@ -209,19 +156,19 @@
           </a-tab-pane>
 
           <!-- review -->
-          <a-tab-pane key="3" tab="Đánh giá">
+          <a-tab-pane key="3">
+            <template #tab>
+              <h3 class="font-[600] m-0">Đánh giá</h3>
+            </template>
             <a-comment v-for="(item, index) in reviewList" :key="index">
-              <template #author><a>Người dùng #{{  item?.nguoiTaoId}}</a></template>
+              <template #author><a>Người dùng #{{ item?.nguoiTaoId }}</a></template>
               <template #avatar>
-                <a-avatar
-                  src="https://joeschmoe.io/api/v1/random"
-                  alt="Han Solo"
-                />
+                <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
               </template>
               <template #content>
                 <a-rate :value="item?.soSao || 0" allow-half disabled />
                 <p class="m-0">
-                 {{ item?.binhLuan }}
+                  {{ item?.binhLuan }}
                 </p>
               </template>
               <template #datetime>
@@ -236,25 +183,15 @@
         <!-- end product description -->
 
         <section class="mt-[30px]">
-          <h3
-            class="mb-[20px] w-fit"
-            style="
-              border-bottom: 3px solid rgba(220, 220, 220, 0.747);
-              font-size: 18px;
-            "
-          >
+          <h3 class="mb-[20px] w-fit" style="
+                    border-bottom: 2px solid black;
+                    font-size: 18px;
+                  ">
             Sản phẩm liên quan
           </h3>
-          <div
-            class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center"
-          >
-            <a-card
-              hoverable
-              :bodyStyle="'padding: 10px'"
-              style="width: 23%; border: none; box-shadow: none"
-              :key="index"
-              v-for="(item, index) in relatedProducts"
-            >
+          <div class="flex flex-wrap gap-[20px] w-full">
+            <a-card hoverable :bodyStyle="'padding: 10px'" style="width: 23%; border: none; box-shadow: none" :key="index"
+              v-for="(item, index) in relatedProducts">
               <template #cover>
                 <div class="relative">
                   <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
@@ -283,12 +220,7 @@
                   </div>
 
                   <a-space>
-                    <a-rate
-                      class="text-[14px]"
-                      :value="item?.soSaoDanhGia || 0"
-                      allow-half
-                      disabled
-                    />
+                    <a-rate class="text-[14px]" :value="item?.soSaoDanhGia || 0" allow-half disabled />
                     <a-divider type="vertical" class="bg-gray-500" />
                     <span>55 Đã bán</span>
                   </a-space>
@@ -318,8 +250,6 @@ const _formatVnCurrency = function (value: number) {
     currency: "VND",
   }).format(value);
 };
-
-const productRate = ref<number>(3);
 
 const isGettingProduct = ref<boolean>(true);
 const productDetail = ref<IProductDetail>();
@@ -405,14 +335,13 @@ const onThayDoiBienTheSize = (value: string) => {
   }
 };
 
-const addToCart = (product, qty) => {
+const addToCart = () => {
   if (variationStockCnt.value == 0) {
     notification.warning({
       message: "Sản phẩm hiện tại đang hết!",
     });
     return;
   }
-  product.quantity = qty || 1;
 
   if (!productDetail.value) return;
 

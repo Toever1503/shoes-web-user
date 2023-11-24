@@ -1,5 +1,5 @@
 <template>
-  <a-config-provider >
+  <a-config-provider class="relative" >
     <TheHeader />
 
     <a-layout>

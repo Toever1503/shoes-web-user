@@ -1,8 +1,6 @@
 <template>
   <header style="border-bottom: 1px solid rgba(220, 220, 220, 0.736)">
-    <div
-      class="flex items-center justify-between gap-[15px] max-w-[1200px] mx-auto px-[100px] py-[30px]"
-    >
+    <div class="flex items-center justify-between gap-[15px] max-w-[1200px] mx-auto px-[100px] py-[30px]">
       <router-link to="/">
         <img class="h-[30px] w-[100px]" src="/cover.png" />
       </router-link>
@@ -60,43 +58,29 @@
 
       <a-space class="items-center">
         <router-link to="/gio-hang">
-          <div
-            style="
-              background-image: url('/image/common/Shopping-Bag.svg');
-              background-size: cover;
-            "
-            class="w-[18px] h-[18px] cursor-pointer hover:scale(1.1)"
-          ></div>
+          <div style="
+                          background-image: url('/image/common/Shopping-Bag.svg');
+                          background-size: cover;
+                        " class="w-[18px] h-[18px] cursor-pointer hover:scale-[1.05] duration-200 easy-in-out"></div>
         </router-link>
-        <SearchOutlined
-          class="text-[16px] cursor-pointer hover:text-orange-500"
-        />
+        <SearchOutlined @click="onClickShowSearchModal" class="text-[16px] cursor-pointer hover:text-[#4096ff] hover:scale-[1.05] duration-200 easy-in-out" />
 
-        <nuxt-link
-          class="font-bold text-lg text-[#000000e0] no-underline"
-          href="/dang-nhap"
-          v-if="authen == null || authen == undefined"
-          >Đăng nhập</nuxt-link
-        >
+        <nuxt-link class="font-bold text-lg text-[#000000e0] no-underline" href="/dang-nhap"
+          v-if="authen == null || authen == undefined">Đăng nhập</nuxt-link>
         <a-dropdown v-else>
           <a class="ant-dropdown-link" @click.prevent>
             <a-avatar size="small">
               <template #icon>
-                <UserOutlined />
+                <UserOutlined class="hover:scale-[1.05] duration-200 easy-in-out" />
               </template>
             </a-avatar>
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item
-                ><nuxt-link href="/tai-khoan/thong-tin"
-                  >Thông tin cá nhân
+              <a-menu-item><nuxt-link href="/tai-khoan/thong-tin">Thông tin cá nhân
                 </nuxt-link>
               </a-menu-item>
-              <a-menu-item
-                ><nuxt-link href="/tai-khoan/lich-su-mua"
-                  >Lịch sử mua hàng</nuxt-link
-                >
+              <a-menu-item><nuxt-link href="/tai-khoan/lich-su-mua">Lịch sử mua hàng</nuxt-link>
               </a-menu-item>
               <a-menu-item @click="logOut">Đăng xuất</a-menu-item>
               <!--            <a-sub-menu key="test" title="sub menu">-->
@@ -113,6 +97,21 @@
       </a-space>
     </div>
   </header>
+  <div v-show="isShowSearchModal"  @click.self="onClickCloseSearchModal"
+    class="absolute top-0 left-0 bg-[#00000080] w-full h-full z-[11] flex justify-center items-center">
+
+    <div class="w-[500px] bg-white p-[50px] rounded-[4px] grid gap-[15px] relative">
+      <label>Nhập từ khoá cần tìm:</label>
+      <a-input v-model:value="searchVal" placeholder="...." />
+
+      <div class="flex justify-center">
+        <a-button type="primary" @click="onClickSearch"> Tìm</a-button>
+      </div>
+
+      <CloseOutlined @click="onClickCloseSearchModal"
+        class="absolute top-[15px] right-[15px] cursor-pointer hover:scale-[1.05] duration-200 easy-in-out" />
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -120,7 +119,7 @@ import { h, ref } from "vue";
 import {
   MailOutlined,
   AppstoreOutlined,
-  SettingOutlined,
+  CloseOutlined,
   DownOutlined,
 } from "@ant-design/icons-vue";
 import { MenuProps } from "ant-design-vue";
@@ -128,6 +127,31 @@ import { fetchInstance } from "~/services/FetchInstance";
 import userVue from "~/layouts/user.vue";
 import ProductService from "~/services/ProductService";
 
+const _router = useRouter();
+
+const isShowSearchModal = ref<boolean>(false);
+const searchVal = ref<String>("");
+
+const onClickSearch = () => {
+  if (!searchVal.value) {
+    notification.warning({
+      message: "Vui lòng nhập từ khoá tìm kiếm!"
+    });
+    return;
+  }
+
+  _router.push("/tim-kiem?q=" + searchVal.value);
+  onClickCloseSearchModal();
+}
+
+const onClickCloseSearchModal = () => {
+  searchVal.value = "";
+  isShowSearchModal.value = false;
+}
+
+const onClickShowSearchModal = () => {
+  isShowSearchModal.value = true;
+}
 // hau
 const categoryList = ref<
   {

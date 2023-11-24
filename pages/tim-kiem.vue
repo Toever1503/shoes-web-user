@@ -4,13 +4,11 @@
       <a-breadcrumb-item>
         <router-link to="/">Trang chủ</router-link>
       </a-breadcrumb-item>
-      <a-breadcrumb-item>Giày nam</a-breadcrumb-item>
+      <a-breadcrumb-item>Tìm kiếm</a-breadcrumb-item>
     </a-breadcrumb>
 
-    <div
-      class="flex gap-[50px] mt-[20px] w-full justify-start px-3 md:px-[50px]"
-    >
-      <ProductFilterSidebar @filter="onClickFilter" />
+    <div class="flex gap-[50px] mt-[20px] w-full justify-start px-3 md:px-[50px]">
+      <ProductFilterSidebar :search-q="String(_route.query.q) || undefined" @filter="onClickFilter" />
       <div class="w-full">
         <a-space class="items-center justify-end w-full mb-[20px]">
           <span class="text-xl">Sắp xếp:</span>
@@ -90,6 +88,7 @@
           </template>
         </a-spin>
 
+
         <div class="flex justify-center mt-[15px]">
           <a-pagination v-model="paginationCnf"></a-pagination>
         </div>
@@ -121,7 +120,6 @@ const paginationCnf = reactive<{
 
 const filterModel = reactive<IProductFilterReq>({
   hienThiWeb: true,
-  gioiTinh: "MALE",
 });
 const filterSortBy = reactive({
   title: "Mới nhất",
@@ -192,14 +190,9 @@ const onCallApiProductFilter = () => {
 };
 
 onMounted(() => {
-  if (_route.query.thuong_hieu)
-    filterModel.thuongHieu = _route.query?.thuong_hieu
-      ? Number(_route.query?.thuong_hieu)
-      : undefined;
-  if (_route.query.danh_muc)
-    filterModel.dmGiay = _route.query?.danh_muc
-      ? Number(_route.query?.danh_muc)
-      : undefined;
+  filterModel.tieuDe = String(_route.query.q) || undefined;
+  if (_route.query.sort)
+    filterSortBy.by = _route.query.sort ? String(_route.query.sort) : "id,desc";
   onCallApiProductFilter();
 });
 </script>
