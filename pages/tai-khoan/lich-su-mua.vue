@@ -148,12 +148,12 @@
                             {{ text }}
                           </template>
                           <template v-else-if="column.dataIndex === 'rating'">
-                            <a-rate @change="rateStar" v-model:value="record.rating" disabled="!daDanhGia" />
+                            <a-rate @change="rateStar" v-model:value="record.rating" :disabled="daDanhGia"/>
                             {{ record.rating }}
                           </template>
                           <template v-else-if="column.dataIndex === 'comment'">
                             <a-form-item :name="'record.comment[' + record.id + ']'">
-                              <a-textarea v-model:value="record.comment" disabled="!daDanhGia" :auto-size="{ minRows: 3, maxRows: 5 }"
+                              <a-textarea v-model:value="record.comment" :auto-size="{ minRows: 3, maxRows: 5 }" :disabled="daDanhGia"
                                 placeholder="Nhập bình luận ..." @input="handleCommentInput(record)"></a-textarea>
                               <a-form-explain class="text-red-500" v-if="showCommentError(record)">Hãy nhập bình
                                 luận!</a-form-explain>
@@ -161,13 +161,7 @@
                           </template>
                         </template>
                       </a-table>
-                    <a-popconfirm  title="Bạn chắc chắn muốn đánh giá không?"
-                        ok-text="Có"
-                        cancel-text="không"
-                        @confirm="handleOk"
-                        @cancel="cancel">
-                      <a-button type="primary" class="mt-5" :loading="iconLoading" v-if="!daDanhGia"  >Đánh giá</a-button>
-                      </a-popconfirm>
+                      <a-button type="primary" class="mt-5" :loading="iconLoading" v-if="!daDanhGia" @click="handleOk"  >Đánh giá</a-button>
                     </div>
                   </a-modal>
 
@@ -389,10 +383,7 @@ const getOrderStatusColor = (val: string) => {
   }
 };
 
-const cancel = (e: MouseEvent) => {
-  console.log(e);
-  // message.error('Click on No');
-};
+
 
 const tblData = ref([]);
 const visible = ref<boolean>(false);
@@ -437,6 +428,12 @@ const dateFormat = (ngayTao) =>{
 const iconLoading = ref<boolean | DelayLoading>(false);
 const showModal1 = (id) => {
   const record = tblData.value.find((item) => item.id === id);
+  if(record.checkRate == 1){
+    daDanhGia.value = true;
+  }else{
+    daDanhGia.value = false;
+  }
+  console.log('daDanhGia', daDanhGia.value);
   orderUserService.chiTietOrder(id).then(res => {
     console.log('Đánh giá111', res.data);
     selectedRecord.value = res.data;
