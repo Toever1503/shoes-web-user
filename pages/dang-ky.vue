@@ -117,7 +117,7 @@ const formRef = ref(null);
 const handleSubmit = () =>{
   formRef.value.validate().then(() => {
     // Check for empty username and password
-    if (formState.username.trim() === '' || formState.password.trim() === '') {
+    if (formState.userName.trim() === '' || formState.password.trim() === '') {
       message.error('Vui lòng nhập tài khoản và mật khẩu.');
       return;
     }

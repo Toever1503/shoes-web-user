@@ -148,12 +148,12 @@
                             {{ text }}
                           </template>
                           <template v-else-if="column.dataIndex === 'rating'">
-                            <a-rate @change="rateStar" v-model:value="record.rating" />
+                            <a-rate @change="rateStar" v-model:value="record.rating" disabled="!daDanhGia" />
                             {{ record.rating }}
                           </template>
                           <template v-else-if="column.dataIndex === 'comment'">
                             <a-form-item :name="'record.comment[' + record.id + ']'">
-                              <a-textarea v-model:value="record.comment" :auto-size="{ minRows: 3, maxRows: 5 }"
+                              <a-textarea v-model:value="record.comment" disabled="!daDanhGia" :auto-size="{ minRows: 3, maxRows: 5 }"
                                 placeholder="Nhập bình luận ..." @input="handleCommentInput(record)"></a-textarea>
                               <a-form-explain class="text-red-500" v-if="showCommentError(record)">Hãy nhập bình
                                 luận!</a-form-explain>
@@ -161,7 +161,13 @@
                           </template>
                         </template>
                       </a-table>
-                      <a-button type="primary" class="mt-5" :loading="iconLoading" v-if="!daDanhGia" @click="handleOk"  >Đánh giá</a-button>
+                    <a-popconfirm  title="Bạn chắc chắn muốn đánh giá không?"
+                        ok-text="Có"
+                        cancel-text="không"
+                        @confirm="handleOk"
+                        @cancel="cancel">
+                      <a-button type="primary" class="mt-5" :loading="iconLoading" v-if="!daDanhGia"  >Đánh giá</a-button>
+                      </a-popconfirm>
                     </div>
                   </a-modal>
 
@@ -383,7 +389,10 @@ const getOrderStatusColor = (val: string) => {
   }
 };
 
-
+const cancel = (e: MouseEvent) => {
+  console.log(e);
+  // message.error('Click on No');
+};
 
 const tblData = ref([]);
 const visible = ref<boolean>(false);
