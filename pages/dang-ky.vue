@@ -26,25 +26,25 @@
               name="userName"
               :rules="[{ required: true, message: 'Tài khoản không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.userName" placeholder="Tài khoản ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.userName"  @change="formState.userName = formState.userName.replace(/^\s*$/, '')" placeholder="Tài khoản ..."/>
             </a-form-item>
             </div>
             <div class="flex flex-col">
                  <a-form-item
               label="Email"
               name="email"
-              :rules="[ {validator: handleValidateTypeEmail}]"
+              :rules="[ {validator: handleValidateTypeEmail}, { required: true, message: 'Email không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.email" placeholder="Email ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.email" @change="formState.email = formState.email.replace(/^\s*$/, '')" placeholder="Email ..."/>
             </a-form-item>
               </div>
               <div class="flex flex-col">
                  <a-form-item
               label="Số điện thoại"
               name="phone"
-              :rules="[ {validator: handleValidateTypePhone}]"
+              :rules="[ {validator: handleValidateTypePhone}, { required: true, message: 'Số điện thoại không được để trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.phone" placeholder="Số điện thoại ..."/>
+              <a-input class="h-10 text-base" v-model:value="formState.phone" @change="formState.phone = formState.phone.replace(/^\s*$/, '')" placeholder="Số điện thoại ..."/>
             </a-form-item>
               </div>
               <div class="flex flex-col">
@@ -105,7 +105,7 @@ onsubmit = (e) => {
     console.log("signup page mounted: ", storeCounter);
 }
 const formState = reactive({
-    role: "ROLE_ADMIN",
+    role: "ROLE_USER",
     userName: '',
     password: '',
     email: '',
@@ -115,6 +115,12 @@ const formState = reactive({
 const formRef = ref(null);
 
 const handleSubmit = () =>{
+  formRef.value.validate().then(() => {
+    // Check for empty username and password
+    if (formState.userName.trim() === '' || formState.password.trim() === '') {
+      message.error('Vui lòng nhập tài khoản và mật khẩu.');
+      return;
+    }
   console.log("formState: ", formState);
      authService.register(formState).then((res) => {
         console.log("res: ", res);
@@ -125,6 +131,7 @@ const handleSubmit = () =>{
           message.error("Đăng ký thất bại");
         }
       });
+    });
 }
 
 const handleValidateTypePhone = (rule, value) => {

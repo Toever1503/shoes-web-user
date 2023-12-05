@@ -21,9 +21,9 @@
               <a-form-item
               label="Tài khoản"
               name="username"
-              :rules="[{ required: true, message: 'Tài khoản không được để trống!' }]"
+              :rules="[{ required: true, message: 'Vui lòng không bỏ trống!' }]"
           > 
-              <a-input class="h-10 text-base" v-model:value="formState.username" placeholder="Tài khoản ...">
+              <a-input class="h-10 text-base" v-model:value="formState.username"  @change="formState.username = formState.username.replace(/^\s*$/, '')" :maxlength="255" placeholder="Tài khoản ...">
                 <template #prefix><UserOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
               </a-input>
             </a-form-item>
@@ -35,7 +35,7 @@
               name="password"
               :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]"
           >
-            <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ...">
+            <a-input-password class="h-10 text-base" v-model:value="formState.password"  @change="formState.password = formState.password.replace(/^\s*$/, '')" placeholder="Mật khẩu ...">
               <template #prefix><LockOutlined style="color: rgba(0, 0, 0, 0.25)" /></template>
             </a-input-password>
           </a-form-item>
@@ -56,6 +56,26 @@
             Chưa có tài khoản?
             <nuxt-link class="text-blue-600 hover:text-blue-700" href="/dang-ky">Đăng ký</nuxt-link>
           </div>
+          <div class="mt-5"><a class="text-blue-600 hover:text-blue-700" @click="showModal">Forgot Password ?</a></div>
+          
+          <a-modal v-model:visible="visible" title="Quên mật khẩu" @ok="handleOk">
+         <a-form 
+            ref="formRef"
+            style="margin: 0 auto"
+            :model="formForgotPass"
+            name="basic"
+            layout="vertical">
+          <div class="flex flex-col">
+                 <a-form-item
+              label="Email"
+              name="email"
+              :rules="[ {validator: handleValidateTypeEmail}, { required: true, message: 'Email không được để trống!' }]"
+          > 
+              <a-input v-model:value="formForgotPass.email" placeholder="Email ..."/>
+            </a-form-item>
+              </div>
+         </a-form>
+    </a-modal>
         </div>
       </div>
     </div>
@@ -70,31 +90,81 @@ const onSlideChange = () => {
   console.log("slide change");
 };
 const formState = reactive({
-  username: '',
-  password: '',
+  username: "",
+  password: "",
+});
+const formForgotPass = reactive({
+  email: '',
 });
 const formRef = ref(null);
+const visible = ref<boolean>(false);
 
-const handleSubmit = () => {
-  authService.login(formState).then(
+const showModal = () => {
+  visible.value = true;
+  formForgotPass.email = "";
+  resetValidation();
+};
+
+const resetValidation = () => {
+  // Xóa thông báo validate
+  formRef.value.resetFields();
+};
+
+const handleOk = (e: MouseEvent) => {
+      console.log(e);
+      console.log(formForgotPass.email);
+      authService.forgotPassword(formForgotPass.email).then(
                 res => {
                     console.log('user: ',res.data);
-                    console.log('login success: ');
-                    // fetchInstance.setCookie('token', `${res.data.content.accessToken}`, res.data.content.accessExpireIn);
-                    // fetchInstance.setCookie('auth',  `${res.data.content.roles[0]}`, res.data.content.refreshExpireIn);
-                    // fetchInstance.setCookie('username',  `${res.data.content.userName}`, res.data.content.refreshExpireIn);
-                    window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
-                    window.localStorage.setItem('auth', `${res.data.content.roles[0]}`);
-                    window.localStorage.setItem('username', `${res.data.content.userName}`);
-                    message.success('Đăng nhập thành công');
-                    window.location.href = '/';
+                    message.success('Vui lòng kiểm tra email để lấy lại mật khẩu');
+                    setTimeout(() => {
+                      visible.value = false;
+                    }, 1000);
                 },
                 error => {
-                    if(error.response.data.code == 1001){
-                       message.error('Tài khoản hoặc mật khẩu không chính xác');
+                    if(error.response.data.code == 9999){
+                       message.warning('Email không tồn tại trong hệ thống !');
                     }
                 }
-            );
+            ).catch((error) => {
+              message.warning('Không tìm thấy email. Vui lòng kiểm tra lại!');
+              console.log(error);
+            });
+    };
+
+const handleValidateTypeEmail = (rule, value) => {
+  if (value && !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g.test(value)) {
+    return Promise.reject('Email không hợp lệ!');
+  }
+    return Promise.resolve();
+};
+
+
+const handleSubmit = () => {
+  formRef.value.validate().then(() => {
+    // Check for empty username and password
+    if (formState.username.trim() === '' || formState.password.trim() === '') {
+      message.error('Vui lòng nhập tài khoản và mật khẩu.');
+      return;
+    }
+
+    console.log(formState);
+    authService.login(formState).then(
+      res => {
+        console.log('user: ', res.data);
+        console.log('login success: ');
+        window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
+                    window.localStorage.setItem('auth', `${res.data.content.roles[0]}`);
+                    window.localStorage.setItem('username', `${res.data.content.userName}`);
+        window.location.href = '/';
+      },
+      error => {
+        if (error.response.data.code == 1001) {
+          message.error('Tài khoản hoặc mật khẩu không chính xác');
+        }
+      }
+    );
+  });
 };
 
 </script>
