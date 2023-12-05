@@ -8,9 +8,9 @@
     <a-form-item name="category" class="w-full mb-3">
       <template #label class="w-full">
         <span class="font-semibold block w-full" style="
-              border-bottom: 2px solid rgba(220, 220, 220, 0.747);
-              font-size: 18px;
-            ">Danh mục</span>
+                    border-bottom: 2px solid rgba(220, 220, 220, 0.747);
+                    font-size: 18px;
+                  ">Danh mục</span>
       </template>
       <a-radio-group v-model:value="formState.category" class="grid">
         <a-radio :value="val.id" :key="val.id" v-for="val in categoryList">{{ val.tenDanhMuc }}
@@ -21,9 +21,9 @@
     <a-form-item name="color" class="w-full mb-3">
       <template #label>
         <label class="font-semibold block w-full" style="
-              border-bottom: 2px solid rgba(220, 220, 220, 0.747);
-              font-size: 18px;
-            ">Màu</label>
+                    border-bottom: 2px solid rgba(220, 220, 220, 0.747);
+                    font-size: 18px;
+                  ">Màu</label>
       </template>
       <a-radio-group v-model:value="formState.color">
         <a-radio :value="val.id" :key="val.id" v-for="val in colorList">{{
@@ -35,9 +35,9 @@
     <a-form-item name="size" class="w-full mb-3">
       <template #label>
         <label class="font-semibold block w-full" style="
-              border-bottom: 2px solid rgba(220, 220, 220, 0.747);
-              font-size: 18px;
-            ">Size</label>
+                    border-bottom: 2px solid rgba(220, 220, 220, 0.747);
+                    font-size: 18px;
+                  ">Size</label>
       </template>
       <a-radio-group v-model:value="formState.size">
         <a-radio :value="val.id" :key="val.id" v-for="val in sizeList">{{
@@ -49,9 +49,9 @@
     <a-form-item name="priceRange" class="w-full">
       <template #label>
         <label class="font-semibold block w-full" style="
-              border-bottom: 2px solid rgba(220, 220, 220, 0.747);
-              font-size: 18px;
-            ">Giá</label>
+                    border-bottom: 2px solid rgba(220, 220, 220, 0.747);
+                    font-size: 18px;
+                  ">Giá</label>
       </template>
       <a-slider v-model:value="formState.priceRange" @change="onRangePriceChange" :min="0" range :max="100000000">
         <template #mark="{ point, label }"> kfmsk </template>
@@ -82,14 +82,25 @@
     <a-form-item name="brand" class="w-full">
       <template #label>
         <label class="font-semibold block w-full" style="
-              border-bottom: 2px solid rgba(220, 220, 220, 0.747);
-              font-size: 18px;
-            ">Thương hiệu</label>
+                    border-bottom: 2px solid rgba(220, 220, 220, 0.747);
+                    font-size: 18px;
+                  ">Thương hiệu</label>
       </template>
       <a-radio-group v-model:value="formState.brand" class="grid">
         <a-radio :value="val.id" :key="val.id" v-for="val in brandList">{{
           val.tenThuongHieu
         }}</a-radio>
+      </a-radio-group>
+    </a-form-item>
+    <a-form-item name="brand" class="w-full">
+      <template #label>
+        <label class="font-semibold block w-full"
+          style="border-bottom: 2px solid rgba(220, 220, 220, 0.747);font-size: 18px;">Đánh giá</label>
+      </template>
+      <a-radio-group v-model:value="formState.soSaoDanhGia" class="">
+        <a-radio :value="val" :key="val" v-for="val in 5">
+          {{ val }} sao
+        </a-radio>
       </a-radio-group>
     </a-form-item>
 

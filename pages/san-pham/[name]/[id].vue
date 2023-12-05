@@ -160,33 +160,40 @@
             <template #tab>
               <h3 class="font-[600] m-0">Đánh giá</h3>
             </template>
-            <a-comment v-for="(item, index) in reviewList" :key="index">
-              <template #author><a>Người dùng #{{ item?.nguoiTaoId }}</a></template>
-              <template #avatar>
-                <a-avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
-              </template>
-              <template #content>
-                <a-rate :value="item?.soSao || 0" allow-half disabled />
-                <p class="m-0">
-                  {{ item?.binhLuan }}
-                </p>
-              </template>
-              <template #datetime>
-                <a-tooltip :title="dayjs().format('YYYY-MM-DD HH:mm:ss')">
-                  <span>{{ dayjs(item?.ngayTao).fromNow() }}</span>
-                </a-tooltip>
-              </template>
-            </a-comment>
+            <a-spin :spinning="reviewPagination.loading">
+              <a-comment v-for="(item, index) in reviewList" :key="index">
+                <template #author><a>{{ item?.nguoiTao?.name }}</a></template>
+                <template #avatar>
+                  <a-avatar :src="item?.nguoiTao?.anh" alt="Han Solo" />
+                </template>
+                <template #content>
+                  <a-rate :value="item?.soSao || 0" allow-half disabled />
+                  <p class="m-0">
+                    {{ item?.binhLuan }}
+                  </p>
+                </template>
+                <template #datetime>
+                  <a-tooltip :title="dayjs().format('YYYY-MM-DD HH:mm:ss')">
+                    <span>{{ dayjs(item?.ngayTao).fromNow() }}</span>
+                  </a-tooltip>
+                </template>
+              </a-comment>
+            </a-spin>
+
+            <div class="flex justify-center">
+              <a-pagination v-model:current="reviewPagination.current" :showSizeChanger="false"
+                :total="reviewPagination.total" @change="reviewPagination.onChange" />
+            </div>
           </a-tab-pane>
         </a-tabs>
 
         <!-- end product description -->
 
-        <section class="mt-[30px]">
+        <section class="my-[30px] ">
           <h3 class="mb-[20px] w-fit" style="
-                    border-bottom: 2px solid black;
-                    font-size: 18px;
-                  ">
+                              border-bottom: 2px solid black;
+                              font-size: 18px;
+                            ">
             Sản phẩm liên quan
           </h3>
           <div class="flex flex-wrap gap-[20px] w-full">
@@ -213,9 +220,9 @@
                 </template>
                 <template #description>
                   <div class="product_price flex items-center gap-[10px]">
-                    <del>{{ item?.giaCu }} vnd</del>
+                    <del> {{ _formatVnCurrency(item?.giaCu || 0) }}</del>
                     <span class="font-bold text-red-500">
-                      {{ item?.giaMoi }} vnd
+                      {{ _formatVnCurrency(item?.giaMoi || 0) }}
                     </span>
                   </div>
 
@@ -600,7 +607,27 @@ const onClickImageBg = (src: string) => {
 const relatedProducts = ref([]);
 
 const reviewList = ref([]);
-
+const reviewPagination = reactive({
+  loading: false,
+  current: 1,
+  pageSize: 10,
+  total: 10,
+  onChange: (current: number) => {
+    reviewPagination.current = current;
+    onCallApiGetReview()
+  }
+})
+const onCallApiGetReview = () => {
+  if (reviewPagination.loading) return;
+  reviewPagination.loading = true;
+  ProductService.getReviewForProduct(Number(_route.params.id), reviewPagination.current - 1, reviewPagination.pageSize)
+    .then((res: any) => {
+      console.log("revierw data", res);
+      reviewList.value = res.content;
+      reviewPagination.total = res.totalElements;
+    })
+    .finally(() => reviewPagination.loading = false);
+}
 onMounted(() => {
   ProductService.chiTietSp(Number(_route.params.id))
     .then((res) => {
@@ -635,9 +662,7 @@ onMounted(() => {
       console.log("fetch product error", err);
     })
     .finally(() => (isGettingProduct.value = false));
-  ProductService.getReviewForProduct(Number(_route.params.id)).then((res) => {
-    console.log("revierw data", res);
-    reviewList.value = res as any;
-  });
+
+  onCallApiGetReview()
 });
 </script>

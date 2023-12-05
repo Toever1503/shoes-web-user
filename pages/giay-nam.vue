@@ -159,6 +159,7 @@ const onClickFilter = (val: IProductFilterModel) => {
   filterModel.mau = val.color;
   filterModel.sizeId = val.sizeId;
   filterModel.tieuDe = val.name || undefined;
+  filterModel.soSaoDanhGia = val.soSaoDanhGia;
   if (val.priceStart > 0 || val.priceEnd > 0)
     filterModel.khoangGia = val.priceRange;
 

@@ -6,6 +6,7 @@ export interface IProductFilterModel {
     brand?: number;
     priceStart: number;
     priceEnd: number;
+    soSaoDanhGia?: number;
     priceRange: [number, number]
 };
 
@@ -17,5 +18,6 @@ export interface IProductFilterReq{
     tieuDe?: string;
     mau?: number;
     sizeId?: number;
+    soSaoDanhGia?: number;
     gioiTinh?: 'MALE' | 'FEMALE';
   }

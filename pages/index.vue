@@ -15,15 +15,15 @@
   },
 }">
         <SwiperSlide>
-          <img src="https://cf.shopee.vn/file/vn-50009109-c01ffe7818db36dd90e0c8ed0ec2baa1_xxhdpi" />
+          <img src="/image/banner/banner2.jpg" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img src="https://cf.shopee.vn/file/vn-50009109-ed9104cb971e205afcdd0bf1cf5479c1_xxhdpi" />
+          <img src="/image/banner/banner1.jpg" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img src="https://cf.shopee.vn/file/vn-50009109-83dd5db23e7386abacc6be4165b2cf2e_xxhdpi" />
+          <img src="/image/banner/banner.jpg" />
         </SwiperSlide>
       </Swiper>
     </section>
