@@ -63,12 +63,14 @@
                           background-size: cover;
                         " class="w-[18px] h-[18px] cursor-pointer hover:scale-[1.05] duration-200 easy-in-out"></div>
         </router-link>
-        <SearchOutlined @click="onClickShowSearchModal" class="text-[16px] cursor-pointer hover:text-[#4096ff] hover:scale-[1.05] duration-200 easy-in-out" />
+        <SearchOutlined @click="onClickShowSearchModal"
+          class="text-[16px] cursor-pointer hover:text-[#4096ff] hover:scale-[1.05] duration-200 easy-in-out" />
 
         <nuxt-link class="font-bold text-lg text-[#000000e0] no-underline" href="/dang-nhap"
           v-if="authen == null || authen == undefined">Đăng nhập</nuxt-link>
-        <a-dropdown v-else>
-          <a class="ant-dropdown-link" @click.prevent>
+        <a-dropdown v-else class="ml-[10px]">
+          <a class="ant-dropdown-link flex items-center gap-[5px]" @click.prevent>
+            {{ loggedUserName }}
             <a-avatar size="small">
               <template #icon>
                 <UserOutlined class="hover:scale-[1.05] duration-200 easy-in-out" />
@@ -81,6 +83,8 @@
                 </nuxt-link>
               </a-menu-item>
               <a-menu-item><nuxt-link href="/tai-khoan/lich-su-mua">Lịch sử mua hàng</nuxt-link>
+              </a-menu-item>
+              <a-menu-item><nuxt-link href="/tai-khoan/doi-mat-khau">Đổi mật khẩu</nuxt-link>
               </a-menu-item>
               <a-menu-item @click="logOut">Đăng xuất</a-menu-item>
               <!--            <a-sub-menu key="test" title="sub menu">-->
@@ -97,7 +101,7 @@
       </a-space>
     </div>
   </header>
-  <div v-show="isShowSearchModal"  @click.self="onClickCloseSearchModal"
+  <div v-show="isShowSearchModal" @click.self="onClickCloseSearchModal"
     class="absolute top-0 left-0 bg-[#00000080] w-full h-full z-[11] flex justify-center items-center">
 
     <div class="w-[500px] bg-white p-[50px] rounded-[4px] grid gap-[15px] relative">
@@ -130,6 +134,7 @@ import ProductService from "~/services/ProductService";
 
 const _router = useRouter();
 
+const loggedUserName = ref<string>("");
 const isShowSearchModal = ref<boolean>(false);
 const searchVal = ref<String>("");
 
@@ -183,6 +188,7 @@ onMounted(() => {
         message: "Không thể lấy dữ liệu danh mục!",
       })
     );
+  loggedUserName.value = localStorage.getItem("username") || "";
 });
 
 
@@ -226,11 +232,13 @@ const items = ref<MenuProps["items"]>([
 const authen = window.localStorage.getItem("username");
 
 const logOut = () => {
-  window.location.reload();
-  window.localStorage.removeItem("username");
-  window.localStorage.removeItem("auth");
-  window.localStorage.removeItem("loggedUser");
-  window.location.href = "/";
+  notification.success({
+    message: "Đăng xuất thành công!"
+  });
+  localStorage.removeItem("loggedUser");
+  localStorage.removeItem("username");
+  localStorage.removeItem("auth");
+  setTimeout(() => _router.push("/"), 200);
 };
 </script>
 

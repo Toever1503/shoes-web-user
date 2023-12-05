@@ -6,8 +6,8 @@ function getInstance() {
         return axiosInstance
     }
     axiosInstance = axios.create({
-        baseURL: "http://localhost:8082/v1",
-        // baseURL: "https://shoes.orisu.lol/v1",
+        // baseURL: "http://localhost:8082/v1",
+        baseURL: "https://shoes.orisu.lol/v1",
         headers: {},
     });
 

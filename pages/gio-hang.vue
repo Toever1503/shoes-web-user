@@ -80,7 +80,7 @@
 
             <a-descriptions-item class="px-5">
               <div class="text-end w-full">
-                <a-button class="bg-black text-white">
+                <a-button type="primary" :disabled="_storeCart.cartTotalQty == 0">
                   <router-link
                     :to="_storeCart.cartTotalQty > 0 ? '/dat-hang' : '#'"
                   >
