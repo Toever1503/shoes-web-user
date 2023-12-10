@@ -229,7 +229,7 @@ const items = ref<MenuProps["items"]>([
   },
 ]);
 
-const authen = window.localStorage.getItem("username");
+const authen = ref<string | null>(window.localStorage.getItem("username"));
 
 const logOut = () => {
   notification.success({
@@ -238,8 +238,12 @@ const logOut = () => {
   localStorage.removeItem("loggedUser");
   localStorage.removeItem("username");
   localStorage.removeItem("auth");
-  setTimeout(() => _router.push("/"), 200);
+  setTimeout(() => window.location.href = window.location.origin, 200);
 };
+
+onMounted(() => {
+  authen.value = window.localStorage.getItem("username");
+})
 </script>
 
 <style>

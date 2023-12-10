@@ -138,24 +138,25 @@ const handleSubmit = () => {
     }
 
     console.log(formState);
-    authService.login(formState).then(
-      res => {
-        console.log('user: ', res.data);
-        console.log('login success: ');
-        notification.success({
-          message: 'Đăng nhập thành công!'
-        });
-        window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
-        window.localStorage.setItem('auth', `${res.data.content.roles[0]}`);
-        window.localStorage.setItem('username', `${res.data.content.userName}`);
-        setTimeout(() => _router.push("/"), 200);
-      },
-      error => {
-        if (error.response.data.code == 1001) {
-          notification.error({ message: 'Tài khoản hoặc mật khẩu không chính xác' });
+    authService.login(formState)
+      .then(
+        res => {
+          console.log('user: ', res.data);
+          console.log('login success: ');
+          notification.success({
+            message: 'Đăng nhập thành công!'
+          });
+          window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
+          window.localStorage.setItem('auth', `${res.data.content.roles[0]}`);
+          window.localStorage.setItem('username', `${res.data.content.userName}`);
+          setTimeout(() => window.location.href = window.location.origin, 200);
+        },
+        error => {
+          if (error.response.data.code == 1001) {
+            notification.error({ message: 'Tài khoản hoặc mật khẩu không chính xác' });
+          }
         }
-      }
-    );
+      );
   });
 };
 
