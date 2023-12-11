@@ -51,7 +51,7 @@
                  <a-form-item
               label="Họ và tên"
               name="name"
-              :rules="[{ required: true, message: 'Họ và tên không được để trống!' }]"
+              :rules="[ {validator: handleValidateTypeName}, { required: true, message: 'Họ và tên không được để trống!' }]"
           > 
               <a-input class="h-10 text-base" v-model:value="formState.name" placeholder="Email ..."/>
             </a-form-item>
@@ -137,6 +137,12 @@ const handleSubmit = () =>{
 const handleValidateTypePhone = (rule, value) => {
   if (value && !/((09|03|07|08|05)+([0-9]{8})\b)/g.test(value)) {
     return Promise.reject('Số điện thoại không đúng!');
+  }
+  return Promise.resolve();
+};
+const handleValidateTypeName = (rule, value) => {
+  if (value && !/^[a-zA-Z0-9_]+$/g.test(value)) {
+    return Promise.reject('Tên người dùng không hợp lệ!');
   }
   return Promise.resolve();
 };
