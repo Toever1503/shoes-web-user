@@ -18,7 +18,7 @@
         </div>
         <div class="mb-4">
           <a-form-item label="Email" name="email"
-            :rules="[{ validator: handleValidateTypeEmail }, { required: true, message: 'Email không được để trống!' }]">
+            :rules="[{ validator: handleValidateTypeEmail }]">
             <a-input v-model:value="formState.email"
               @change="formState.email = formState.email.replace(/[^a-zA-Z0-9.@]/g, '')" class="h-10 text-base"
               placeholder="Email..." />

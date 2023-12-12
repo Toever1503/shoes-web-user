@@ -21,8 +21,8 @@
           <div class="flex flex-col">
             <a-form-item label="Email" name="email"
               :rules="[{ validator: handleValidateTypeEmail }, { required: true, message: 'Email không được để trống!' }]">
-              <a-input class="h-10 text-base" v-model:value="formState.email"
-                @change="formState.email = formState.email.replace(/^\s*$/, '')" placeholder="Email ..." />
+              <a-input class="h-10 text-base" v-model:value.trim="formState.email"
+                @change="formState.email = formState.email.replace(/^\s+/, '')" placeholder="Email ..." />
             </a-form-item>
           </div>
           <div class="flex flex-col">
@@ -41,7 +41,7 @@
           </div>
           <div class="flex flex-col mb-3">
             <a-form-item style="margin-bottom: 0" label="Mật khẩu" name="password"
-              :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]">
+              :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }, {min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!'}]">
               <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ..." />
             </a-form-item>
 

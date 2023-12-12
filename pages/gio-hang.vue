@@ -47,6 +47,8 @@
           <template v-if="column.dataIndex === 'qty'">
             <a-input-number
               v-model:value="record.qty"
+              min="1"
+              :max="record.stockCnt"
               @change="(val: any) => updateQty(Number(val), record as ICart)"
             />
           </template>
