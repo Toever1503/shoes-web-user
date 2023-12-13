@@ -69,10 +69,10 @@
                 <span v-else class="font-bold text-red-500">
                   {{ _formatVnCurrency(item?.giaMoi) }}
                 </span>
-                <div v-if="item?.giaCu && item?.giaCu > 0">
+                <div v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
                   <span class="bg-red-200 text-red-500 p-1">-{{
                     String(
-                      (item?.giaMoi / item?.giaCu) * 100
+                      ((item?.giaCu - item?.giaMoi) / item?.giaCu) * 100
                     ).slice(0, 2)
                   }}%</span>
                 </div>
@@ -138,10 +138,10 @@
                 <span v-else class="font-bold text-red-500">
                   {{ _formatVnCurrency(item?.giaMoi) }}
                 </span>
-                <div v-if="item?.giaCu && item?.giaCu > 0">
+                <div v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
                   <span class="bg-red-200 text-red-500 p-1">-{{
                     String(
-                      (item?.giaMoi / item?.giaCu) * 100
+                      ((item?.giaCu - item?.giaMoi) / item?.giaCu) * 100
                     ).slice(0, 2)
                   }}%</span>
                 </div>
@@ -205,12 +205,13 @@
                 <span v-else class="font-bold text-red-500">
                   {{ _formatVnCurrency(item?.giaMoi) }}
                 </span>
-                <div v-if="item?.giaCu && item?.giaCu > 0">
+                <div v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
                   <span class="bg-red-200 text-red-500 p-1">-{{
-                    String(
-                      (item?.giaMoi / item?.giaCu) * 100
-                    ).slice(0, 2)
-                  }}%</span>
+                    Math.floor(Number(
+                      ((item?.giaCu - item?.giaMoi) / item?.giaCu) * 100
+                    ))
+                  }}%
+                  </span>
                 </div>
               </div>
 
