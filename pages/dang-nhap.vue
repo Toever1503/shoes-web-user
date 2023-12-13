@@ -12,7 +12,7 @@
             <a-form-item label="Tài khoản" name="username"
               :rules="[{ required: true, message: 'Vui lòng không bỏ trống!' }]">
               <a-input class="h-10 text-base" v-model:value="formState.username"
-                @change="formState.username = formState.username.replace(/^\s*$/, '')" :maxlength="255"
+                @change="formState.username = formState.username.replace(/^\s+/, '')" :maxlength="255"
                 placeholder="Tài khoản ...">
                 <template #prefix>
                   <UserOutlined style="color: rgba(0, 0, 0, 0.25)" />
@@ -24,7 +24,7 @@
             <a-form-item style="margin-bottom: 0" label="Mật khẩu" name="password"
               :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]">
               <a-input-password class="h-10 text-base" v-model:value="formState.password"
-                @change="formState.password = formState.password.replace(/^\s*$/, '')" placeholder="Mật khẩu ...">
+                @change="formState.password = formState.password.replace(/^\s+/, '')" placeholder="Mật khẩu ...">
                 <template #prefix>
                   <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
                 </template>
@@ -138,24 +138,26 @@ const handleSubmit = () => {
     }
 
     console.log(formState);
-    authService.login(formState).then(
-      res => {
-        console.log('user: ', res.data);
-        console.log('login success: ');
-        notification.success({
-          message: 'Đăng nhập thành công!'
-        });
-        window.localStorage.setItem('loggedUser', `${res.data.content.accessToken}`);
-        window.localStorage.setItem('auth', `${res.data.content.roles[0]}`);
-        window.localStorage.setItem('username', `${res.data.content.userName}`);
-        setTimeout(() => _router.push("/"), 200);
-      },
-      error => {
-        if (error.response.data.code == 1001) {
-          notification.error({ message: 'Tài khoản hoặc mật khẩu không chính xác' });
+    authService.login(formState)
+      .then(
+        res => {
+          console.log('user: ', res.data);
+          console.log('login success: ');
+          notification.success({
+            message: 'Đăng nhập thành công!'
+          });
+          window.localStorage.setItem('loggedUser', `${res.data.accessToken}`);
+          window.localStorage.setItem('auth', `${res.data.roles[0]}`);
+          window.localStorage.setItem('username', `${res.data.userName}`);
+          setTimeout(() => window.location.href = window.location.origin, 200);
+        },
+        error => {
+          console.log(err)
+          if (error.response.data.code == 1001) {
+            notification.error({ message: 'Tài khoản hoặc mật khẩu không chính xác' });
+          }
         }
-      }
-    );
+      );
   });
 };
 

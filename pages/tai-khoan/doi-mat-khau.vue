@@ -18,7 +18,7 @@
         <a-form-item name="newPassword" :rules="[{
           required: true,
           validator: handleTypePassword
-        }]">
+        }, {min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!'}]">
           <span class="">Mật khẩu mới <span class="text-red-500">(*)</span></span>
           <a-input-password v-model:value="formState.newPassword">
             <template #prefix>
@@ -30,7 +30,7 @@
         <a-form-item name="newPasswordConfirm" :rules="[{
           required: true,
           validator: handleConfirmPassword
-        }]">
+        }, {min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!'}]">
           <span>Xác nhận mật khẩu mới<span class="text-red-500">(*)</span></span>
           <a-input-password v-model:value="formState.newPasswordConfirm">
             <template #prefix>

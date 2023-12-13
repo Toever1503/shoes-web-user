@@ -74,4 +74,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     app.provide("getRandomColor", () => color[Math.floor(Math.random() * color.length)]);
     app.provide("getProvinces", getProvinces);
     app.provide("formatVnCurrency", formatVnCurrency);
+    app.provide("removeSpecialChars", (val: string) => val.replace(/[^\w\sÀàÁáÂâÃãÈèÉéÊêÌìÍíÒòÓóÔôÕõÙùÚúĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ]/g, ""));
 });

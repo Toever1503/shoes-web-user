@@ -22,11 +22,10 @@
 }" :loop="true" :modules="modules" class="product_image_slide mx-auto h-[450px] w-[50px]" @swiper="onSwiper"
               @slideChange="onSlideChange">
               <swiper-slide v-slot="{ isActive }" v-for="item in productImages" :key="item" class="mt-[10px] h-[40px]">
-                <div @click="onClickImageBg(item)" :style="
-                  isActive
+                <div @click="onClickImageBg(item)" :style="isActive
                     ? 'border: 1px solid yellow'
                     : 'border: 1px solid #d9d9d9'
-                ">
+                  ">
                   <img class="" alt="example" :src="item" />
                 </div>
               </swiper-slide>
@@ -86,20 +85,18 @@
 
             <a-space direction="vertical" :size="20">
               <a-space class="product_variations mt-5">
-                <a-select v-if="
-                  productDetail?.loaiBienThe == 'BOTH' ||
+                <a-select v-if="productDetail?.loaiBienThe == 'BOTH' ||
                   productDetail?.loaiBienThe == 'COLOR'
-                " v-model:value="selectedVariation1" @change="onThayDoiBienTheMau" class="min-w-[200px]">
+                  " v-model:value="selectedVariation1" @change="onThayDoiBienTheMau" class="min-w-[200px]">
                   <a-select-option value="">Chọn màu</a-select-option>
                   <a-select-option :key="index" :value="item.id" v-for="(item, index) in variation1List">
                     {{ item.giaTri }}
                   </a-select-option>
                 </a-select>
 
-                <a-select v-if="
-                  productDetail?.loaiBienThe == 'BOTH' ||
+                <a-select v-if="productDetail?.loaiBienThe == 'BOTH' ||
                   productDetail?.loaiBienThe == 'SIZE'
-                " v-model:value="selectedVariation2" @change="onThayDoiBienTheSize" class="min-w-[200px]">
+                  " v-model:value="selectedVariation2" @change="onThayDoiBienTheSize" class="min-w-[200px]">
                   <a-select-option value="">Chọn size</a-select-option>
                   <a-select-option :key="index" :value="item.id" v-for="(item, index) in variation2List">
                     {{ item.giaTri }}
@@ -207,6 +204,13 @@
 
                   <div class="absolute bottom-2 left-[30%] hidden">
                     <button>Xem chi tiết</button>
+                  </div>
+                  <div class="absolute top-[10px] right-[10px]" v-if="item?.giaCu && item?.giaCu > 0">
+                    <span class="bg-red-200 text-red-500 p-1">-{{
+                      String(
+                        (item?.giaMoi / item?.giaCu) * 100
+                      ).slice(0, 2)
+                    }}%</span>
                   </div>
                 </div>
               </template>

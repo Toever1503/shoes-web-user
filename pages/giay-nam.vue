@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="mb-[30px]">
     <a-breadcrumb class="bg-gray-50 px-3 md:px-[50px] py-2">
       <a-breadcrumb-item>
         <router-link to="/">Trang chủ</router-link>
@@ -52,6 +52,13 @@
 
                 <div class="absolute bottom-2 left-[30%] hidden">
                   <button>Xem chi tiết</button>
+                </div>
+                <div class="absolute top-[10px] right-[10px]" v-if="item?.giaCu && item?.giaCu > 0">
+                  <span class="bg-red-200 text-red-500 p-1">-{{
+                    String(
+                      (item?.giaMoi / item?.giaCu) * 100
+                    ).slice(0, 2)
+                  }}%</span>
                 </div>
               </div>
 

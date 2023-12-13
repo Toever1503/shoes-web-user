@@ -31,8 +31,7 @@
     <!-- sale products -->
     <section class="mt-[30px] w-full">
       <div class="flex gap-[20px] justify-center mb-[15px] tabar_product">
-        <h4 :class="
-          'text-[18px] pb-2 duration-150 ease-in-out uppercase'">
+        <h4 :class="'text-[18px] pb-2 duration-150 ease-in-out uppercase'">
           Sản phẩm bán chạy
         </h4>
       </div>
@@ -42,19 +41,21 @@
           <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in saleProductList">
             <div class="relative">
               <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
+                <img :src="item?.anhChinh?.url"
+                  class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
 
               <div class="absolute bottom-2 left-[30%] hidden">
                 <button>Xem chi tiết</button>
               </div>
+
             </div>
 
             <a-space direction="vertical" :size="10" class="mt-[10px]">
               <h3 class="m-0 text-base">
                 <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                    {{ item.tieuDe.slice(0, 50) }}
-                  </router-link>
+                  {{ item.tieuDe.slice(0, 50) }}
+                </router-link>
               </h3>
 
               <div class="product_price flex items-center gap-[10px]">
@@ -68,6 +69,13 @@
                 <span v-else class="font-bold text-red-500">
                   {{ _formatVnCurrency(item?.giaMoi) }}
                 </span>
+                <div v-if="item?.giaCu && item?.giaCu > 0">
+                  <span class="bg-red-200 text-red-500 p-1">-{{
+                    String(
+                      (item?.giaMoi / item?.giaCu) * 100
+                    ).slice(0, 2)
+                  }}%</span>
+                </div>
               </div>
 
               <a-space>
@@ -92,8 +100,7 @@
     <!-- latest products -->
     <section class="mt-[30px] w-full">
       <div class="flex gap-[20px] justify-center mb-[15px] tabar_product">
-        <h4 :class="
-          'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase'">
+        <h4 :class="'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase'">
           Sản phẩm mới cập nhật
         </h4>
       </div>
@@ -104,7 +111,8 @@
           <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in latestProductList">
             <div class="relative">
               <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
+                <img :src="item?.anhChinh?.url"
+                  class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
 
               <div class="absolute bottom-2 left-[30%] hidden">
@@ -115,8 +123,8 @@
             <a-space direction="vertical" :size="10" class="mt-[10px]">
               <h3 class="m-0 text-base">
                 <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                    {{ item.tieuDe.slice(0, 50) }}
-                  </router-link>
+                  {{ item.tieuDe.slice(0, 50) }}
+                </router-link>
               </h3>
 
               <div class="product_price flex items-center gap-[10px]">
@@ -130,6 +138,13 @@
                 <span v-else class="font-bold text-red-500">
                   {{ _formatVnCurrency(item?.giaMoi) }}
                 </span>
+                <div v-if="item?.giaCu && item?.giaCu > 0">
+                  <span class="bg-red-200 text-red-500 p-1">-{{
+                    String(
+                      (item?.giaMoi / item?.giaCu) * 100
+                    ).slice(0, 2)
+                  }}%</span>
+                </div>
               </div>
 
               <a-space>
@@ -153,8 +168,7 @@
 
     <section class="mt-[30px] w-full">
       <div class="flex gap-[20px] justify-center mb-[15px] tabar_product">
-        <h4 :class="
-          'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase'">
+        <h4 :class="'text-[18px] pb-2 cursor-pointer hover:text-[#4096ff] duration-150 ease-in-out uppercase'">
           Sản phẩm được yêu thích
         </h4>
       </div>
@@ -164,7 +178,8 @@
           <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in likeProductList">
             <div class="relative">
               <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
+                <img :src="item?.anhChinh?.url"
+                  class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
 
               <div class="absolute bottom-2 left-[30%] hidden">
@@ -175,8 +190,8 @@
             <a-space direction="vertical" :size="10" class="mt-[10px]">
               <h3 class="m-0 text-base">
                 <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                    {{ item.tieuDe.slice(0, 50) }}
-                  </router-link>
+                  {{ item.tieuDe.slice(0, 50) }}
+                </router-link>
               </h3>
 
               <div class="product_price flex items-center gap-[10px]">
@@ -190,6 +205,13 @@
                 <span v-else class="font-bold text-red-500">
                   {{ _formatVnCurrency(item?.giaMoi) }}
                 </span>
+                <div v-if="item?.giaCu && item?.giaCu > 0">
+                  <span class="bg-red-200 text-red-500 p-1">-{{
+                    String(
+                      (item?.giaMoi / item?.giaCu) * 100
+                    ).slice(0, 2)
+                  }}%</span>
+                </div>
               </div>
 
               <a-space>
@@ -210,6 +232,39 @@
         </a-button>
       </div>
     </section>
+
+    <section class="my-[50px] h-[200px] px-[20px]">
+      <swiper :slidesPerView="4" :spaceBetween="30" class="mySwiper" :loop="true" :effect="'creative'" :autoplay="{
+        delay: 8000,
+        disableOnInteraction: true,
+      }">
+        <SwiperSlide>
+          <img class="ư-full h-full" src="/image/brand/nike.jpeg" />
+        </SwiperSlide>
+
+        <SwiperSlide>
+          <img class="ư-full h-[200px]" src="/image/brand/adidas.png" />
+        </SwiperSlide>
+
+        <SwiperSlide>
+          <img class="ư-full h-[200px]" src="/image/brand/new-balance.png" />
+        </SwiperSlide>
+
+        <SwiperSlide>
+          <img class="ư-full h-[200px]" src="/image/brand/converse.jpeg" />
+        </SwiperSlide>
+
+        <SwiperSlide>
+          <img class="ư-full h-[200px]" src="/image/brand/puma.png" />
+        </SwiperSlide>
+
+        <SwiperSlide>
+          <img class="ư-full h-[200px]" src="/image/brand/vans.jpeg" />
+        </SwiperSlide>
+      </swiper>
+
+    </section>
+
   </div>
 </template>
 

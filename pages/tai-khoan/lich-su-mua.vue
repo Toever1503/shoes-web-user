@@ -22,7 +22,6 @@
           </template>
           <template v-else-if="column.dataIndex === 'ngayTao'">
             <!-- {{ dayjs(text).format("DD/MM/YYYY HH:mm:ss") }} -->
-            {{ text }}
             {{ dateFormat(text) }}
           </template>
           <template v-else-if="column.dataIndex === 'diaChiEntity'">
@@ -50,19 +49,23 @@
           <template v-else-if="column.dataIndex === 'action'">
             <div class="flex gap-[10px] items-left justify-start">
               <a>
-                <a-tooltip> <a-button type="default" size="small" title="Chi tiết" @click="showModal(record.id)">Chi
-                    tiết</a-button>
+                <a-tooltip>
+                  <a-space direction="vertical">
+                    <a-button type="default" size="small" title="Chi tiết" @click="showModal(record.id)">Chi
+                      tiết</a-button>
 
-                  <a-button type="default" size="small" class="ml-1" title="Hủy đơn"
-                    v-if="record.trangThai == 'WAITING_CONFIRM'">
-                    Hủy đơn
-                  </a-button>
-                  <a-button @click="showModal1(record.id)" size="small" title="Đánh giá" type="default" class="ml-1"
-                    v-if="record.trangThai == 'COMPLETED'">
-                    Đánh giá
-                  </a-button>
-                  <a-modal title="Đánh giá chi tiết" width="900px" :footer="null" v-model:open="open">
-                    <div class="flex flex-col items-end justify-center">
+                    <a-button type="default" size="small" class="ml-1" title="Hủy đơn"
+                      v-if="record.trangThai == 'WAITING_CONFIRM'">
+                      Hủy đơn
+                    </a-button>
+                    <a-button @click="showModal1(record)" size="small" title="Đánh giá" type="default" class="ml-1"
+                      v-if="record.trangThai == 'COMPLETED'">
+                      Đánh giá
+                    </a-button>
+                  </a-space>
+
+                  <a-modal title="Đánh giá sản phẩm" width="900px" :footer="null" v-model:open="open">
+                    <div class="grid  justify-center">
                       <a-table bordered :pagination="false" :columns="tblModalRate.columns"
                         :dataSource="selectedRecord.chiTietDonHang" @change="onTblChange">
                         <template #bodyCell="{ column, text, record }">
@@ -83,7 +86,6 @@
                           </template>
                           <template v-else-if="column.dataIndex === 'rating'">
                             <a-rate @change="rateStar" v-model:value="record.rating" :disabled="daDanhGia" />
-                            {{ record.rating }}
                           </template>
                           <template v-else-if="column.dataIndex === 'comment'">
                             <a-form-item :name="'record.comment[' + record.id + ']'">
@@ -96,8 +98,10 @@
                           </template>
                         </template>
                       </a-table>
-                      <a-button type="primary" class="mt-5" :loading="iconLoading" v-if="!daDanhGia"
-                        @click="handleOk">Đánh giá</a-button>
+                      <div class="flex justify-end">
+                        <a-button type="primary" class="mt-5 w-fit" :loading="iconLoading" v-if="!daDanhGia"
+                          @click="handleOk">Đánh giá</a-button>
+                      </div>
                     </div>
                   </a-modal>
 
@@ -362,15 +366,14 @@ const dateFormat = (ngayTao) => {
 }
 
 const iconLoading = ref<boolean | DelayLoading>(false);
-const showModal1 = (id) => {
-  const record = tblData.value.find((item) => item.id === id);
-  if (record.checkRate == 1) {
+const showModal1 = (record) => {
+  if (record?.checkRate == 1) {
     daDanhGia.value = true;
   } else {
     daDanhGia.value = false;
   }
   console.log('daDanhGia', daDanhGia.value);
-  orderUserService.chiTietOrder(id).then(res => {
+  orderUserService.chiTietOrder(record.id).then(res => {
     console.log('Đánh giá111', res.data);
     selectedRecord.value = res.data;
     sanPhamTieuDeList.value = res.data.chiTietDonHang.map(item => item.sanPham.tieuDe);
@@ -429,15 +432,17 @@ const handleOk = (e: MouseEvent) => {
       console.log('formComment', formComment);
 
       if (!daDanhGia.value) {
-        danhGiaService.create(formComment).then((res) => {
-          console.log('res', res.data);
-          iconLoading.value = true;
-          message.success('Đánh giá thành công');
-          setTimeout(() => {
+        iconLoading.value = true;
+        danhGiaService.create(formComment)
+          .then((res) => {
+            console.log('res', res.data);
+            LichSuMua(orderFilter.status);
+            message.success('Đánh giá thành công');
+          })
+          .finally(() => {
             open.value = false;
             iconLoading.value = false;
-          }, 1000);
-        });
+          });
       }
     }
     // else {
@@ -466,7 +471,7 @@ const tblLoading = ref<boolean>(false);
 const onTblChange = ({ current }: { current: number }, status) => {
   tblPagination.current = current;
   console.log('current: ', current);
-  LichSuMua(status);
+  LichSuMua(orderFilter.status);
 };
 const LichSuMua = (status) => {
   if (tblLoading.value) return;

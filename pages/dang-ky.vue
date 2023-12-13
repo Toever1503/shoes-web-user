@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-cover" style="
+  <div class="flex flex-col py-[50px] items-center justify-center bg-cover" style="
         background-image: url('https://goodfit.vn/wp-content/uploads/2021/01/gang-tay-the-thao-chong-nang-6.jpg');
       ">
     <div
@@ -13,33 +13,35 @@
           <div class="flex flex-col">
             <a-form-item label="Tài khoản" name="userName"
               :rules="[{ required: true, message: 'Tài khoản không được để trống!' }]">
-              <a-input class="h-10 text-base" v-model:value="formState.userName"
-                @change="formState.userName = formState.userName.replace(/^\s*$/, '')" placeholder="Tài khoản ..." />
+              <a-input class="h-10 text-base"
+                @change="formState.userName = formState.userName.replace(/[^a-zA-Z0-9@]/g, '')"
+                v-model:value.trim="formState.userName" placeholder="Tài khoản ..." />
             </a-form-item>
           </div>
           <div class="flex flex-col">
             <a-form-item label="Email" name="email"
               :rules="[{ validator: handleValidateTypeEmail }, { required: true, message: 'Email không được để trống!' }]">
-              <a-input class="h-10 text-base" v-model:value="formState.email"
-                @change="formState.email = formState.email.replace(/^\s*$/, '')" placeholder="Email ..." />
+              <a-input class="h-10 text-base" v-model:value.trim="formState.email"
+                @change="formState.email = formState.email.replace(/^\s+/, '')" placeholder="Email ..." />
             </a-form-item>
           </div>
           <div class="flex flex-col">
             <a-form-item label="Số điện thoại" name="phone"
               :rules="[{ validator: handleValidateTypePhone }, { required: true, message: 'Số điện thoại không được để trống!' }]">
-              <a-input class="h-10 text-base" v-model:value="formState.phone"
-                @change="formState.phone = formState.phone.replace(/^\s*$/, '')" placeholder="Số điện thoại ..." />
+              <a-input class="h-10 text-base" v-model:value="formState.phone" :maxlength="10"
+                @change="formState.phone = formState.phone.replace(/[^0-9@]/g, '')" placeholder="Số điện thoại ..." />
             </a-form-item>
           </div>
           <div class="flex flex-col">
             <a-form-item label="Họ và tên" name="name"
               :rules="[{ required: true, message: 'Họ và tên không được để trống!' }]">
-              <a-input class="h-10 text-base" v-model:value="formState.name" placeholder="Email ..." />
+              <a-input class="h-10 text-base" v-model:value="formState.name"
+                @change="formState.name = _removeSpecialChars(formState.name)" placeholder="Họ và tên ..." />
             </a-form-item>
           </div>
           <div class="flex flex-col mb-3">
             <a-form-item style="margin-bottom: 0" label="Mật khẩu" name="password"
-              :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }]">
+              :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }, {min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!'}]">
               <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ..." />
             </a-form-item>
 
@@ -62,6 +64,7 @@ import { useCounterStore } from '@/stores/counter'
 import { authService } from "../services/AuthService";
 import { message } from "ant-design-vue";
 
+const _removeSpecialChars = inject("removeSpecialChars", (val: string) => val);
 const _router = useRouter();
 const storeCounter = useCounterStore()
 
@@ -69,6 +72,9 @@ const increase = () => storeCounter.increment();
 // ✅ this one will be reactive
 // 💡 but you could also just use `store.doubleCount` directly
 const doubleValue = computed(() => storeCounter.doubleCount)
+
+
+
 onMounted(() => {
 
   console.log("signup page mounted: ", storeCounter);
