@@ -141,11 +141,12 @@ const handleValidateTypePhone = (rule, value) => {
   return Promise.resolve();
 };
 const handleValidateTypeName = (rule, value) => {
-  if (value && !/^[a-zA-Z0-9_]+$/g.test(value)) {
+  if (value && !/^[a-zA-Z0-9_\sÀ-ỹ]+$/g.test(value)) {
     return Promise.reject('Tên người dùng không hợp lệ!');
   }
   return Promise.resolve();
 };
+
 const handleValidateTypeEmail = (rule, value) => {
   if (value && !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g.test(value)) {
     return Promise.reject('Email không hợp lệ!');
