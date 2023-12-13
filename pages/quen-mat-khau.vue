@@ -75,7 +75,7 @@ const onSubmit = () => {
         res => {
           console.log('user: ',res.data.content);
           message.success('Đổi mật khẩu thành công !');
-          location.href = "/dang-nhap";
+          // location.href = "/dang-nhap";
         },
         error => {
           if(error.response.data.code == 9999){

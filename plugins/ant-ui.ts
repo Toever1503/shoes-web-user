@@ -11,7 +11,7 @@ message.config({
 });
 notification.config({
     maxCount: 3,
-    duration: 1
+    duration: 1.5
 });
 
 export default defineNuxtPlugin((nuxtApp) => {
