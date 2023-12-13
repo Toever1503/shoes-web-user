@@ -31,15 +31,14 @@
           <a-form-item
             label="Số điện thoại"
             name="soDienThoaiNhanHang"
-            :rules="[
-              { required: true, message: 'Vui lòng không được bỏ trống!' },
-            ]"
+            :rules="[{ required: true, validator: handleValidateTypePhone }]"
           >
-            <a-input v-model:value="formState.soDienThoaiNhanHang" :maxLength="10" />
+            <a-input v-model:value="formState.soDienThoaiNhanHang"
+            @change="formState.soDienThoaiNhanHang = formState.soDienThoaiNhanHang.replace(/[^0-9@]/g, '')" :maxLength="10" />
           </a-form-item>
 
-          <a-form-item label="Địa chỉ email" name="email">
-            <a-input v-model:value="formState.email" :maxLength="255" type="email" />
+          <a-form-item label="Địa chỉ email" name="email" :rules="[{ validator: handleValidateTypeEmail }]">
+            <a-input v-model:value="formState.email" :maxLength="255" @change="formState.email = formState.email.replace(/^\s+/, '')" type="email" />
           </a-form-item>
 
           <div class="flex justify-end mb-2" v-if="false">
@@ -403,6 +402,20 @@ const onCheckVoucher = () => {
   }
 };
 
+const handleValidateTypePhone = (rule, value) => {
+  if (!value) return Promise.reject('Vui lòng không bỏ trống!');
+  if (value && !/((09|03|07|08|05)+([0-9]{8})\b)/g.test(value)) {
+    return Promise.reject('Số điện thoại không đúng!');
+  }
+  return Promise.resolve();
+};
+
+const handleValidateTypeEmail = (rule, value) => {
+  if (value && !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g.test(value)) {
+    return Promise.reject('Email không hợp lệ!');
+  }
+  return Promise.resolve();
+};
 const provinceList = ref<AddressProvinceType[]>([]);
 const districtList = ref<AddressDistrictType[]>([]);
 const wardList = ref<AddressWardType[]>([]);
@@ -485,7 +498,7 @@ const onFinish = (values: any) => {
     .catch((err) => {
       console.log("checkout failed: ", err.response?._data?.code);
       notification.error({
-        message: "Đặt hàng thất bại. " + (err.response?._data?.message || ""),
+        message: "Đặt hàng thất bại. " + (err.response?._data?.code != 9999 ? err.response?._data?.message : ""),
       });
     })
     .finally(() => (submitted.value = false));
