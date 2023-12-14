@@ -17,15 +17,15 @@
           </a-form-item>
         </div>
         <div class="mb-4">
-          <a-form-item label="Email" name="email"
-            :rules="[{ validator: handleValidateTypeEmail }]">
+          <a-form-item label="Email" name="email" :rules="[{ validator: handleValidateTypeEmail }]">
             <a-input v-model:value="formState.email"
               @change="formState.email = formState.email.replace(/[^a-zA-Z0-9.@]/g, '')" class="h-10 text-base"
               placeholder="Email..." />
           </a-form-item>
         </div>
         <div class="mb-4">
-          <a-form-item label="Số điện thoại" name="phone" :rules="[{ validator: handleValidateTypePhone }, { required: true, message: 'Số điện thoại không được để trống!' }]">
+          <a-form-item label="Số điện thoại" name="phone"
+            :rules="[{ validator: handleValidateTypePhone }, { required: true, message: 'Số điện thoại không được để trống!' }]">
             <a-input v-model:value="formState.phone" :maxlength="10"
               @change="formState.phone = formState.phone.replace(/[^0-9@]/g, '')" class="h-10 text-base"
               placeholder="Số điện thoại" />
@@ -100,9 +100,22 @@ const handleSubmit = () => {
         res => {
           console.log('res', res.data);
           message.success('Cập nhật thành công');
-        }, error => {
-          console.log('error', error);
-          message.error('Cập nhật thất bại');
+        }, err => {
+          console.log('error', err);
+          if (err?.response?.data?.code == 21)
+            notification.error({
+              message: "Tài khoản này đã được đăng ký."
+            });
+          else if (err?.response?.data?.code == 22)
+            notification.error({
+              message: "Email này đã được đăng ký."
+            });
+          else if (err?.response?.data?.code == 23)
+            notification.error({
+              message: "Số điện thoại này đã được đăng ký."
+            });
+          else
+            message.error('Cập nhật thất bại');
         });
     })
     .catch(err => {

@@ -20,7 +20,7 @@
           validator: handleTypePassword
         }, {min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!'}]">
           <span class="">Mật khẩu mới <span class="text-red-500">(*)</span></span>
-          <a-input-password v-model:value="formState.newPassword">
+          <a-input-password v-model:value="formState.newPassword" @change="formState.newPassword = formState.newPassword.toLowerCase()">
             <template #prefix>
               <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
             </template>
@@ -32,7 +32,7 @@
           validator: handleConfirmPassword
         }, {min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!'}]">
           <span>Xác nhận mật khẩu mới<span class="text-red-500">(*)</span></span>
-          <a-input-password v-model:value="formState.newPasswordConfirm">
+          <a-input-password v-model:value="formState.newPasswordConfirm" @change="formState.newPasswordConfirm = formState.newPasswordConfirm.toLowerCase()">
             <template #prefix>
               <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
             </template>

@@ -14,13 +14,12 @@
             <a-form-item label="Tài khoản" name="userName"
               :rules="[{ required: true, message: 'Tài khoản không được để trống!' }]">
               <a-input class="h-10 text-base"
-                @change="formState.userName = formState.userName.replace(/[^a-zA-Z0-9@]/g, '')"
+                @change="formState.userName = formState.userName.replace(/[^a-zA-Z0-9@]/g, '').toLowerCase()"
                 v-model:value.trim="formState.userName" placeholder="Tài khoản ..." />
             </a-form-item>
           </div>
           <div class="flex flex-col">
-            <a-form-item label="Email" name="email"
-              :rules="[{ validator: handleValidateTypeEmail }, { required: true, message: 'Email không được để trống!' }]">
+            <a-form-item label="Email" name="email" :rules="[{ validator: handleValidateTypeEmail }]">
               <a-input class="h-10 text-base" v-model:value.trim="formState.email"
                 @change="formState.email = formState.email.replace(/^\s+/, '')" placeholder="Email ..." />
             </a-form-item>
@@ -41,8 +40,8 @@
           </div>
           <div class="flex flex-col mb-3">
             <a-form-item style="margin-bottom: 0" label="Mật khẩu" name="password"
-              :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }, {min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!'}]">
-              <a-input-password class="h-10 text-base" v-model:value="formState.password" placeholder="Mật khẩu ..." />
+              :rules="[{ required: true, message: 'Mật khẩu không được để trống!' }, { min: 6, message: 'Mật khẩu cần phải tối thiểu 6 ký tự!' }]">
+              <a-input-password class="h-10 text-base" v-model:value="formState.password" @change="formState.password = formState.password.toLowerCase()" placeholder="Mật khẩu ..." />
             </a-form-item>
 
           </div>
@@ -105,19 +104,39 @@ const handleSubmit = () => {
       return;
     }
     console.log("formState: ", formState);
-    authService.register(formState).then((res) => {
-      console.log("res: ", res);
-      if (res.status == 200) {
-        notification.success({
-          message: "Đăng ký thành công"
-        });
-        _router.push("/dang-nhap");
-      } else {
-        notification.error({
-          message: "Đăng ký thất bại"
-        });
-      }
-    });
+    authService.register(formState)
+      .then((res) => {
+        console.log("res: ", res);
+        if (res.status == 200) {
+          notification.success({
+            message: "Đăng ký thành công"
+          });
+          _router.push("/dang-nhap");
+        } else {
+          notification.error({
+            message: "Đăng ký thất bại"
+          });
+        }
+      })
+      .catch((err) => {
+        if (err?.response?.data?.code == 21)
+          notification.error({
+            message: "Tài khoản này đã được đăng ký."
+          });
+        else if (err?.response?.data?.code == 22)
+          notification.error({
+            message: "Email này đã được đăng ký."
+          });
+        else if (err?.response?.data?.code == 23)
+          notification.error({
+            message: "Số điện thoại này đã được đăng ký."
+          });
+        else {
+          notification.error({
+            message: "Đăng ký thất bại!"
+          });
+        }
+      });
   });
 }
 
