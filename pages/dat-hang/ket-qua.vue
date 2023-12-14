@@ -67,7 +67,7 @@
                 </span>
 
                 <span>
-                  {{ _formatVnCurrency(orderDetail?.tongTienSp) }}
+                  {{ _formatVnCurrency(orderDetail?.tongGiaTien) }}
                 </span>
               </a-space>
 

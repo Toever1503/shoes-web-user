@@ -51,6 +51,14 @@
                 <div class="absolute bottom-2 left-[30%] hidden">
                   <button>Xem chi tiết</button>
                 </div>
+
+                <div class="absolute top-[10px] right-[10px]" v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
+                  <span class="bg-red-200 text-red-500 p-1">-{{
+                    Math.floor(Number(
+                      ((item?.giaCu - item?.giaMoi) / item?.giaCu) * 100
+                    ))
+                  }}%</span>
+                </div>
               </div>
 
               <a-space direction="vertical" :size="10" class="mt-[10px]">

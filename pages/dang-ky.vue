@@ -35,7 +35,7 @@
             <a-form-item label="Họ và tên" name="name"
               :rules="[{ required: true, message: 'Họ và tên không được để trống!' }]">
               <a-input class="h-10 text-base" v-model:value="formState.name"
-                @change="formState.name = _removeSpecialChars(formState.name)" placeholder="Họ và tên ..." />
+                @change="formState.name = _removeSpecialChars(formState.name).replace(/^\s+/, '')" placeholder="Họ và tên ..." />
             </a-form-item>
           </div>
           <div class="flex flex-col mb-3">

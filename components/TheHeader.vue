@@ -56,12 +56,14 @@
         <router-link to="/chinh-sach"> Chính sách đổi trả </router-link>
       </a-space>
 
-      <a-space class="items-center">
+      <a-space class="items-center" :size="15">
         <router-link to="/gio-hang">
+        <a-badge :count="_storeCart.cartTotalQty" :offset="[4,0]" >
           <div style="
                           background-image: url('/image/common/Shopping-Bag.svg');
                           background-size: cover;
                         " class="w-[18px] h-[18px] cursor-pointer hover:scale-[1.05] duration-200 easy-in-out"></div>
+          </a-badge>
         </router-link>
         <SearchOutlined @click="onClickShowSearchModal"
           class="text-[16px] cursor-pointer hover:text-[#4096ff] hover:scale-[1.05] duration-200 easy-in-out" />
@@ -132,6 +134,7 @@ import { fetchInstance } from "~/services/FetchInstance";
 import userVue from "~/layouts/user.vue";
 import ProductService from "~/services/ProductService";
 
+const _storeCart = useCartStore();
 const _router = useRouter();
 
 const loggedUserName = ref<string>("");
