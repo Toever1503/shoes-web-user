@@ -56,7 +56,7 @@
         <router-link to="/chinh-sach"> Chính sách đổi trả </router-link>
       </a-space>
 
-      <a-space class="items-center" :size="15">
+      <a-space class="items-center" :size="20">
         <router-link to="/gio-hang">
         <a-badge :count="_storeCart.cartTotalQty" :offset="[4,0]" >
           <div style="
