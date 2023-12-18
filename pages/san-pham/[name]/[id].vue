@@ -14,17 +14,14 @@
         <div class="md:flex gap-[50px]">
           <a-space style="max-width: 600px; max-height: 500px"
             class="product_image md:w-1/2 justify-center md:max-w-[unset] mx-auto">
-            <swiper :direction="'vertical'" :slidesPerView="8" :pagination="{
-              clickable: true,
-            }" :autoplay="{
-  delay: 2000,
-  disableOnInteraction: true,
-}" :loop="true" :modules="modules" class="product_image_slide mx-auto h-[450px] w-[50px]" @swiper="onSwiper"
-              @slideChange="onSlideChange">
-              <swiper-slide v-slot="{ isActive }" v-for="item in productImages" :key="item" class="mt-[10px] h-[40px]">
-                <div @click="onClickImageBg(item)" :style="isActive
-                    ? 'border: 1px solid yellow'
-                    : 'border: 1px solid #d9d9d9'
+            <swiper @swiper="onSwiper" :modules="modules" :direction="'vertical'" :slidesPerView="8" :loop="true"
+              :autoplay="true" class="product_image_slide mx-auto h-[450px] w-[50px]" @onSlideChange="onSlideChange"
+              @realIndexChange="realIndexChange">
+              <swiper-slide v-slot="{ isActive }" v-for="(item, index) in productImages" :key="item"
+                class="mt-[10px] h-[40px]">
+                <div @click="onClickImageBg(item, index)" :style="false
+                  ? 'border: 1px solid yellow'
+                  : 'border: 1px solid #d9d9d9'
                   ">
                   <img class="" alt="example" :src="item" />
                 </div>
@@ -57,9 +54,9 @@
                 <div class="flex items-center gap-[10px] text-[14px]">
                   <del>{{ _formatVnCurrency(productDetail?.giaCu || 0) }}</del>
                   <span class="bg-red-200 text-red-500 p-1">-{{
-                    String(
-                      (productDetail?.giaMoi / productDetail?.giaCu) * 100
-                    ).slice(0, 2)
+                    Math.floor(
+                      Number(((item?.giaCu - item?.giaMoi) / productDetail?.giaCu) * 100)
+                    )
                   }}%</span>
                 </div>
               </template>
@@ -74,7 +71,8 @@
               </legend>
               <ul>
                 <template :key="index" v-for="(item, index) in productDetail.vouchers">
-                  <li>
+                  <li class="capitalize">
+                    Nhập mã: <span class="font-[600] text-red-500">{{item.maGiamGia}}</span>
                     {{ item.moTa }}
                   </li>
                 </template>
@@ -103,6 +101,16 @@
                   </a-select-option>
                 </a-select>
               </a-space>
+
+              <span class="cursor-pointer hover:text-blue-400" @click="showSizeGuide">
+                ⍟ Hướng dẫn chọn size
+               <a-modal :open="isShowSizeGuide" :footer="null" @cancel="hideSizeGuide" style="top: 0 !important;">
+                <div class="w-full flex justify-center py-[50px] h-full">
+                  <a-image :preview="false" src="https://myshoes.vn/image/catalog/banner/chon-size.png" />
+                </div>
+               </a-modal>
+               
+              </span>
 
               <a-space :size="20">
                 <span> Số lượng: </span>
@@ -165,8 +173,11 @@
                 </template>
                 <template #content>
                   <a-rate :value="item?.soSao || 0" allow-half disabled />
-                  <p class="m-0">
-                    {{ item?.binhLuan }}
+                  <p class="m-0" v-if="item?.isHide">
+                    {{item?.binhLuan?.replace(/./g, '*')}}
+                  </p>
+                  <p class="m-0" v-else>
+                    item?.binhLuan
                   </p>
                 </template>
                 <template #datetime>
@@ -194,50 +205,54 @@
             Sản phẩm liên quan
           </h3>
           <div class="flex flex-wrap gap-[20px] w-full">
-            <a-card hoverable :bodyStyle="'padding: 10px'" style="width: 23%; border: none; box-shadow: none" :key="index"
-              v-for="(item, index) in relatedProducts">
-              <template #cover>
-                <div class="relative">
-                  <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                    <img :src="item?.anhChinh?.url" class="shadow-sm" />
-                  </router-link>
+            <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in relatedProducts">
+              <div class="relative">
+                <router-link class="block h-[300px]" :to="`/san-pham/${item?.slug}/${item?.id}`">
+                  <img :src="item?.anhChinh?.url"
+                    class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
+                </router-link>
 
-                  <div class="absolute bottom-2 left-[30%] hidden">
-                    <button>Xem chi tiết</button>
-                  </div>
-                  <div class="absolute top-[10px] right-[10px]" v-if="item?.giaCu && item?.giaCu > 0">
-                    <span class="bg-red-200 text-red-500 p-1">-{{
-                      String(
-                        (item?.giaMoi / item?.giaCu) * 100
-                      ).slice(0, 2)
-                    }}%</span>
-                  </div>
+                <div class="absolute bottom-2 left-[30%] hidden">
+                  <button>Xem chi tiết</button>
                 </div>
-              </template>
-              <a-card-meta>
-                <template #title>
-                  <h3 class="m-0 text-base">
-                    <router-link :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
-                      {{ item.tieuDe }}
-                    </router-link>
-                  </h3>
-                </template>
-                <template #description>
-                  <div class="product_price flex items-center gap-[10px]">
-                    <del> {{ _formatVnCurrency(item?.giaCu || 0) }}</del>
-                    <span class="font-bold text-red-500">
-                      {{ _formatVnCurrency(item?.giaMoi || 0) }}
-                    </span>
-                  </div>
+                <div class="absolute top-[10px] right-[10px]" v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
+                  <span class="bg-red-200 text-red-500 p-1">-{{
+                    Math.floor(Number(
+                      ((item?.giaCu - item?.giaMoi) / item?.giaCu) * 100
+                    ))
+                  }}%</span>
+                </div>
+              </div>
 
-                  <a-space>
-                    <a-rate class="text-[14px]" :value="item?.soSaoDanhGia || 0" allow-half disabled />
-                    <a-divider type="vertical" class="bg-gray-500" />
-                    <span>55 Đã bán</span>
-                  </a-space>
-                </template>
-              </a-card-meta>
-            </a-card>
+              <a-space direction="vertical" :size="10" class="mt-[10px]">
+                <h3 class="m-0 text-base">
+                  <router-link class="font-[600]" :to="`/san-pham/${item?.slug}/${item?.id}`">
+                    {{ item.tieuDe.slice(0, 50) }}
+                  </router-link>
+                </h3>
+
+                <div class="product_price flex items-center gap-[10px]">
+                  <template v-if="item?.giaCu && item?.giaCu > 0">
+                    <del>{{ _formatVnCurrency(item?.giaCu) }}</del>
+                    <span class="font-bold text-red-500">
+                      {{ _formatVnCurrency(item?.giaMoi) }}
+                    </span>
+                  </template>
+
+                  <span v-else class="font-bold text-red-500">
+                    {{ _formatVnCurrency(item?.giaMoi) }}
+                  </span>
+                  
+                </div>
+
+                <a-space>
+                  <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
+                  <a-divider type="vertical" class="bg-gray-500" />
+                  <span>{{ item?.daBan }} Đã bán</span>
+                </a-space>
+              </a-space>
+            </div>
+            
           </div>
         </section>
       </div>
@@ -251,6 +266,9 @@ import { useCartStore } from "/stores/cart";
 import { onMounted, inject } from "vue";
 import IProductDetail from "~/types/IProductDetail";
 import ProductService from "~/services/ProductService";
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Autoplay, Scrollbar, Controller } from 'swiper/modules';
+
 
 const _storeCart = useCartStore();
 const _route = useRoute();
@@ -265,8 +283,16 @@ const _formatVnCurrency = function (value: number) {
 const isGettingProduct = ref<boolean>(true);
 const productDetail = ref<IProductDetail>();
 
+
+const swiperInstance = ref();
+const modules = [Autoplay, Scrollbar, Controller];
 const productImages = ref<string[]>([]);
 const activeImage = ref<string>("");
+const activeImageIndex = ref<number>(0);
+const onSwiper = (swiper) => {
+  console.log("on swiper", swiper)
+  swiperInstance.value = swiper;
+}
 
 const selectedVariation1 = ref<string>("");
 const selectedVariation2 = ref<string>("");
@@ -602,7 +628,7 @@ const buyNow = () => {
   }
 };
 
-const onClickImageBg = (src: string) => {
+const onClickImageBg = (src: string, index: number) => {
   if (typeof src == "object") {
     console.log("click image: ", src[0]);
     activeImage.value = src[0];
@@ -632,14 +658,29 @@ const onCallApiGetReview = () => {
     })
     .finally(() => reviewPagination.loading = false);
 }
+const onSlideChange = (e: any) => {
+  console.log("slide changed", e.activeIndex);
+  activeImageIndex.value = e.activeIndex as number;
+  activeImage.value = productImages.value[swiperInstance.value.activeIndex]
+}
+const realIndexChange = (e) => {
+  console.log("realIndexChange changed", e.activeIndex);
+}
+
+const isShowSizeGuide = ref<boolean>(false);
+const showSizeGuide = () => (isShowSizeGuide.value = true);
+const hideSizeGuide = () => (isShowSizeGuide.value = false);
 onMounted(() => {
+  productImages.value = [];
   ProductService.chiTietSp(Number(_route.params.id))
     .then((res) => {
-      console.log("result:  ", res);
+      console.log("result:  ", productImages.value.length);
 
       const pImgs = [];
       pImgs.push(res.anhChinh.url);
-      pImgs.push(res.anhPhu.map((item) => item.url));
+      res.anhPhu.forEach(item => {
+        pImgs.push(item.url);
+      })
       res.bienTheDTOS.forEach((item) => {
         if (item.anh) pImgs.push(item.anh.url);
       });

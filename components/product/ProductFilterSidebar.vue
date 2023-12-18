@@ -65,7 +65,7 @@
               formState.priceStart,
               formState.priceRange[1],
             ]
-          " class="w-[150px]" type="number" suffix="vnd" />
+          " class="w-[150px]" type="number" min="0" suffix="vnd" />
         </a-space>
         <a-space class="justify-between w-full">
           <span class="block w-[50px]">Đến:</span>
@@ -74,7 +74,7 @@
               formState.priceRange[0],
               formState.priceEnd,
             ]
-          " type="number" class="w-[150px]" suffix="vnd" />
+          " type="number" class="w-[150px]" min="0" suffix="vnd" />
         </a-space>
       </a-space>
     </a-form-item>

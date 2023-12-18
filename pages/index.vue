@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="w-full h-[500px]">
+    <section class="w-full h-[700px]">
       <Swiper class="h-full" :modules="[SwiperAutoplay, SwiperEffectCreative]" :slides-per-view="1" :loop="true"
         :effect="'creative'" :autoplay="{
           delay: 8000,
@@ -40,7 +40,7 @@
         <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
           <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in saleProductList">
             <div class="relative">
-              <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+              <router-link class="block h-[450px]" :to="`/san-pham/${item?.slug}/${item?.id}`">
                 <img :src="item?.anhChinh?.url"
                   class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
@@ -53,7 +53,7 @@
 
             <a-space direction="vertical" :size="10" class="mt-[10px]">
               <h3 class="m-0 text-base">
-                <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <router-link class="font-[600]" :to="`/san-pham/${item?.slug}/${item?.id}`">
                   {{ item.tieuDe.slice(0, 50) }}
                 </router-link>
               </h3>
@@ -110,7 +110,7 @@
         <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
           <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in latestProductList">
             <div class="relative">
-              <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+              <router-link class="block h-[450px]" :to="`/san-pham/${item?.slug}/${item?.id}`">
                 <img :src="item?.anhChinh?.url"
                   class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
@@ -122,7 +122,7 @@
 
             <a-space direction="vertical" :size="10" class="mt-[10px]">
               <h3 class="m-0 text-base">
-                <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <router-link class="font-[600]" :to="`/san-pham/${item?.slug}/${item?.id}`">
                   {{ item.tieuDe.slice(0, 50) }}
                 </router-link>
               </h3>
@@ -177,7 +177,7 @@
         <div class="flex flex-wrap gap-[20px] px-[30px] w-full justify-center">
           <div style="width: 23%; border: none; box-shadow: none" :key="index" v-for="(item, index) in likeProductList">
             <div class="relative">
-              <router-link class="block h-[450px]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+              <router-link class="block h-[450px]" :to="`/san-pham/${item?.slug}/${item?.id}`">
                 <img :src="item?.anhChinh?.url"
                   class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
@@ -189,7 +189,7 @@
 
             <a-space direction="vertical" :size="10" class="mt-[10px]">
               <h3 class="m-0 text-base">
-                <router-link class="font-[600]" :to="`/san-pham/${item?.tieuDe}/${item?.id}`">
+                <router-link class="font-[600]" :to="`/san-pham/${item?.slug}/${item?.id}`">
                   {{ item.tieuDe.slice(0, 50) }}
                 </router-link>
               </h3>
