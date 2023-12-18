@@ -11,7 +11,7 @@
           <span>
             Điện thoại:
             <a href="tel:0584843998" class="hover:text-[#524FD5]">
-              098 123 4567
+              0
             </a>
           </span>
 

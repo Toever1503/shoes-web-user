@@ -49,10 +49,13 @@
                     class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
                 </router-link>
 
-                <div class="absolute bottom-2 left-[30%] hidden">
-                  <button>Xem chi tiết</button>
+                <div class="absolute top-2 left-2" v-if="item?.tongSp > 0">
+                  <div class="font-[600] bordered p-1 w-fit rounded-[4px] mx-auto text-[12px] bg-red-500 text-white">
+                    Đã bán hết
+                  </div>
                 </div>
-                <div class="absolute top-[10px] right-[10px]" v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
+                <div class="absolute top-[10px] right-[10px]"
+                  v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
                   <span class="bg-red-200 text-red-500 p-1">-{{
                     Math.floor(Number(
                       ((item?.giaCu - item?.giaMoi) / item?.giaCu) * 100
@@ -79,13 +82,13 @@
                   <span v-else class="font-bold text-red-500">
                     {{ _formatVnCurrency(item?.giaMoi) }}
                   </span>
-                  
+
                 </div>
 
                 <a-space>
                   <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
                   <a-divider type="vertical" class="bg-gray-500" />
-                  <span>{{ item?.daBan }} Đã bán</span>
+                  <span>{{ item?.daBan || 0 }} Đã bán</span>
                 </a-space>
               </a-space>
             </div>
@@ -98,7 +101,8 @@
         </a-spin>
 
         <div class="flex justify-center mt-[15px]">
-          <a-pagination v-model="paginationCnf"></a-pagination>
+          <a-pagination v-model:current="paginationCnf.current" @change="onCallApiProductFilter"
+            :pageSize="paginationCnf.pageSize" :total="paginationCnf.total"></a-pagination>
         </div>
       </div>
     </div>
