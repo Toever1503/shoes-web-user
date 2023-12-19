@@ -44,7 +44,7 @@
                 <img :src="item?.anhChinh?.url"
                   class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
-              <div class="absolute top-2 left-2" v-if="item?.tongSp > 0">
+              <div class="absolute top-2 left-2" v-if="item?.tongSp == 0">
                 <div class="font-[600] bordered p-1 w-fit rounded-[4px] mx-auto text-[12px] bg-red-500 text-white">
                   Đã bán hết
                 </div>
@@ -118,7 +118,7 @@
                   class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
 
-              <div class="absolute top-2 left-2" v-if="item?.tongSp > 0">
+              <div class="absolute top-2 left-2" v-if="item?.tongSp == 0">
                 <div class="font-[600] bordered p-1 w-fit rounded-[4px] mx-auto text-[12px] bg-red-500 text-white">
                   Đã bán hết
                 </div>
@@ -187,7 +187,8 @@
                   class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
               </router-link>
 
-              <div class="absolute top-2 left-2" v-if="item?.tongSp > 0">
+              
+              <div class="absolute top-2 left-2" v-if="item?.tongSp == 0">
                 <div class="font-[600] bordered p-1 w-fit rounded-[4px] mx-auto text-[12px] bg-red-500 text-white">
                   Đã bán hết
                 </div>

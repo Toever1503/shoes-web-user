@@ -87,6 +87,69 @@
                                 {{ _formatVnCurrency(record.giaTien * record.soLuong) }}
                             </template>
                         </template>
+
+                        <template #footer>
+                            <a-card class="mb-[15px]">
+                                <div>
+                                    <p class="text-[16px] font-bold">Tên người nhận</p>
+
+                                    <p>{{ detailOrder?.data?.diaChi.tenNguoiNhan }}</p>
+
+                                    <a-divider />
+
+                                    <p class="text-[16px] font-bold">Thông tin liên hệ</p>
+
+                                    <p>SDT: {{ detailOrder?.data?.diaChi.sdt }}</p>
+                                    <p>Email: {{ detailOrder?.data?.diaChi.email || "-" }}</p>
+
+                                    <a-divider />
+
+                                    <p class="text-[16px] font-bold">Địa chỉ giao hàng</p>
+
+                                    <p>
+                                        {{ detailOrder?.data?.diaChi.diaChi.replaceAll(/__[0-9]+##/g, ", ") }}
+                                    </p>
+
+                                    <p class="text-[16px] font-bold">Ghi chú</p>
+                                    <p>{{ detailOrder?.data?.ghiChu || "-" }}</p>
+                                    <!-- <a-badge status="processing" text="Running" /> -->
+                                </div>
+                            </a-card>
+
+                            <a-card>
+                                <div class="w-full text-center grid grid-cols-3 justify-between">
+                                    <div class="flex gap-[10px]">
+                                        Tổng tiền sản phẩm({{ detailOrder?.data?.tongSp }} đôi)
+                                    </div>
+                                    <p></p>
+                                    <p>{{ _formatVnCurrency(detailOrder?.data?.tongGiaTien) }}</p>
+                                </div>
+
+                                <div class="w-full text-center grid grid-cols-3 justify-between">
+                                    <div class="flex gap-[10px]">Giảm giá</div>
+                                    <p></p>
+                                    <p>{{ _formatVnCurrency(detailOrder?.data?.tongTienGiamGia) }}</p>
+                                </div>
+
+                                <div class="w-full text-center grid grid-cols-3 justify-between">
+                                    <div class="flex gap-[10px]">Phí ship</div>
+                                    <p></p>
+                                    <p>{{ _formatVnCurrency(detailOrder?.data?.phiShip) }}</p>
+                                </div>
+
+                                <div class="w-full text-center grid grid-cols-3 justify-between">
+                                    <div class="flex gap-[10px]">Phương thức thanh toán</div>
+                                    <p></p>
+                                    <p>{{ detailOrder?.data?.phuongThucTT }}</p>
+                                </div>
+
+                                <div class="w-full text-center grid grid-cols-3 justify-between font-bold">
+                                    <div class="flex gap-[10px]">Tổng tiền thanh toán</div>
+                                    <p></p>
+                                    <p>{{ _formatVnCurrency(detailOrder?.data?.tongGiaCuoiCung) }}</p>
+                                </div>
+                            </a-card>
+                        </template>
                     </a-table>
                 </a-modal>
             </section>
@@ -187,17 +250,19 @@ const detailOrder = reactive<any>({
             align: "center",
         },
     ],
+    data: {},
     chiTietDonHang: []
 });
 const onShowDetailOrder = (record: any) => {
     detailOrder.chiTietDonHang = record.chiTietDonHang;
+    detailOrder.data = record;
     detailOrder.isOpen = true;
 };
 const onCloseDetailOrder = () => detailOrder.isOpen = false;
 
 const hasTracked = ref<boolean>(false);
 const onTrackOrder = () => {
-    if(isSearching.value) return;
+    if (isSearching.value) return;
     isSearching.value = true;
     orderUserService.trackOrder(q.value)
         .then(({ data }) => {

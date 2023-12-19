@@ -127,6 +127,68 @@
                           {{ text }}
                         </template>
                       </template>
+                      <template #footer>
+                        <a-card v-if="selectedRecord" class="mb-[15px]">
+                          <div>
+                            <p class="text-[16px] font-bold">Tên người nhận</p>
+
+                            <p>{{ selectedRecord?.diaChi?.tenNguoiNhan }}</p>
+
+                            <a-divider />
+
+                            <p class="text-[16px] font-bold">Thông tin liên hệ</p>
+
+                            <p>SDT: {{ selectedRecord?.diaChi?.sdt }}</p>
+                            <p>Email: {{ selectedRecord.diaChi?.email || "-" }}</p>
+
+                            <a-divider />
+
+                            <p class="text-[16px] font-bold">Địa chỉ giao hàng</p>
+
+                            <p>
+                              {{ selectedRecord?.diaChi?.diaChi.replaceAll(/__[0-9]+##/g, ", ") }}
+                            </p>
+
+                            <p class="text-[16px] font-bold">Ghi chú</p>
+                            <p>{{ selectedRecord?.ghiChu || "-" }}</p>
+                            <!-- <a-badge status="processing" text="Running" /> -->
+                          </div>
+                        </a-card>
+
+                        <a-card v-if="selectedRecord">
+                          <div class="w-full text-center grid grid-cols-3 justify-between">
+                            <div class="flex gap-[10px]">
+                              Tổng tiền sản phẩm({{ selectedRecord?.tongSp }} đôi)
+                            </div>
+                            <p></p>
+                            <p>{{ _formatVnCurrency(selectedRecord?.tongGiaTien || 0) }}</p>
+                          </div>
+
+                          <div class="w-full text-center grid grid-cols-3 justify-between">
+                            <div class="flex gap-[10px]">Giảm giá</div>
+                            <p></p>
+                            <p>{{ _formatVnCurrency(selectedRecord?.tongTienGiamGia || 0) }}</p>
+                          </div>
+
+                          <div class="w-full text-center grid grid-cols-3 justify-between">
+                            <div class="flex gap-[10px]">Phí ship</div>
+                            <p></p>
+                            <p>{{ _formatVnCurrency(selectedRecord?.phiShip || 0) }}</p>
+                          </div>
+
+                          <div class="w-full text-center grid grid-cols-3 justify-between">
+                            <div class="flex gap-[10px]">Phương thức thanh toán</div>
+                            <p></p>
+                            <p>{{ selectedRecord?.phuongThucTT }}</p>
+                          </div>
+
+                          <div class="w-full text-center grid grid-cols-3 justify-between font-bold">
+                            <div class="flex gap-[10px]">Tổng tiền thanh toán</div>
+                            <p></p>
+                            <p>{{ _formatVnCurrency(selectedRecord?.tongGiaCuoiCung || 0) }}</p>
+                          </div>
+                        </a-card>
+                      </template>
                     </a-table>
                   </a-modal>
                 </a-tooltip>
@@ -143,8 +205,10 @@
 import { orderUserService } from "../../services/OrderUser";
 import { ETrangThaiDonHang, getLabelOrderStatusByValue } from "./IDonHangStatus";
 import { danhGiaService } from "../../services/DanhGiaService"
-import { reactive, ref } from 'vue';
+import { reactive, ref, inject } from 'vue';
 // import dayjs from "dayjs-nuxt"
+
+const _formatVnCurrency = inject("formatVnCurrency", (p: number) => 0);
 
 const selectedRecord = ref(null);
 
