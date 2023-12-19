@@ -36,6 +36,7 @@
               @change="formState.email = formState.email.replace(/^\s+/, '')" type="email" />
           </a-form-item>
 
+
           <div class="flex justify-end mb-2" v-if="false">
             <a-button v-if="true" size="small"> Chọn địa chỉ cũ </a-button>
           </div>
@@ -538,9 +539,10 @@ const calcShipFee = () => {
 };
 
 onMounted(() => {
-  console.log("dat hang page mounted");
   // load provinces
   provinceList.value = _getProvinces({ p: undefined });
+  console.log("dat hang page mounted: ", provinceList.value);
+
   if (localStorage.getItem("lastAddress")) {
     try {
       const lastAddress = String(localStorage.getItem("lastAddress")).split(
