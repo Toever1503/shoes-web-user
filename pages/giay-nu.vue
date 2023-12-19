@@ -50,8 +50,10 @@
                   <img :src="item?.anhChinh?.url" class="shadow-sm h-full rounded-[5px] hover:scale-[1.05] duration-200 easy-in-out" />
                 </router-link>
 
-                <div class="absolute bottom-2 left-[30%] hidden">
-                  <button>Xem chi tiết</button>
+                <div class="absolute top-2 left-2" v-if="item?.tongSp > 0">
+                  <div class="font-[600] bordered p-1 w-fit rounded-[4px] mx-auto text-[12px] bg-red-500 text-white">
+                    Đã bán hết
+                  </div>
                 </div>
 
                 <div class="absolute top-[10px] right-[10px]" v-if="item?.giaCu && item?.giaCu > 0 && item?.giaCu > item?.giaMoi">
@@ -86,7 +88,7 @@
                 <a-space>
                   <a-rate class="text-[14px]" :value="item?.tbDanhGia || 0" allow-half disabled />
                   <a-divider type="vertical" class="bg-gray-500" />
-                  <span>{{ item?.daBan }} Đã bán</span>
+                  <span>{{ item?.daBan || 0}} Đã bán</span>
                 </a-space>
               </a-space>
             </div>
@@ -94,12 +96,11 @@
           <template v-else-if="!isFiltering && productList.length == 0">
             <a-result status="404" sub-title="Không tìm thấy sản phẩm nào!">
             </a-result>
-
           </template>
         </a-spin>
 
         <div class="flex justify-center mt-[15px]">
-          <a-pagination v-model="paginationCnf"></a-pagination>
+          <a-pagination v-model:current="paginationCnf.current" @change="onCallApiProductFilter" :pageSize="paginationCnf.pageSize" :total="paginationCnf.total"></a-pagination>
         </div>
       </div>
     </div>
@@ -199,6 +200,21 @@ const onCallApiProductFilter = () => {
     )
     .finally(() => isFiltering.value = false);
 };
+
+watch(() => _route.query, () => {
+  filterModel.dmGiay = undefined;
+  filterModel.thuongHieu = undefined;
+  if (_route.query.thuong_hieu)
+    filterModel.thuongHieu = _route.query?.thuong_hieu
+      ? Number(_route.query?.thuong_hieu)
+      : undefined;
+  if (_route.query.danh_muc)
+    filterModel.dmGiay = _route.query?.danh_muc
+      ? Number(_route.query?.danh_muc)
+      : undefined;
+  onCallApiProductFilter();
+}, { flush: 'pre', immediate: true, deep: true });
+
 
 onMounted(() => {
   if (_route.query.thuong_hieu)

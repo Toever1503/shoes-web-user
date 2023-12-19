@@ -15,13 +15,13 @@
           <template #overlay>
             <a-menu>
               <a-menu-item :key="item.tenDanhMuc" v-for="item in categoryList">
-                <router-link :to="`/giay-nu?danh_muc=${item.id}`">
+                <router-link :to="`/giay-nam?danh_muc=${item.id}`">
                   {{ item.tenDanhMuc }}
                 </router-link>
               </a-menu-item>
 
               <a-menu-item :key="item.tenThuongHieu" v-for="item in brandList">
-                <router-link :to="`/giay-nu?thuong_hieu=${item.id}`">
+                <router-link :to="`/giay-nam?thuong_hieu=${item.id}`">
                   Giày {{ item.tenThuongHieu }}
                 </router-link>
               </a-menu-item>
