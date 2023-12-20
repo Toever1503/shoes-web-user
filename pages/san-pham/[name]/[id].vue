@@ -345,7 +345,7 @@ const onThayDoiBienTheSize = (value: string) => {
   quantity.value = 1;
   if (!value) {
     variation1List.value = productDetail.value.giaTri1List;
-    variationStockCnt.value = productDetail.value.soLuongKho;
+    variationStockCnt.value = productDetail.value.tongSp;
     return;
   }
   if (productDetail.value.loaiBienThe == "BOTH") {
