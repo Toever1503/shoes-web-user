@@ -248,27 +248,27 @@
         disableOnInteraction: true,
       }">
         <SwiperSlide>
-          <img class="ư-full h-full" src="/image/brand/nike.jpeg" />
+          <img class="w-full h-[200px]" src="/image/brand/nike.jpeg" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img class="ư-full h-[200px]" src="/image/brand/adidas.png" />
+          <img class="w-full h-[200px]" src="/image/brand/adidas.png" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img class="ư-full h-[200px]" src="/image/brand/new-balance.png" />
+          <img class="w-full h-[200px]" src="/image/brand/new-balance.png" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img class="ư-full h-[200px]" src="/image/brand/converse.jpeg" />
+          <img class="w-full h-[200px]" src="/image/brand/converse.jpeg" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img class="ư-full h-[200px]" src="/image/brand/puma.png" />
+          <img class="w-full h-[200px]" src="/image/brand/puma.png" />
         </SwiperSlide>
 
         <SwiperSlide>
-          <img class="ư-full h-[200px]" src="/image/brand/vans.jpeg" />
+          <img class="w-full h-[200px]" src="/image/brand/vans.jpeg" />
         </SwiperSlide>
       </swiper>
 
